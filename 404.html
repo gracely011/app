@@ -1,0 +1,159 @@
+<!--
+  ____                     _       
+ / ___|_ __ __ _  ___ ___| |_   _ 
+| |  _| '__/ _` |/ __/ _ \ | | | |
+| |_| | | | (_| | (_|  __/ | |_| |
+ \____|_|  \__,_|\___\___|_|\__, |
+                            |___/ 
+   Unlock Premium Together
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Not Found | Gracely</title>
+
+    <script>
+    // Direct Access Fallback Router for Clean URLs (HTTP/HTTPS Only)
+    (function handle404Routing() {
+        if (!window.location.protocol.startsWith('http')) return;
+        try {
+            var pathname = window.location.pathname;
+            var segments = pathname.split('/').filter(Boolean);
+            var lastSegment = (segments[segments.length - 1] || '').toLowerCase();
+            
+            // Redirect /home or /home.html directly to root index with query & hash
+            if (lastSegment === 'home') {
+                window.location.replace('/' + window.location.search + window.location.hash);
+                return;
+            }
+            
+            var validPages = [
+                'admin', 'blocked', 'canva', 'dashboard', 'extension', 'guardrequired',
+                'history', 'index', 'kalender-konten', 'login', 'logs', 'maintenance',
+                'manual', 'motion', 'password', 'phantomcanva', 'premium', 'privacy',
+                'profile', 'reset', 'signup', 'supertools', 'terms', 'tutorial',
+                'update', 'youtube-noads'
+            ];
+            
+            if (lastSegment && validPages.indexOf(lastSegment) !== -1) {
+                var cleanPath = pathname.replace(/\/+$/, '');
+                var targetUrl = (cleanPath.charAt(0) === '/' ? '' : '/') + cleanPath + '.html' + window.location.search + window.location.hash;
+                window.location.replace(targetUrl);
+            }
+        } catch(e) {}
+    })();
+    </script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="assets/images/favicon.png" type="image/png">
+
+    <style>
+        :root {
+            --text-color: #ffffff;
+            --background-color: #000000;
+            --accent-color: #888888; /* A slightly lighter grey for the border */
+            --illustration-color: #ffffff;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            perspective: 1000px;
+        }
+
+        .illustration {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 10rem;
+            font-weight: 900;
+            margin: 0;
+            line-height: 1;
+            color: var(--text-color);
+            text-shadow: 0 5px 25px rgba(255, 255, 255, 0.1);
+            transition: transform 0.1s ease-out;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 10px 0 20px 0;
+            color: var(--accent-color);
+        }
+
+        p {
+            font-size: 1.125rem;
+            line-height: 1.6;
+            margin: 0 0 30px 0;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        a {
+            color: var(--text-color);
+            font-weight: bold;
+            text-decoration: none;
+            padding: 12px 25px;
+            border: 2px solid var(--accent-color);
+            border-radius: 50px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: var(--text-color);
+            color: var(--background-color);
+        }
+    </style>
+
+    <!-- Gracely Backend Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js"></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+</head>
+<body>
+
+    <div class="illustration">
+        <svg viewBox="0 0 100 100" fill="none" stroke="var(--illustration-color)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M30,45 C30,25 70,25 70,45 C70,65 50,60 50,70 L50,75 M50,85 L50,86" />
+        </svg>
+    </div>
+
+    <main class="container">
+        <h1 id="text-3d">4 0 4 </h1>
+        <h2>OPAT KOSONG OPAT Page Not Found</h2>
+        <p>Oops! The page you're looking for doesn't exist. It might have been moved or deleted.</p>
+        <a href="./">Return to Homepage</a>
+    </main>
+
+    <script src="layout.js"></script>
+    <script src="assets/script.js"></script>
+</body>
+</html>

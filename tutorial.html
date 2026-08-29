@@ -1,0 +1,458 @@
+<!--
+  ____                     _       
+ / ___|_ __ __ _  ___ ___| |_   _ 
+| |  _| '__/ _` |/ __/ _ \ | | | |
+| |_| | | | (_| | (_|  __/ | |_| |
+ \____|_|  \__,_|\___\___|_|\__, |
+                            |___/ 
+   Unlock Premium Together
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tutorial & Guide | Gracely</title>
+  <meta name="title" content="Tutorial & Guide | Gracely" />
+  <meta name="description" content="Step-by-step guide on how to install and use Gracely Extension and Gracely Guard." />
+  <link rel="shortcut icon" href="assets/images/favicon.png" type="image/png" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  <link rel="stylesheet" href="assets/css/animate.css" />
+  <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/css/ud-styles.css" />
+  <link rel="stylesheet" href="assets/styles.css" />
+  <link rel="stylesheet" href="assets/css/pages/ext.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icon-css@1.1.0/css/flag-icon.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js"></script>
+  <style>
+    .tutorial-card {
+      background: #ffffff;
+      border: 1px solid #eef0f4;
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 28px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+      transition: all 0.3s ease;
+    }
+    .tutorial-card:hover {
+      border-color: #375dfb;
+      transform: translateY(-4px);
+      box-shadow: 0 14px 35px rgba(55, 93, 251, 0.12);
+    }
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #375dfb, #10a37f);
+      color: #fff;
+      font-weight: 700;
+      font-size: 18px;
+      border-radius: 12px;
+      margin-bottom: 0;
+      flex-shrink: 0;
+    }
+    .tutorial-icon-box {
+      font-size: 28px;
+      color: #375dfb;
+      margin-bottom: 16px;
+    }
+    .troubleshoot-box {
+      background: #f0fdf4;
+      border: 1px solid #dcfce7;
+      border-left: 4px solid #10a37f;
+      padding: 18px 22px;
+      border-radius: 0 14px 14px 0;
+      margin-top: 16px;
+    }
+    .tutorial-code {
+      background: #f1f5f9;
+      color: #2563eb;
+      border: 1px solid #e2e8f0;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header Start -->
+  <header class="ud-header gp-header">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <nav class="navbar navbar-expand-lg gp-nav">
+            <a class="navbar-brand" href="./" aria-label="Gracely">
+              <img src="assets/images/logo/gracely_mobile_white.png" alt="Gracely" id="logo" class="gp-logo gp-logo-mark" />
+              <img src="assets/images/logo/gracely_white.png" alt="Gracely" class="gp-logo gp-logo-full" />
+            </a>
+            <button class="navbar-toggler" type="button" aria-label="Menu" aria-controls="gpNavCollapse" aria-expanded="false">
+              <span class="toggler-icon"> </span>
+              <span class="toggler-icon"> </span>
+              <span class="toggler-icon"> </span>
+            </button>
+
+            <div class="navbar-collapse gp-collapse" id="gpNavCollapse">
+              
+              <div class="gp-drawer-head d-lg-none">
+                <img src="assets/images/logo/gracely_mobile_black.png" alt="Gracely" style="height: 30px; width: auto;">
+                <button type="button" class="gp-drawer-close" id="gpDrawerClose" aria-label="Close menu"><i class="fa-solid fa-xmark"></i></button>
+              </div>
+
+              <!-- HYBRID: PROFILE IN DRAWER (LOGGED IN ONLY) -->
+              <div class="gp-drawer-account d-lg-none" id="mobile-user-profile" style="display:none;">
+                <span class="gp-avatar sync-avatar">M</span>
+                <div class="gp-drawer-account-text">
+                  <div class="gp-drawer-name sync-fullname">Member</div>
+                  <div class="gp-plan-badge-container"></div>
+                </div>
+              </div>
+
+              <ul id="nav" class="navbar-nav mx-auto">
+                <li class="nav-item"><a href="./">Home</a></li>
+                <li class="nav-item"><a href="./#features">Features</a></li>
+                <li class="nav-item"><a href="./#about">About</a></li>
+                <li class="nav-item"><a href="./#pricing">Pricing</a></li>
+                <li class="nav-item"><a href="./#services">Services</a></li>
+              </ul>
+
+              <div class="gp-drawer-extra d-lg-none">
+                <div class="gp-drawer-title" id="mobile-account-title" style="display:none;">Account</div>
+                <ul class="gp-drawer-links" id="mobile-account-links" style="display:none;">
+                  <li><a href="./dashboard.html"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                  <li><a href="./profile.html"><i class="fa-solid fa-user-pen"></i> Edit profile</a></li>
+                  <li><a href="./history.html"><i class="fa-solid fa-receipt"></i> Order history</a></li>
+                  <li><a href="./logs.html"><i class="fa-solid fa-clock-rotate-left"></i> Activity logs</a></li>
+                  <li><a href="./extension.html"><i class="fa-brands fa-discord"></i> Manage extension</a></li>
+                </ul>
+
+                  <div class="gp-drawer-title">Language</div>
+                  <ul class="gp-drawer-langs">
+                    <li><a href="?lang=en" data-lang="en"><span class="flag-icon flag-icon-us"></span> English</a></li>
+                    <li><a href="?lang=id" data-lang="id"><span class="flag-icon flag-icon-id"></span> Indonesia</a></li>
+                    <li><a href="?lang=my" data-lang="my"><span class="flag-icon flag-icon-my"></span> Melayu</a></li>
+                    <li><a href="?lang=ph" data-lang="ph"><span class="flag-icon flag-icon-ph"></span> Filipino</a></li>
+                    <li><a href="?lang=vn" data-lang="vn"><span class="flag-icon flag-icon-vn"></span> Tiếng Việt</a></li>
+                    <li><a href="?lang=th" data-lang="th"><span class="flag-icon flag-icon-th"></span> ไทย</a></li>
+                    <li><a href="?lang=cn" data-lang="cn"><span class="flag-icon flag-icon-cn"></span> 中文</a></li>
+                    <li><a href="?lang=jp" data-lang="jp"><span class="flag-icon flag-icon-jp"></span> 日本語</a></li>
+                    <li><a href="?lang=kr" data-lang="kr"><span class="flag-icon flag-icon-kr"></span> 한국어</a></li>
+                  </ul>
+
+                  <!-- HYBRID: AUTH BUTTONS -->
+                  <div class="gp-drawer-auth" id="mobile-auth-logged-out">
+                      <a href="./login.html" class="ud-main-btn gp-btn-pad w-100 gp-btn-glass is-light"><i class="fa-solid fa-arrow-right-to-bracket"></i> Log In</a>
+                      <a href="./signup.html" class="ud-main-btn gp-btn-pad w-100 gp-btn-solid"><i class="fa-solid fa-user-plus"></i> Sign Up</a>
+                  </div>
+                  
+                  <div class="gp-drawer-auth" id="mobile-auth-logged-in" style="display:none;">
+                      <a href="./premium.html" class="ud-main-btn gp-btn-pad w-100 gp-btn-glass is-light"><i class="fa-solid fa-crown"></i> Extend premium</a>                      
+                      <a href="#" id="drawer-logout-btn" class="ud-main-btn gp-btn-pad w-100 gp-btn-glass is-light" onclick="if(typeof logout === 'function') logout();"><i class="fa fa-sign-out"></i> Log out</a>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="navbar-btn gp-actions">
+                
+                <div class="nav-item dropdown d-none d-lg-inline-block me-2">
+                  <a class="ud-main-btn ud-login-btn text-center dropdown-toggle gp-lang-toggle" href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                    <span class="flag-icon flag-icon-us"></span>
+                    <i class="fa-solid fa-chevron-down gp-lang-caret"></i>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end gp-dropdown">
+                    <li class="gp-lang-head">Select language</li>
+                    <li><a class="dropdown-item" href="?lang=en" data-lang="en"><span class="flag-icon flag-icon-us me-2"></span>English</a></li>
+                    <li><a class="dropdown-item" href="?lang=id" data-lang="id"><span class="flag-icon flag-icon-id me-2"></span>Indonesia</a></li>
+                    <li><a class="dropdown-item" href="?lang=my" data-lang="my"><span class="flag-icon flag-icon-my me-2"></span>Melayu</a></li>
+                    <li><a class="dropdown-item" href="?lang=ph" data-lang="ph"><span class="flag-icon flag-icon-ph me-2"></span>Filipino</a></li>
+                    <li><a class="dropdown-item" href="?lang=vn" data-lang="vn"><span class="flag-icon flag-icon-vn me-2"></span>Tiếng Việt</a></li>
+                    <li><a class="dropdown-item" href="?lang=th" data-lang="th"><span class="flag-icon flag-icon-th me-2"></span>ไทย</a></li>
+                    <li><a class="dropdown-item" href="?lang=cn" data-lang="cn"><span class="flag-icon flag-icon-cn me-2"></span>中文</a></li>
+                    <li><a class="dropdown-item" href="?lang=jp" data-lang="jp"><span class="flag-icon flag-icon-jp me-2"></span>日本語</a></li>
+                    <li><a class="dropdown-item" href="?lang=kr" data-lang="kr"><span class="flag-icon flag-icon-kr me-2"></span>한국어</a></li>
+                  </ul>
+                </div>
+
+                <!-- HYBRID: BEFORE LOGIN (DESKTOP) -->
+                <a href="./login.html" class="ud-main-btn gp-glassbtn d-none d-md-inline-block" id="desktop-login-btn">Log In</a>
+                <a href="./signup.html" class="gp-rimbtn d-none d-md-inline-flex gp-cta" id="desktop-signup-btn">
+                  <span class="gp-rimbtn-rim" aria-hidden="true"></span>
+                  <span class="gp-rimbtn-core" aria-hidden="true"></span>
+                  <span class="gp-rimbtn-text">Sign Up</span>
+                </a>
+                <a href="./login.html" class="ud-main-btn ud-login-btn gp-glassbtn d-md-none" id="mobile-nav-login-btn">Log In</a>
+
+                <!-- HYBRID: AFTER LOGIN (DESKTOP) -->
+                <div class="nav-item dropdown d-none gp-user" id="desktop-user-dropdown">
+                  <a class="gp-user-toggle dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" aria-label="Account">
+                    <span class="gp-avatar sync-avatar">M</span>
+                    <span class="gp-user-name d-none d-lg-inline sync-firstname">Member</span>
+                    <i class="fa-solid fa-chevron-down gp-user-caret d-none d-lg-inline"></i>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-end gp-dropdown gp-user-menu">
+                    <div class="gp-user-head">
+                      <div class="gp-user-head-label">Signed in as</div>
+                      <div class="gp-user-head-name sync-fullname">Member</div>
+                      <div class="gp-plan-badge-container"></div>
+                    </div>
+                    <a class="dropdown-item" href="./dashboard.html"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+                    <a class="dropdown-item" href="./profile.html"><i class="fa-solid fa-user-pen"></i> Edit profile</a>
+                    <a class="dropdown-item" href="./history.html"><i class="fa-solid fa-receipt"></i> Order history</a>
+                    <a class="dropdown-item" href="./logs.html"><i class="fa-solid fa-clock-rotate-left"></i> Activity logs</a>
+                    <a class="dropdown-item" href="./extension.html"><i class="fa-brands fa-discord"></i> Manage extension</a>
+                    <a class="dropdown-item" href="./premium.html"><i class="fa-solid fa-crown"></i> Extend premium</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item gp-item-danger" href="#" id="logout-button" onclick="if(typeof logout === 'function') logout();"><i class="fa fa-sign-out"></i> Log out</a>
+                  </div>
+                </div>
+              </div>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div class="gp-drawer-backdrop" id="gpDrawerBackdrop"></div>
+    <script>
+    (function () {
+      var toggler  = document.querySelector('.navbar-toggler');
+      var collapse = document.getElementById('gpNavCollapse');
+      var backdrop = document.getElementById('gpDrawerBackdrop');
+      var closeBtn = document.getElementById('gpDrawerClose');
+      if (!toggler || !collapse) return;
+      function sync() {
+        var open = collapse.classList.contains('show');
+        backdrop.classList.toggle('show', open);
+        document.body.classList.toggle('gp-drawer-open', open);
+        toggler.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+      function close() {
+        collapse.classList.remove('show');
+        toggler.classList.remove('active');
+        sync();
+      }
+      toggler.addEventListener('click', function () { setTimeout(sync, 0); });
+      if (closeBtn) closeBtn.addEventListener('click', close);
+      if (backdrop) backdrop.addEventListener('click', close);
+    })();
+    </script>
+  <!-- Header End -->
+
+  <!-- Hero Section -->
+  <section class="ud-page-banner" style="padding-top: 150px; padding-bottom: 60px;">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="ud-banner-content text-center">
+            <h1 class="mb-3 text-white">Gracely Tutorial & Guide</h1>
+            <p class="text-white-50 mx-auto" style="max-width: 650px; font-size: 17px;">
+              Learn how to install, activate, and enjoy dozens of premium services in one click using Gracely Extension & Gracely Guard.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tutorial Content Section -->
+  <section class="ud-blog-details py-5" style="background: #ffffff; min-height: 60vh;">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-10">
+
+          <!-- Step 1 -->
+          <div class="tutorial-card">
+            <div class="d-flex align-items-center gap-3">
+              <span class="step-badge">1</span>
+              <h3 class="mb-0" style="color: #111827; font-weight: 700; font-size: 22px;">Install Gracely Guard First (Mandatory), Then Gracely Extension</h3>
+            </div>
+            
+            <!-- Mandatory Alert Box -->
+            <div class="mt-3 p-3" style="background: #f0fdf4; border: 1px solid #bbf7d0; border-left: 4px solid #10a37f; border-radius: 8px;">
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <i class="fa-solid fa-shield-halved text-success"></i>
+                <strong style="color: #065f46; font-size: 15px;">MANDATORY: Install Gracely Guard First</strong>
+              </div>
+              <p class="small mb-0" style="color: #374151; line-height: 22px;">
+                <b>Gracely Guard 1.0.3</b> is the mandatory system security module that must be installed and enabled first. Without Guard, Gracely Extension cannot activate premium accounts.
+              </p>
+            </div>
+
+            <p class="mt-3 mb-2" style="color: #4b5563; font-size: 16px; line-height: 26px;">
+              Follow this installation sequence in your browser:
+            </p>
+            <ol class="ps-3 mb-4" style="color: #4b5563; font-size: 15px; line-height: 26px;">
+              <li class="mb-2">Log in to your account and download the extension files from the <a href="./dashboard.html" style="color: #375dfb; font-weight: 600;">Gracely Dashboard</a> or go to <a href="./extension.html" style="color: #375dfb; font-weight: 600;">Manage Extension</a>.</li>
+              <li class="mb-2">Open your Chrome/Brave/Edge browser and type <code class="tutorial-code">chrome://extensions</code> in the address bar.</li>
+              <li class="mb-2">Enable the <b>Developer mode</b> toggle in the top right corner of the page.</li>
+              <li class="mb-2"><strong style="color: #065f46;">Order 1 (Mandatory First):</strong> Install <code class="tutorial-code">gracely-guard-1.0.3.zip</code>.</li>
+              <li class="mb-0"><strong style="color: #1e3a8a;">Order 2:</strong> Install <code class="tutorial-code">gracely-extension-2.2.zip</code>.</li>
+            </ol>
+
+            <div class="row g-3">
+              <!-- Method A -->
+              <div class="col-md-6">
+                <div style="background: #f0f4ff; border: 1px solid #d0dcff; border-radius: 12px; padding: 20px; height: 100%;">
+                  <h5 class="mb-2" style="color: #1e3a8a; font-weight: 700; font-size: 16px;"><i class="fa-solid fa-hand-pointer text-primary me-2"></i>Method 1: Drag & Drop (Easiest)</h5>
+                  <p class="small mb-0" style="color: #4b5563; line-height: 24px;">
+                    <b>No ZIP extraction needed!</b> Simply drag and drop the <code class="tutorial-code">gracely-guard-1.0.3.zip</code> file first into <code class="tutorial-code">chrome://extensions</code>. After Guard is installed, drag and drop <code class="tutorial-code">gracely-extension-2.2.zip</code>.
+                  </p>
+                </div>
+              </div>
+              <!-- Method B -->
+              <div class="col-md-6">
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; height: 100%;">
+                  <h5 class="mb-2" style="color: #0f172a; font-weight: 700; font-size: 16px;"><i class="fa-solid fa-folder-open text-primary me-2"></i>Method 2: Extract & Load Unpacked</h5>
+                  <p class="small mb-0" style="color: #4b5563; line-height: 24px;">
+                    Extract both ZIP files to your computer, then click <b>Load unpacked</b> in <code class="tutorial-code">chrome://extensions</code> and select the <code class="tutorial-code">gracely-guard-1.0.3</code> folder first, followed by the <code class="tutorial-code">gracely-extension-2.2</code> folder.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <p class="small mt-3 mb-0" style="color: #6b7280;">
+              <i class="fa-solid fa-thumbtack text-warning me-1"></i> Don't forget to pin both extension icons to your browser toolbar for quick and easy access.
+            </p>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="tutorial-card">
+            <div class="d-flex align-items-center gap-3">
+              <span class="step-badge">2</span>
+              <h3 class="mb-0" style="color: #111827; font-weight: 700; font-size: 22px;">Sign In to Your Gracely Account</h3>
+            </div>
+            <p class="mt-3 mb-3" style="color: #4b5563; font-size: 16px; line-height: 26px;">
+              The extension will automatically synchronize with your account status on the Gracely website:
+            </p>
+            <ul class="ps-3 mb-0" style="color: #4b5563; font-size: 15px; line-height: 26px;">
+              <li class="mb-2">Open the <a href="./login.html" style="color: #375dfb; font-weight: 600;">Gracely Login Page</a> in the same browser.</li>
+              <li class="mb-2">Enter your email and password, then complete the Cloudflare Turnstile verification.</li>
+              <li>Once logged in, the extension will automatically detect your active plan (Premium / Pro / The Phantom) and session tokens.</li>
+            </ul>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="tutorial-card">
+            <div class="d-flex align-items-center gap-3">
+              <span class="step-badge">3</span>
+              <h3 class="mb-0" style="color: #111827; font-weight: 700; font-size: 22px;">Access Premium Services in One Click</h3>
+            </div>
+            <p class="mt-3 mb-3" style="color: #4b5563; font-size: 16px; line-height: 26px;">
+              Click the <b>Gracely Extension</b> icon on your browser toolbar:
+            </p>
+            <ul class="ps-3 mb-0" style="color: #4b5563; font-size: 15px; line-height: 26px;">
+              <li class="mb-2">Use the search bar or category filters to find the service you need (e.g. <i>ChatGPT, Netflix, Canva Pro, Coursera, Perplexity</i>, etc.).</li>
+              <li class="mb-2">Click the service button. A new tab will open and your premium session is automatically injected without entering passwords manually.</li>
+              <li><b>Important:</b> Never click <i>Log Out</i> on target service websites (e.g. Netflix or ChatGPT) to ensure accounts stay active for all users.</li>
+            </ul>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="tutorial-card">
+            <div class="d-flex align-items-center gap-3">
+              <span class="step-badge">4</span>
+              <h3 class="mb-0" style="color: #111827; font-weight: 700; font-size: 22px;">Tips & Troubleshooting</h3>
+            </div>
+            <div class="troubleshoot-box">
+              <h5 class="mb-2" style="color: #065f46; font-weight: 700; font-size: 16px;"><i class="fa-solid fa-circle-info text-success me-2"></i>If Account Does Not Auto-Login or Shows an Error:</h5>
+              <p class="mb-1" style="color: #374151; font-size: 15px;">1. Open the extension and click the <b>Refresh</b> icon in the top right corner of the extension popup.</p>
+              <p class="mb-1" style="color: #374151; font-size: 15px;">2. Clear cache and cookies for the target service, then click the service again from the extension.</p>
+              <p class="mb-0" style="color: #374151; font-size: 15px;">3. Ensure Gracely Guard is always in <b>Enabled (Active)</b> status in <code class="tutorial-code">chrome://extensions</code>.</p>
+            </div>
+          </div>
+
+          <!-- Action CTA -->
+          <div class="text-center mt-5">
+            <a href="./dashboard.html" class="ud-main-btn gp-btn-solid me-3"><i class="fa-solid fa-gauge me-2"></i>Download on Dashboard</a>
+            <a href="./extension.html" class="ud-main-btn gp-btn-glass is-light"><i class="fa-brands fa-discord me-2"></i>Manage Extension</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Start -->
+  <footer class="ud-footer">
+    <div class="ud-footer-widgets">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="ud-widget">
+              <a href="./" class="ud-footer-logo">
+                <img src="assets/images/logo/gracely_white.png" alt="logo" />
+              </a>
+              <p class="ud-widget-desc">
+                Unlock Premium Together. Experience seamless premium access with top-tier security and privacy.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+            <div class="ud-widget">
+              <h5 class="ud-widget-title">Dashboard</h5>
+              <ul class="ud-widget-links">
+                <li><a href="./dashboard.html">View dashboard</a></li>
+                <li><a href="./premium.html">Purchase premium</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+            <div class="ud-widget">
+              <h5 class="ud-widget-title">Extension</h5>
+              <ul class="ud-widget-links">
+                <li><a href="./extension.html">Manage extension</a></li>
+                <li><a href="./tutorial.html">Tutorial & Guide</a></li>
+                <li><a href="./update.html">Update Center</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-xl-2 col-lg-2 col-md-6 col-sm-10">
+            <div class="ud-widget">
+              <h5 class="ud-widget-title">Contact</h5>
+              <ul class="ud-widget-links">
+                <li><a href="mailto:contact@gracely.my.id">contact@gracely.my.id</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ud-footer-bottom">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8">
+            <ul class="ud-footer-bottom-left">
+              <li><a href="./privacy.html">Privacy Policy</a></li>
+              <li><a href="./terms.html">Terms of Service</a></li>
+              <li><a href="./#contact">Contact Us</a></li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <p class="ud-footer-bottom-right">Gracely &copy; 2023-2026</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- Footer End -->
+
+  <a href="javascript:void(0)" class="back-to-top"><i class="fa-solid fa-arrow-up"></i></a>
+  <script src="assets/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/wow.min.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/script.js"></script>
+</body>
+
+</html>

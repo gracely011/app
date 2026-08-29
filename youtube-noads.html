@@ -1,0 +1,79 @@
+<!--
+  ____                     _       
+ / ___|_ __ __ _  ___ ___| |_   _ 
+| |  _| '__/ _` |/ __/ _ \ | | | |
+| |_| | | | (_| | (_|  __/ | |_| |
+ \____|_|  \__,_|\___\___|_|\__, |
+                            |___/ 
+   Unlock Premium Together
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube NoAds | Gracely</title>
+    <meta name="title" content="YouTube NoAds | Gracely">
+    <meta name="description" content="Watch YouTube videos and playlists seamlessly without advertisements on Gracely.">
+    <link rel="shortcut icon" href="assets/images/favicon.png" type="image/png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="assets/youtube-noads-2.0.css">
+
+    <!-- Gracely Auth Protection -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js"></script>
+    <script>
+        (async () => {
+            await requireAuth();
+        })();
+    </script>
+</head>
+
+<body>
+
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-title">
+                <h1>YouTube NoAds</h1>
+                <p>version 2.0 &mdash; Gracely &copy; 2024-<span id="year"></span></p>
+                <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+            </div>
+            <div class="header-controls">
+                <div style="display: flex; gap: 10px; align-items: center; width: 100%;">
+                    <div class="input-wrapper" style="flex: 1;">
+                        <input type="text" id="videoURL" placeholder=" ">
+                        <label for="videoURL">YouTube URL</label>
+                        <button id="playBtn" aria-label="Watch">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+                    <a href="./dashboard.html" class="dash-back-btn" title="Back to Dashboard" style="flex-shrink: 0; text-decoration: none; padding: 10px 14px; font-size: 13px; font-weight: 600; border-radius: 10px; background: #000; color: #fff; display: inline-flex; align-items: center; gap: 6px; transition: opacity 0.2s;">
+                        <i class="fa-solid fa-gauge"></i> <span class="d-none d-sm-inline">Dashboard</span>
+                    </a>
+                </div>
+                <div id="error-message"></div>
+            </div>
+        </header>
+
+        <main>
+            <section id="video-player-container">
+                <div id="video-placeholder">
+                    <i class="fab fa-youtube"></i>
+                    <p>Enter a YouTube video/playlist URL to start watching</p>
+                </div>
+                <iframe id="video-player" class="hidden"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen></iframe>
+            </section>
+        </main>
+    </div>
+
+    <script src="assets/youtube-noads-2.0-final.js"></script>
+</body>
+
+</html>

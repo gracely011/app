@@ -1,0 +1,92 @@
+/*
+  ____                     _       
+ / ___|_ __ __ _  ___ ___| |_   _ 
+| |  _| '__/ _` |/ __/ _ \ | | | |
+| |_| | | | (_| | (_|  __/ | |_| |
+ \____|_|  \__,_|\___\___|_|\__, |
+                            |___/ 
+   Unlock Premium Together
+*/
+.gp-ext { padding: 80px 0; }
+.gp-ext-grid { grid-template-columns: 7fr 5fr; grid-template-areas: 'main how' 'main limits'; }
+.gp-area-ex-main { grid-area: main; } .gp-area-ex-how { grid-area: how; } .gp-area-ex-limits { grid-area: limits; }
+.gp-ext-grid-ext { grid-template-columns: 7fr 5fr; grid-template-areas: 'status dl' 'status install'; align-items: start; }
+.gp-area-ex-status { grid-area: status; } .gp-area-ex-dl { grid-area: dl; } .gp-area-ex-install { grid-area: install; }
+
+/* header icon tint */
+.gp-ex-card .menu-section-header i { color: inherit; }
+
+/* intro + example */
+.gp-ex-lead { font-size: 13px; color: rgba(255,255,255,0.7); margin: 0 0 8px; line-height: 1.55; }
+.gp-ex-example { font-size: 12px; color: rgba(255,255,255,0.55); margin: 0 0 18px; line-height: 1.5; word-break: break-all; }
+.gp-ex-example code { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.08); padding: 2px 7px; border-radius: 6px; font-size: 11px; }
+
+/* dark floating-label inputs (inside dark cards) */
+.gp-ex-form .gracely-form-group { margin-bottom: 16px; }
+.gp-ex-form .gracely-form-group input,
+.gp-ex-form .gracely-form-group select { background: #0d0d0d; border-color: rgba(255,255,255,0.22); color: #fff; font-size: 15px; padding: 12px 14px; }
+.gp-ex-form .gracely-form-group select { padding-right: 40px; }
+.gp-ex-form .gracely-form-group select option { background: #111; color: #fff; }
+.gp-ex-form .gracely-form-group label { background: #0d0d0d; color: rgba(255,255,255,0.55); left: 12px; font-size: 15px; border-radius: 4px; }
+.gp-ex-form .gracely-form-group input:focus,
+.gp-ex-form .gracely-form-group select:focus { border-color: #fff; box-shadow: 0 0 0 3px rgba(255,255,255,0.08); }
+.gp-ex-form .gracely-form-group input:focus + label,
+.gp-ex-form .gracely-form-group input:not(:placeholder-shown) + label,
+.gp-ex-form .gracely-form-group select:focus + label,
+.gp-ex-form .gracely-form-group select:not([value=""]):valid + label { color: #fff; }
+.gp-ex-form .gracely-form-group:has(select)::after { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23ffffff' stroke-opacity='.7' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3E%3C/svg%3E"); }
+.gp-ex-form .cf-turnstile { margin-bottom: 16px; }
+.gp-ex-form { display: flex; flex-direction: column; flex: 1 1 auto; }
+.gp-ex-form .gp-dc-note { margin-top: auto; padding-top: 12px; }
+.gp-ex-form .gp-dash-actions { margin-top: 14px; }
+.gp-ex-submit { justify-content: center; }
+.gp-ex-submit:disabled { opacity: .45; cursor: not-allowed; }
+
+/* result / status alerts sit inside the main card */
+.gp-ex-card .gp-alert { margin: 0 0 16px; }
+.gp-alert-success .gp-alert-btn { background: #000; color: #fff; }
+.gp-alert-info .gp-alert-btn { background: #000; color: #fff; }
+
+/* "How to use" / "Limits" */
+.gp-ex-limits { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.gp-ex-limits li { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; line-height: 1.5; color: rgba(255,255,255,0.8); }
+.gp-ex-limits li i { margin-top: 3px; font-size: 14px; color: rgba(255,255,255,0.6); flex: 0 0 16px; text-align: center; }
+.gp-ex-limits li b { color: #fff; }
+.gp-ex-quota { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 16px; font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 999px; padding: 5px 12px; }
+.gp-ex-quota i { font-size: 11px; }
+
+/* extension.php */
+.gp-ex-status { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+.gp-ex-status-icon { width: 64px; height: 64px; border-radius: 18px; background: #fff; color: #000; display: inline-flex; align-items: center; justify-content: center; font-size: 26px; flex: 0 0 64px; }
+.gp-ex-status-icon.is-ok { background: #16a34a; color: #fff; }
+.gp-ex-status-title { font-size: 22px; font-weight: 800; line-height: 1.2; color: #fff; }
+.gp-ex-status-sub { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 6px; }
+.gp-ex-pin { display: block; width: 100%; max-width: 420px; height: auto; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); margin: 6px 0 16px; }
+.gp-ex-kbd { display: inline-block; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 11px; font-weight: 700; color: #fff; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); border-bottom-width: 2px; border-radius: 6px; padding: 1px 6px; }
+.gp-ex-card .gp-dash-downloads { padding: 0 0 6px; grid-template-columns: 1fr; }
+.gp-ex-card .gp-dash-tutorials { padding: 10px 0 2px; }
+.gp-ex-card .gp-dash-tutorials-btns a.gp-chip-btn { text-decoration: none; display: inline-block; }
+.gp-ex-card .gp-dc-steps li code { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.08); padding: 1px 6px; border-radius: 6px; font-size: 12px; }
+.gp-ex-back { margin-top: 24px; }
+
+/* guardrequired.php (light status box) */
+.gp-ex-guard-img { width: 100%; max-width: 320px; height: auto; border-radius: 12px; border: 1px solid #ececec; margin: 0 auto 18px; display: block; }
+.gp-ex-guard-actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 18px; }
+.gp-ex-guard-actions .ud-main-btn { border-radius: 999px; padding: 11px 20px; }
+.gp-ex-guard-actions .gp-ex-ghost { background: transparent; color: #000; border: 1px solid #ccc; }
+.gp-ex-guard-actions .gp-ex-ghost:hover { background: #f3f3f3; color: #000; }
+.gp-ex-guard-ver { display: inline-block; font-size: 12px; font-weight: 700; background: #000; color: #fff; border-radius: 999px; padding: 3px 10px; margin-left: 4px; }
+.gp-status-box .gp-status-icon.gp-ex-guard-icon { color: #d93636; }
+.gp-status-box .gp-status-icon.gp-ex-ok-icon { color: #16a34a; }
+.gp-status-box .gp-ex-kbd { color: #000; background: #f5f5f5; border-color: #d5d5d5; }
+
+@media (max-width: 991px) {
+  .gp-ext-grid { grid-template-columns: 1fr; grid-template-areas: 'main' 'how' 'limits'; }
+  .gp-ext-grid-ext { grid-template-columns: 1fr; grid-template-areas: 'status' 'dl' 'install'; }
+}
+@media (max-width: 767px) {
+  .gp-ext { padding: 60px 0; }
+  .gp-ext .container { padding-left: 16px; padding-right: 16px; }
+  .gp-ex-status-icon { width: 52px; height: 52px; flex-basis: 52px; font-size: 22px; }
+  .gp-ex-status-title { font-size: 18px; }
+}

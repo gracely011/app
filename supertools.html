@@ -1,0 +1,1597 @@
+<!--
+  ____                     _       
+ / ___|_ __ __ _  ___ ___| |_   _ 
+| |  _| '__/ _` |/ __/ _ \ | | | |
+| |_| | | | (_| | (_|  __/ | |_| |
+ \____|_|  \__,_|\___\___|_|\__, |
+                            |___/ 
+   Unlock Premium Together
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperTools | Gracely</title>
+    <link rel="shortcut icon" href="assets/images/favicon.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js"></script>
+    <script>
+        (async () => {
+            await requireAuth();
+
+            // Proteksi esktra: Mengecek masa aktif Premium dari state global
+            const isPremiumValid = String(GracelyState.get('isPremium')) === 'true';
+
+            if (!isPremiumValid) {
+                window.location.href = 'premium.html';
+            }
+        })();
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/heic2any/0.0.4/heic2any.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.7/beautify-html.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        .tool-btn.active {
+            background-color: #eff6ff;
+            color: #4f46e5;
+        }
+
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 3px solid #4f46e5;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .calc-btn {
+            @apply h-14 rounded-lg font-semibold text-lg transition-colors flex items-center justify-center shadow-sm active: scale-95 bg-gray-50 text-gray-700 hover:bg-gray-100;
+        }
+
+        .calc-btn.op {
+            @apply bg-indigo-50 text-indigo-600;
+        }
+
+        .calc-btn.eq {
+            @apply bg-indigo-600 text-white hover: bg-indigo-700;
+        }
+
+        .calc-btn.cl {
+            @apply bg-red-50 text-red-600;
+        }
+
+        .calc-btn:active {
+            @apply bg-gray-200;
+        }
+
+        /* Diff Checker */
+        .diff-added {
+            background-color: #dcfce7;
+            border-left: 3px solid #22c55e;
+        }
+
+        .diff-removed {
+            background-color: #fee2e2;
+            border-left: 3px solid #ef4444;
+        }
+
+        .diff-line {
+            font-family: 'JetBrains Mono', monospace;
+            padding: 2px 8px;
+            white-space: pre-wrap;
+            word-break: break-all;
+            font-size: 12px;
+            min-height: 20px;
+        }
+
+        /* Typing Test */
+        .correct {
+            color: #16a34a;
+        }
+
+        .incorrect {
+            color: #dc2626;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800 h-screen flex overflow-hidden" onkeydown="handleGlobalKey(event)">
+
+
+    <aside class="w-64 bg-white border-r border-gray-200 flex-shrink-0 hidden md:flex flex-col">
+        <div class="p-6 border-b border-gray-100">
+            <div class="flex items-center gap-2 text-indigo-600">
+                <i data-lucide="zap" class="w-6 h-6 fill-current"></i>
+                <h1 class="text-xl font-bold tracking-tight">SuperTools</h1>
+            </div>
+            <p class="text-xs text-gray-400 mt-1">100% Client-Side Processing</p>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto p-4 space-y-1">
+            <a href="dashboard.html"
+                class="tool-btn w-full flex items-center gap-3 px-4 py-2.5 text-sm font-bold rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 mb-4 shadow-sm">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to Gracely
+            </a>
+
+            <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-4">Essentials</div>
+            <button onclick="showTool('calculator')"
+                class="tool-btn w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50">
+                <i data-lucide="calculator" class="w-4 h-4"></i> Calculator
+            </button>
+            <button onclick="showTool('converter-unit')"
+                class="tool-btn w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50">
+                <i data-lucide="arrow-left-right" class="w-4 h-4"></i> Unit Converter
+            </button>
+            <button onclick="showTool('timer')"
+                class="tool-btn w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50">
+                <i data-lucide="hourglass" class="w-4 h-4"></i> Timer
+            </button>
+            <button onclick="showTool('stopwatch')"
+                class="tool-btn w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50">
+                <i data-lucide="timer" class="w-4 h-4"></i> Stopwatch
+            </button>
+
+            <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 mt-6 px-4">Media & Images
+            </div>
+            <button onclick="showTool('converter')"
+                class="tool-btn w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50">
+                <i data-lucide="image" class="w-4 h-4"></i> Image Converter
+            </button>
+            <button onclick="showTool('resizer')"
+                class="tool-btn w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50">
+                <i data-lucide="minimize" class="w-4 h-4"></i> Image Resizer
+            </button>
+            <button onclick="showTool('color-picker')"
+                class="tool-btn w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50">
+                <i data-lucide="pipette" class="w-4 h-4"></i> Color Picker
+            </button>
+            <button onclick="showTool('media-extract')"
+                class="tool-btn w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50">
+                <i data-lucide="music" class="w-4 h-4"></i> Video to Audio
+            </button>
+            <button onclick="showTool('img2pdf')"
+                class="tool-btn w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50">
+                <i data-lucide="file-text" class="w-4 h-4"></i> Image to PDF
+            </button>
+
+            <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 mt-6 px-4">Dev & Fun</div>
+            <button onclick="showTool('text')"
+                class="tool-btn w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50">
+                <i data-lucide="code" class="w-4 h-4"></i> Text & JSON
+            </button>
+            <button onclick="showTool('html-editor')"
+                class="tool-btn w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50">
+                <i data-lucide="layout" class="w-4 h-4"></i> HTML Live Editor
+            </button>
+            <button onclick="showTool('diff')"
+                class="tool-btn w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50">
+                <i data-lucide="file-diff" class="w-4 h-4"></i> Diff Checker
+            </button>
+            <button onclick="showTool('qr')"
+                class="tool-btn w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50">
+                <i data-lucide="qr-code" class="w-4 h-4"></i> QR Generator
+            </button>
+            <button onclick="showTool('password')"
+                class="tool-btn w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50">
+                <i data-lucide="lock" class="w-4 h-4"></i> Password Gen
+            </button>
+            <button onclick="showTool('typing')"
+                class="tool-btn w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50">
+                <i data-lucide="keyboard" class="w-4 h-4"></i> Typing Test
+            </button>
+            <button onclick="showTool('json-obfuscator')"
+                class="tool-btn w-full flex items-center gap-3 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:bg-gray-50">
+                <i data-lucide="shield-alert" class="w-4 h-4"></i> JSON Obfuscator
+            </button>
+        </nav>
+    </aside>
+
+
+    <div
+        class="md:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b z-40 flex items-center justify-between px-4">
+        <div class="flex items-center gap-2 text-indigo-600">
+            <i data-lucide="zap" class="w-6 h-6"></i>
+            <span class="font-bold">SuperTools</span>
+        </div>
+        <button onclick="toggleMobile()" class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+    </div>
+
+
+    <div id="mobile-menu" class="hidden fixed inset-0 z-50 bg-gray-900/50 backdrop-blur-sm md:hidden transition-opacity"
+        onclick="toggleMobile()">
+        <div class="absolute right-0 top-0 bottom-0 w-72 bg-white shadow-2xl p-4 overflow-y-auto transform transition-transform"
+            onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between mb-6 pb-4 border-b">
+                <span class="font-bold text-lg text-gray-800">Menu</span>
+                <button onclick="toggleMobile()" class="p-2 hover:bg-gray-100 rounded-full text-gray-500">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <div class="space-y-1 pb-10">
+
+                <a href="dashboard.html"
+                    class="w-full flex items-center gap-3 px-3 py-3 text-sm font-bold rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 mx-2 mb-4 shadow-sm"
+                    style="width: calc(100% - 1rem);">
+                    <i data-lucide="arrow-left" class="w-4 h-4 text-white"></i> Back to Gracely
+                </a>
+
+                <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 mt-2 px-2">Essentials</div>
+                <button onclick="showTool('calculator'); toggleMobile()"
+                    class="w-full flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                    <i data-lucide="calculator" class="w-4 h-4 text-indigo-500"></i> Calculator
+                </button>
+                <button onclick="showTool('converter-unit'); toggleMobile()"
+                    class="w-full flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                    <i data-lucide="arrow-left-right" class="w-4 h-4 text-indigo-500"></i> Unit Converter
+                </button>
+                <button onclick="showTool('timer'); toggleMobile()"
+                    class="w-full flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                    <i data-lucide="hourglass" class="w-4 h-4 text-indigo-500"></i> Timer
+                </button>
+                <button onclick="showTool('stopwatch'); toggleMobile()"
+                    class="w-full flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                    <i data-lucide="timer" class="w-4 h-4 text-indigo-500"></i> Stopwatch
+                </button>
+
+
+                <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 mt-6 px-2">Media</div>
+                <button onclick="showTool('converter'); toggleMobile()"
+                    class="w-full flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                    <i data-lucide="image" class="w-4 h-4 text-pink-500"></i> Image Converter
+                </button>
+                <button onclick="showTool('resizer'); toggleMobile()"
+                    class="w-full flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                    <i data-lucide="minimize" class="w-4 h-4 text-pink-500"></i> Image Resizer
+                </button>
+                <button onclick="showTool('color-picker'); toggleMobile()"
+                    class="w-full flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                    <i data-lucide="pipette" class="w-4 h-4 text-pink-500"></i> Color Picker
+                </button>
+                <button onclick="showTool('media-extract'); toggleMobile()"
+                    class="w-full flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                    <i data-lucide="music" class="w-4 h-4 text-pink-500"></i> Video to Audio
+                </button>
+                <button onclick="showTool('img2pdf'); toggleMobile()"
+                    class="w-full flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                    <i data-lucide="file-text" class="w-4 h-4 text-pink-500"></i> Image to PDF
+                </button>
+
+
+                <div class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 mt-6 px-2">Dev & Fun</div>
+                <button onclick="showTool('text'); toggleMobile()"
+                    class="w-full flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                    <i data-lucide="code" class="w-4 h-4 text-blue-500"></i> Text & JSON
+                </button>
+                <button onclick="showTool('html-editor'); toggleMobile()"
+                    class="w-full flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                    <i data-lucide="layout" class="w-4 h-4 text-blue-500"></i> HTML Editor
+                </button>
+                <button onclick="showTool('diff'); toggleMobile()"
+                    class="w-full flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                    <i data-lucide="file-diff" class="w-4 h-4 text-blue-500"></i> Diff Checker
+                </button>
+                <button onclick="showTool('qr'); toggleMobile()"
+                    class="w-full flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                    <i data-lucide="qr-code" class="w-4 h-4 text-blue-500"></i> QR Generator
+                </button>
+                <button onclick="showTool('password'); toggleMobile()"
+                    class="w-full flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                    <i data-lucide="lock" class="w-4 h-4 text-blue-500"></i> Password Gen
+                </button>
+                <button onclick="showTool('typing'); toggleMobile()"
+                    class="w-full flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                    <i data-lucide="keyboard" class="w-4 h-4 text-blue-500"></i> Typing Test
+                </button>
+                <button onclick="showTool('json-obfuscator'); toggleMobile()"
+                    class="w-full flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg text-gray-700 hover:bg-gray-50">
+                    <i data-lucide="shield-alert" class="w-4 h-4 text-blue-500"></i> JSON Obfuscator
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <main class="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-8 mt-16 md:mt-0">
+
+
+        <div id="tool-welcome" class="tool-section hidden max-w-3xl mx-auto text-center pt-12">
+            <div
+                class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-indigo-100 text-indigo-600 mb-6">
+                <i data-lucide="zap" class="w-10 h-10"></i>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Welcome to SuperTools</h2>
+            <p class="text-gray-600 max-w-lg mx-auto">A powerful collection of offline-capable utilities. Select a tool
+                from the sidebar to get started.</p>
+        </div>
+
+
+        <div id="tool-calculator" class="tool-section hidden max-w-sm mx-auto">
+            <div class="mb-6 text-center">
+                <h2 class="text-2xl font-bold text-gray-900">Calculator</h2>
+                <p class="text-xs text-gray-400">Supports Keyboard Input</p>
+            </div>
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
+                <div class="bg-gray-100 rounded-xl p-4 mb-4 text-right">
+                    <div id="calc-history" class="text-sm text-gray-400 h-6"></div>
+                    <div id="calc-display" class="text-3xl font-mono font-bold text-gray-800 truncate">0</div>
+                </div>
+                <div class="grid grid-cols-4 gap-3">
+                    <button onclick="calcClear()" class="calc-btn cl">C</button>
+                    <button onclick="calcInput('(')" class="calc-btn op">(</button>
+                    <button onclick="calcInput(')')" class="calc-btn op">)</button>
+                    <button onclick="calcInput('/')" class="calc-btn op">Ã·</button>
+
+                    <button onclick="calcInput('7')" class="calc-btn">7</button>
+                    <button onclick="calcInput('8')" class="calc-btn">8</button>
+                    <button onclick="calcInput('9')" class="calc-btn">9</button>
+                    <button onclick="calcInput('*')" class="calc-btn op">Ã—</button>
+
+                    <button onclick="calcInput('4')" class="calc-btn">4</button>
+                    <button onclick="calcInput('5')" class="calc-btn">5</button>
+                    <button onclick="calcInput('6')" class="calc-btn">6</button>
+                    <button onclick="calcInput('-')" class="calc-btn op">âˆ’</button>
+
+                    <button onclick="calcInput('1')" class="calc-btn">1</button>
+                    <button onclick="calcInput('2')" class="calc-btn">2</button>
+                    <button onclick="calcInput('3')" class="calc-btn">3</button>
+                    <button onclick="calcInput('+')" class="calc-btn op">+</button>
+
+                    <button onclick="calcInput('0')" class="calc-btn col-span-2">0</button>
+                    <button onclick="calcInput('.')" class="calc-btn">.</button>
+                    <button onclick="calcResult()" class="calc-btn eq">=</button>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="tool-converter-unit" class="tool-section hidden max-w-lg mx-auto">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Unit Converter</h2>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div class="mb-6">
+                    <label class="block text-xs font-medium text-gray-500 mb-1 uppercase">Category</label>
+                    <div class="flex bg-gray-100 p-1 rounded-lg">
+                        <button onclick="setUnitCat('length')"
+                            class="unit-cat-btn flex-1 py-2 text-sm rounded-md font-medium bg-white shadow-sm text-indigo-600">Length</button>
+                        <button onclick="setUnitCat('weight')"
+                            class="unit-cat-btn flex-1 py-2 text-sm rounded-md font-medium text-gray-600 hover:bg-gray-200">Weight</button>
+                        <button onclick="setUnitCat('temp')"
+                            class="unit-cat-btn flex-1 py-2 text-sm rounded-md font-medium text-gray-600 hover:bg-gray-200">Temp</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-[1fr,auto,1fr] gap-4 items-center">
+                    <div class="space-y-2">
+                        <input type="number" id="unit-in-val"
+                            class="w-full text-2xl font-bold p-2 border-b-2 border-indigo-100 focus:border-indigo-500 focus:outline-none bg-transparent"
+                            value="1" oninput="convertUnit()">
+                        <select id="unit-in-type"
+                            class="w-full text-sm text-gray-600 bg-transparent border-none focus:ring-0"
+                            onchange="convertUnit()"></select>
+                    </div>
+                    <div class="text-gray-400"><i data-lucide="arrow-right"></i></div>
+                    <div class="space-y-2">
+                        <input type="number" id="unit-out-val"
+                            class="w-full text-2xl font-bold p-2 border-b-2 border-gray-100 bg-transparent text-gray-500"
+                            readonly>
+                        <select id="unit-out-type"
+                            class="w-full text-sm text-gray-600 bg-transparent border-none focus:ring-0"
+                            onchange="convertUnit()"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="tool-timer" class="tool-section hidden max-w-md mx-auto">
+            <div class="mb-6 text-center">
+                <h2 class="text-2xl font-bold text-gray-900">Timer</h2>
+            </div>
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 text-center">
+                <div id="timer-display" class="text-7xl font-mono font-bold text-gray-800 mb-8">00:00</div>
+
+                <div id="timer-inputs" class="grid grid-cols-3 gap-4 mb-8">
+                    <div><label class="text-xs text-gray-500">Hours</label><input type="number" id="t-h" min="0"
+                            max="99" value="0" class="w-full text-center border rounded p-2"></div>
+                    <div><label class="text-xs text-gray-500">Mins</label><input type="number" id="t-m" min="0" max="59"
+                            value="5" class="w-full text-center border rounded p-2"></div>
+                    <div><label class="text-xs text-gray-500">Secs</label><input type="number" id="t-s" min="0" max="59"
+                            value="0" class="w-full text-center border rounded p-2"></div>
+                </div>
+
+                <div class="flex justify-center gap-4">
+                    <button onclick="startTimer()" id="btn-timer-start"
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-full font-medium w-32">Start</button>
+                    <button onclick="stopTimer()" id="btn-timer-stop"
+                        class="hidden bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-full font-medium w-32">Stop</button>
+                    <button onclick="resetTimer()"
+                        class="bg-gray-100 hover:bg-gray-200 text-gray-800 px-6 py-3 rounded-full font-medium">Reset</button>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="tool-converter" class="tool-section hidden max-w-3xl mx-auto">
+            <div class="mb-6">
+                <div class="flex items-center gap-2">
+                    <h2 class="text-2xl font-bold text-gray-900">Image Converter</h2>
+                    <span class="px-2 py-0.5 bg-purple-100 text-purple-700 text-xs font-bold rounded-full">HEIC Support
+                        Added</span>
+                </div>
+                <p class="text-gray-500 text-sm">Convert PNG, JPG, WEBP, GIF, AVIF, and HEIC/HEIF.</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div id="drop-zone-converter"
+                    class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:bg-gray-50 transition-colors cursor-pointer"
+                    onclick="document.getElementById('file-converter').click()">
+                    <input type="file" id="file-converter" class="hidden" accept="image/*, .heic, .heif" multiple
+                        onchange="handleConverterFiles(this.files)">
+                    <i data-lucide="upload-cloud" class="w-10 h-10 text-gray-400 mx-auto mb-3"></i>
+                    <p class="text-sm font-medium text-gray-700">Click to upload or drag and drop</p>
+                    <p class="text-xs text-gray-500 mt-2">Supports HEIC (iPhone), JPG, PNG, WebP</p>
+                </div>
+                <div id="converter-controls" class="hidden mt-6 pt-6 border-t border-gray-100">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Output Format</label>
+                            <select id="convert-format" class="w-full border rounded-lg p-2 text-sm">
+                                <option value="image/jpeg">JPEG</option>
+                                <option value="image/png">PNG</option>
+                                <option value="image/webp">WEBP</option>
+                                <option value="ico">Favicon (ICO)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700 mb-1">Quality</label>
+                            <input type="range" id="convert-quality" min="0.1" max="1" step="0.1" value="0.9"
+                                class="w-full h-9">
+                        </div>
+                        <div class="flex items-end">
+                            <button onclick="processConverter()"
+                                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg flex justify-center items-center gap-2"><span
+                                    id="conv-btn-text">Convert All</span>
+                                <div id="conv-loader" class="loader hidden"></div>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="converter-preview-list" class="space-y-3 mt-6"></div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="tool-color-picker" class="tool-section hidden max-w-4xl mx-auto">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Color Picker</h2>
+                <p class="text-gray-500 text-sm">Upload an image and <span
+                        class="font-bold text-indigo-600">CLICK</span> to capture a color.</p>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="flex-1">
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:bg-gray-50 mb-4"
+                            onclick="document.getElementById('color-file').click()">
+                            <input type="file" id="color-file" class="hidden" accept="image/*"
+                                onchange="initColorPicker(this.files[0])">
+                            <span class="text-sm text-gray-600 flex items-center justify-center gap-2"><i
+                                    data-lucide="image-plus" class="w-4 h-4"></i> Upload Image</span>
+                        </div>
+                        <div
+                            class="relative overflow-hidden rounded-lg border border-gray-200 bg-gray-100 flex justify-center items-center min-h-[300px] max-h-[500px]">
+                            <canvas id="color-canvas" class="max-w-full cursor-crosshair"></canvas>
+                            <div id="color-placeholder" class="text-gray-400 text-sm absolute pointer-events-none">No
+                                image uploaded</div>
+
+                            <div id="color-magnifier"
+                                class="hidden absolute pointer-events-none border-2 border-white shadow-lg rounded-full w-24 h-24 bg-no-repeat z-10"
+                                style="background-color: white;"></div>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-72 flex flex-col gap-4">
+                        <div class="p-5 border rounded-xl bg-gray-50">
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="text-xs font-bold uppercase text-gray-500">Selected Color</span>
+                                <div id="picked-color-preview" class="w-8 h-8 rounded border-2 border-white shadow-sm"
+                                    style="background-color: #ffffff;"></div>
+                            </div>
+                            <div class="space-y-3">
+                                <div>
+                                    <label class="text-xs text-gray-400">HEX</label>
+                                    <div class="relative">
+                                        <input type="text" id="picked-hex"
+                                            class="w-full font-mono text-sm border rounded p-2 pr-8 bg-white"
+                                            value="#FFFFFF" readonly onclick="copyToClip(this)">
+                                        <i data-lucide="copy" class="w-3 h-3 absolute right-2 top-3 text-gray-400"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="text-xs text-gray-400">RGB</label>
+                                    <div class="relative">
+                                        <input type="text" id="picked-rgb"
+                                            class="w-full font-mono text-sm border rounded p-2 pr-8 bg-white"
+                                            value="rgb(255,255,255)" readonly onclick="copyToClip(this)">
+                                        <i data-lucide="copy" class="w-3 h-3 absolute right-2 top-3 text-gray-400"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-4 border rounded-xl bg-indigo-50 text-indigo-800 text-xs">
+                            <p><strong>Tip:</strong> Hover over image to magnify. <strong>Click</strong> to lock the
+                                color selection.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="tool-text" class="tool-section hidden max-w-4xl mx-auto">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Dev Text Utilities</h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="flex flex-col h-[500px]">
+                    <label class="text-xs font-bold text-gray-500 mb-2">INPUT</label>
+                    <textarea id="text-input"
+                        class="flex-1 border rounded-lg p-3 text-sm font-mono resize-none focus:border-indigo-500 focus:outline-none"
+                        placeholder="Paste Code, JSON, or HTML here..."></textarea>
+                    <div class="flex gap-2 mt-2 text-xs text-gray-500"><span>Length: <b id="char-count">0</b></span>
+                    </div>
+                </div>
+                <div class="flex flex-col h-[500px]">
+                    <label class="text-xs font-bold text-gray-500 mb-2">OUTPUT</label>
+                    <textarea id="text-output"
+                        class="flex-1 bg-gray-50 border rounded-lg p-3 text-sm font-mono resize-none focus:outline-none"
+                        readonly></textarea>
+
+                    <div class="grid grid-cols-3 gap-2 mt-2">
+                        <button onclick="transformText('json')"
+                            class="px-2 py-1.5 bg-indigo-600 text-white rounded text-xs font-medium">Beautify
+                            JSON</button>
+                        <button onclick="transformText('html')"
+                            class="px-2 py-1.5 bg-indigo-600 text-white rounded text-xs font-medium">Beautify
+                            HTML</button>
+                        <button onclick="transformText('minify')"
+                            class="px-2 py-1.5 bg-gray-800 text-white rounded text-xs font-medium">Minify JSON</button>
+                        <button onclick="transformText('lorem')"
+                            class="px-2 py-1.5 bg-indigo-50 text-indigo-600 rounded text-xs font-medium">Lorem
+                            Ipsum</button>
+
+                        <button onclick="transformText('uppercase')"
+                            class="px-2 py-1.5 border rounded text-xs hover:bg-gray-50">UPPERCASE</button>
+                        <button onclick="transformText('lowercase')"
+                            class="px-2 py-1.5 border rounded text-xs hover:bg-gray-50">lowercase</button>
+                        <button onclick="transformText('alternating')"
+                            class="px-2 py-1.5 border rounded text-xs hover:bg-gray-50">uPpErLoWeR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="tool-html-editor" class="tool-section hidden max-w-6xl mx-auto">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">HTML Live Editor</h2>
+            </div>
+            <div class="grid grid-cols-2 gap-4 h-[600px]">
+                <div class="flex flex-col">
+                    <label class="text-xs font-bold text-gray-500 mb-2">CODE (HTML/CSS/JS)</label>
+                    <textarea id="html-code"
+                        class="flex-1 border rounded-lg p-4 font-mono text-sm resize-none focus:ring-2 focus:ring-indigo-500 outline-none bg-gray-900 text-gray-100"
+                        placeholder="<h1>Hello World</h1>" oninput="renderHTML()"></textarea>
+                </div>
+                <div class="flex flex-col">
+                    <label class="text-xs font-bold text-gray-500 mb-2">PREVIEW</label>
+                    <iframe id="html-preview" class="flex-1 w-full border rounded-lg bg-white"></iframe>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="tool-typing" class="tool-section hidden max-w-3xl mx-auto">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Typing Speed Test</h2>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+                <div class="flex justify-between mb-4 text-sm font-medium text-gray-500">
+                    <span>Time: <b id="tt-time">60</b>s</span>
+                    <span>WPM: <b id="tt-wpm">0</b></span>
+                </div>
+                <div id="tt-text-display"
+                    class="text-left text-lg font-mono leading-relaxed mb-6 p-4 bg-gray-50 rounded-lg select-none h-32 overflow-y-auto relative text-gray-500">
+                    Click "Start Test" to begin...
+                </div>
+                <textarea id="tt-input"
+                    class="w-full border rounded-lg p-3 font-mono text-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                    placeholder="Type here..." disabled oninput="handleTyping()"></textarea>
+                <button onclick="startTypingTest()" id="tt-btn"
+                    class="mt-4 bg-indigo-600 text-white px-6 py-2 rounded-lg">Start Test</button>
+            </div>
+        </div>
+
+        <div id="tool-json-obfuscator" class="tool-section hidden max-w-5xl mx-auto">
+            <div class="mb-6"><h2 class="text-2xl font-bold text-gray-900">JSON Obfuscator</h2></div>
+            <div class="flex flex-col gap-6">
+                <!-- Input Block -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <label class="block text-sm font-bold text-gray-700 mb-3">Your JSON Code here:</label>
+                    <textarea id="json-obf-input" class="w-full h-48 border rounded-lg p-3 text-xs font-mono resize-none focus:ring-2 focus:ring-indigo-500 outline-none" placeholder='{ "key": "value" }'></textarea>
+                    
+                    <div class="flex items-center gap-3 mt-4">
+                        <button onclick="obfuscateJSON()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-lg text-sm transition-colors">OBFUSCATE</button>
+                    </div>
+                </div>
+
+                <!-- Options Block -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col gap-4">
+                    <div>
+                        <label class="flex items-center gap-2 cursor-pointer w-max">
+                            <input type="checkbox" id="json-obf-minify" class="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500" checked>
+                            <span class="text-sm font-bold text-gray-700">Minified Output</span>
+                        </label>
+                        <p class="text-xs text-gray-500 mt-1 ml-6">Whether the output code is minified or not</p>
+                    </div>
+                    
+                    <div class="pt-4 border-t border-gray-100">
+                        <label class="flex items-center gap-2 cursor-pointer w-max">
+                            <input type="checkbox" id="json-obf-aes" class="w-4 h-4 text-amber-500 rounded focus:ring-amber-500" onchange="document.getElementById('aes-input-container').classList.toggle('hidden', !this.checked)">
+                            <span class="text-sm font-bold text-amber-600">ðŸ”’ Aktifkan Enkripsi AES (Password)</span>
+                        </label>
+                        
+                        <div id="aes-input-container" class="hidden mt-3 ml-6">
+                            <label class="block text-xs font-bold text-gray-600 mb-1">Password:</label>
+                            <input type="text" id="json-obf-password" class="w-full max-w-sm border border-amber-200 rounded-lg p-2 text-sm focus:ring-2 focus:ring-amber-500 outline-none placeholder-gray-400" placeholder="Contoh: Rahasia_Negara_123">
+                            <p class="text-[10px] text-gray-400 mt-1">Jika opsi ini diaktifkan, data akan dibungkus rapat oleh sandi AES-GCM tingkat tinggi.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Output Block -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <label class="block text-sm font-bold text-gray-700 mb-3">Obfuscated JSON Code:</label>
+                    <textarea id="json-obf-output" class="w-full h-48 bg-gray-100 border rounded-lg p-3 text-xs font-mono resize-none outline-none text-gray-700 focus:ring-2 focus:ring-gray-300" readonly></textarea>
+                    
+                    <div class="flex justify-center mt-6">
+                        <button onclick="copyToClip(document.getElementById('json-obf-output'))" class="bg-black hover:bg-gray-800 text-white font-bold py-3 px-8 rounded-lg text-sm transition-colors uppercase tracking-wider">COPY TO CLIPBOARD</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="tool-diff" class="tool-section hidden max-w-5xl mx-auto">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Diff Checker</h2>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <textarea id="diff-orig" class="w-full h-48 border rounded p-2 text-xs font-mono"
+                        placeholder="Original..."></textarea>
+                    <textarea id="diff-mod" class="w-full h-48 border rounded p-2 text-xs font-mono"
+                        placeholder="Modified..."></textarea>
+                </div>
+                <button onclick="runDiff()"
+                    class="w-full bg-indigo-600 text-white py-2 rounded mb-6 font-medium">Compare</button>
+                <div class="grid grid-cols-2 gap-0 border rounded overflow-hidden bg-gray-50">
+                    <div id="diff-out-orig" class="bg-white"></div>
+                    <div id="diff-out-mod" class="bg-white border-l"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tool-stopwatch" class="tool-section hidden max-w-2xl mx-auto">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Stopwatch</h2>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+                <div id="sw-display" class="text-6xl font-mono font-bold text-gray-800 mb-8 tabular-nums">00:00:00.00
+                </div>
+                <div class="flex justify-center gap-4 mb-8">
+                    <button onclick="swStart()" id="sw-btn-start"
+                        class="bg-green-500 text-white px-6 py-2 rounded-full w-24">Start</button>
+                    <button onclick="swStop()" id="sw-btn-stop"
+                        class="hidden bg-red-500 text-white px-6 py-2 rounded-full w-24">Stop</button>
+                    <button onclick="swLap()" id="sw-btn-lap"
+                        class="bg-gray-200 text-gray-800 px-6 py-2 rounded-full w-24">Lap</button>
+                    <button onclick="swReset()"
+                        class="bg-gray-800 text-white px-6 py-2 rounded-full w-24">Reset</button>
+                </div>
+                <div id="sw-laps"
+                    class="max-h-48 overflow-y-auto border-t pt-4 space-y-2 text-sm font-mono text-gray-600"></div>
+            </div>
+        </div>
+
+
+        <div id="tool-media-extract" class="tool-section hidden max-w-3xl mx-auto">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Video to Audio</h2>
+            </div>
+            <div class="bg-white rounded-xl p-6 border">
+                <div class="border-2 border-dashed p-8 text-center cursor-pointer"
+                    onclick="document.getElementById('file-video').click()"><input type="file" id="file-video"
+                        class="hidden" onchange="handleVideoFile(this.files[0])">
+                    <p>Upload Video</p>
+                </div>
+                <div id="video-process-area" class="hidden mt-4"><button onclick="extractAudio()"
+                        class="w-full bg-indigo-600 text-white py-2 rounded">Convert to WAV</button></div>
+            </div>
+        </div>
+
+        <div id="tool-resizer" class="tool-section hidden max-w-3xl mx-auto">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Image Resizer</h2>
+            </div>
+            <div class="bg-white p-6 rounded-xl border">
+                <input type="file" onchange="handleResizerFile(this.files[0])" class="mb-4">
+                <div id="resizer-workspace" class="hidden">
+                    <img id="resizer-preview" class="h-64 mx-auto object-contain mb-4">
+                    <div class="text-center text-sm text-gray-500 mb-2">Original: <span id="orig-dims"></span></div>
+                    <div class="grid grid-cols-2 gap-4"><input type="number" id="resize-width" class="border p-2"
+                            oninput="calcHeight()"><input type="number" id="resize-height" class="border p-2"
+                            oninput="calcWidth()"></div>
+                    <div class="mt-2"><label><input type="checkbox" id="aspect-ratio" checked> Maintain Ratio</label>
+                    </div>
+                    <button onclick="processResizer()"
+                        class="w-full bg-indigo-600 text-white mt-4 py-2 rounded">Download</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="tool-img2pdf" class="tool-section hidden max-w-3xl mx-auto">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Image to PDF</h2>
+            </div>
+            <div class="bg-white p-6 rounded-xl border"><input type="file" id="file-pdf" class="hidden" multiple
+                    onchange="handlePdfFiles(this.files)"><button onclick="document.getElementById('file-pdf').click()"
+                    class="bg-gray-800 text-white px-4 py-2 rounded mb-4">Add Images</button>
+                <div id="pdf-queue" class="grid grid-cols-4 gap-2 mb-4"></div><button onclick="generatePDF()"
+                    class="w-full bg-red-600 text-white py-2 rounded">Download PDF</button>
+            </div>
+        </div>
+
+        <div id="tool-qr" class="tool-section hidden max-w-3xl mx-auto">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">QR Generator</h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white p-6 border rounded-xl">
+                    <textarea id="qr-text" class="w-full border p-2 rounded mb-4" rows="3"
+                        placeholder="Text/URL"></textarea>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div><label class="text-xs">Foreground</label><input type="color" id="qr-fg" value="#000000"
+                                class="w-full h-10"></div>
+                        <div><label class="text-xs">Background</label><input type="color" id="qr-bg" value="#ffffff"
+                                class="w-full h-10"></div>
+                    </div>
+                    <button onclick="generateQR()" class="w-full bg-gray-900 text-white py-2 rounded">Generate</button>
+                </div>
+                <div class="bg-white p-6 border rounded-xl flex justify-center">
+                    <div id="qr-output"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tool-password" class="tool-section hidden max-w-2xl mx-auto">
+            <div class="mb-6">
+                <h2 class="text-2xl font-bold text-gray-900">Password Gen</h2>
+            </div>
+            <div class="bg-white p-6 border rounded-xl"><input id="pass-output"
+                    class="w-full bg-gray-100 p-3 rounded text-center font-mono mb-4" readonly>
+                <div class="mb-4"><label>Length: <span id="pass-len-val">16</span></label><input type="range"
+                        id="pass-len" min="6" max="64" value="16" class="w-full"
+                        oninput="document.getElementById('pass-len-val').innerText=this.value; generatePassword()">
+                </div>
+                <div class="grid grid-cols-4 gap-2 mb-4"><label><input type="checkbox" id="pass-upper" checked
+                            onchange="generatePassword()"> A-Z</label><label><input type="checkbox" id="pass-lower"
+                            checked onchange="generatePassword()"> a-z</label><label><input type="checkbox"
+                            id="pass-num" checked onchange="generatePassword()"> 0-9</label><label><input
+                            type="checkbox" id="pass-sym" checked onchange="generatePassword()"> #@!</label></div>
+                <button onclick="generatePassword()"
+                    class="w-full bg-indigo-600 text-white py-2 rounded">Regenerate</button>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- Core & Navigation ---
+        lucide.createIcons();
+        let currentTool = 'calculator'; // Declared before usage
+
+        showTool('calculator');
+
+        function showTool(id) {
+            currentTool = id;
+
+            // 1. Reset all buttons
+            document.querySelectorAll('.tool-btn').forEach(b => {
+                b.classList.remove('bg-indigo-50', 'text-indigo-700');
+                b.classList.add('text-gray-600', 'hover:bg-gray-50');
+            });
+
+            // 2. Select the specific button using the EXACT function call string
+            // This ensures 'converter' doesn't match 'converter-unit'
+            const activeBtn = document.querySelector(`aside button[onclick="showTool('${id}')"]`);
+
+            if (activeBtn) {
+                activeBtn.classList.remove('text-gray-600', 'hover:bg-gray-50');
+                activeBtn.classList.add('bg-indigo-50', 'text-indigo-700');
+            }
+
+            // 3. Hide all sections and show target
+            document.querySelectorAll('.tool-section').forEach(s => s.classList.add('hidden'));
+            const target = document.getElementById('tool-' + id);
+            if (target) target.classList.remove('hidden');
+
+            if (window.innerWidth < 768) document.getElementById('mobile-menu').classList.add('hidden');
+        }
+
+        function toggleMobile() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        function copyToClip(el) {
+            el.select();
+            document.execCommand('copy');
+            alert("Copied!");
+        }
+
+        function downloadURI(uri, name) {
+            const l = document.createElement("a");
+            l.download = name;
+            l.href = uri;
+            document.body.appendChild(l);
+            l.click();
+            document.body.removeChild(l);
+        }
+
+        // --- GLOBAL KEYBOARD HANDLER (For Calculator) ---
+        function handleGlobalKey(e) {
+            if (currentTool === 'calculator') {
+                const key = e.key;
+                if (/[0-9]/.test(key)) calcInput(key);
+                if (['+', '-', '*', '/'].includes(key)) calcInput(key);
+                if (key === 'Enter') calcResult();
+                if (key === 'Escape') calcClear();
+                if (key === 'Backspace') {
+                    calcExpr = calcExpr.slice(0, -1);
+                    document.getElementById('calc-display').innerText = calcExpr || "0";
+                }
+                if (key === '.') calcInput('.');
+            }
+        }
+
+        // --- CALCULATOR ---
+        let calcExpr = "";
+
+        function calcInput(val) {
+            calcExpr += val;
+            document.getElementById('calc-display').innerText = calcExpr;
+        }
+
+        function calcClear() {
+            calcExpr = "";
+            document.getElementById('calc-display').innerText = "0";
+            document.getElementById('calc-history').innerText = "";
+        }
+
+        function calcResult() {
+            try {
+                const res = eval(calcExpr);
+                document.getElementById('calc-history').innerText = calcExpr + " =";
+                document.getElementById('calc-display').innerText = res;
+                calcExpr = String(res);
+            } catch (e) {
+                document.getElementById('calc-display').innerText = "Error";
+                calcExpr = "";
+            }
+        }
+
+        // --- TIMER (With Sound) ---
+        let timerInt, timerTotalSecs;
+        const audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+
+        function playBeep() {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.type = 'sine';
+            osc.frequency.value = 880;
+            gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.5);
+        }
+
+        function startTimer() {
+            const h = parseInt(document.getElementById('t-h').value) || 0;
+            const m = parseInt(document.getElementById('t-m').value) || 0;
+            const s = parseInt(document.getElementById('t-s').value) || 0;
+            timerTotalSecs = h * 3600 + m * 60 + s;
+            if (timerTotalSecs <= 0) return;
+
+            document.getElementById('btn-timer-start').classList.add('hidden');
+            document.getElementById('btn-timer-stop').classList.remove('hidden');
+            document.getElementById('timer-inputs').classList.add('opacity-50', 'pointer-events-none');
+
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            timerInt = setInterval(() => {
+                timerTotalSecs--;
+                if (timerTotalSecs < 0) {
+                    resetTimer();
+                    playBeep();
+                    setTimeout(playBeep, 600);
+                    alert("Timer Finished!");
+                    return;
+                }
+                const dh = Math.floor(timerTotalSecs / 3600).toString().padStart(2, '0');
+                const dm = Math.floor((timerTotalSecs % 3600) / 60).toString().padStart(2, '0');
+                const ds = (timerTotalSecs % 60).toString().padStart(2, '0');
+                document.getElementById('timer-display').innerText = `${dh}:${dm}:${ds}`;
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInt);
+            document.getElementById('btn-timer-start').classList.remove('hidden');
+            document.getElementById('btn-timer-stop').classList.add('hidden');
+        }
+
+        function resetTimer() {
+            stopTimer();
+            document.getElementById('timer-display').innerText = "00:00";
+            document.getElementById('timer-inputs').classList.remove('opacity-50', 'pointer-events-none');
+        }
+
+        // --- HTML LIVE EDITOR (Replaced Markdown) ---
+        function renderHTML() {
+            const code = document.getElementById('html-code').value;
+            const iframe = document.getElementById('html-preview');
+            iframe.contentWindow.document.open();
+            iframe.contentWindow.document.write(code);
+            iframe.contentWindow.document.close();
+        }
+
+        // --- TYPING TEST ---
+        const sampleTexts = [
+            "The quick brown fox jumps over the lazy dog.",
+            "To be or not to be, that is the question.",
+            "All that glitters is not gold.",
+            "A journey of a thousand miles begins with a single step.",
+            "In the middle of difficulty lies opportunity."
+        ];
+        let ttTime = 60,
+            ttInt, ttActive = false;
+
+        function startTypingTest() {
+            // Reset
+            clearInterval(ttInt);
+            ttTime = 60;
+            ttActive = true;
+            document.getElementById('tt-time').innerText = 60;
+            document.getElementById('tt-wpm').innerText = 0;
+            document.getElementById('tt-input').value = '';
+            document.getElementById('tt-input').disabled = false;
+            document.getElementById('tt-input').focus();
+            document.getElementById('tt-btn').innerText = "Restart Test";
+
+            // Set random text
+            const text = sampleTexts[Math.floor(Math.random() * sampleTexts.length)];
+            // Wrap letters in spans for validation
+            const html = text.split('').map(char => `<span>${char}</span>`).join('');
+            document.getElementById('tt-text-display').innerHTML = html;
+
+            // Start timer
+            ttInt = setInterval(() => {
+                ttTime--;
+                document.getElementById('tt-time').innerText = ttTime;
+                if (ttTime <= 0) {
+                    clearInterval(ttInt);
+                    ttActive = false;
+                    document.getElementById('tt-input').disabled = true;
+                    alert(`Time's up! Your WPM: ${document.getElementById('tt-wpm').innerText}`);
+                }
+            }, 1000);
+        }
+
+        function handleTyping() {
+            if (!ttActive) return;
+
+            const input = document.getElementById('tt-input').value;
+            const spans = document.getElementById('tt-text-display').querySelectorAll('span');
+            let correctCount = 0;
+
+            spans.forEach((span, index) => {
+                const char = input[index];
+                if (char == null) {
+                    span.classList.remove('correct', 'incorrect');
+                } else if (char === span.innerText) {
+                    span.classList.add('correct');
+                    span.classList.remove('incorrect');
+                    correctCount++;
+                } else {
+                    span.classList.add('incorrect');
+                    span.classList.remove('correct');
+                }
+            });
+
+            // Calculate WPM (simple: chars / 5 / minutes)
+            const minutes = (60 - ttTime) / 60;
+            if (minutes > 0) {
+                const wpm = Math.round((correctCount / 5) / minutes);
+                document.getElementById('tt-wpm').innerText = wpm;
+            }
+        }
+
+        // --- TEXT TOOLS ---
+        document.getElementById('text-input').addEventListener('input', e => document.getElementById('char-count')
+            .innerText = e.target.value.length);
+
+        function transformText(type) {
+            const i = document.getElementById('text-input').value;
+            let o = '';
+            try {
+                if (type === 'uppercase') o = i.toUpperCase();
+                if (type === 'lowercase') o = i.toLowerCase();
+                if (type === 'base64enc') o = btoa(i);
+                if (type === 'base64dec') o = atob(i);
+                if (type === 'minify') o = JSON.stringify(JSON.parse(i));
+                if (type === 'json') o = JSON.stringify(JSON.parse(i), null, 4);
+                if (type === 'html') o = html_beautify(i, {
+                    indent_size: 2
+                });
+                if (type === 'alternating') {
+                    o = i.split('').map((c, idx) => idx % 2 === 0 ? c.toLowerCase() : c.toUpperCase()).join('');
+                }
+                if (type === 'lorem') {
+                    o =
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+                }
+            } catch (e) {
+                o = "Error: Invalid Input";
+            }
+            document.getElementById('text-output').value = o;
+        }
+
+        // --- QR GENERATOR (Fixed Colors) ---
+        function generateQR() {
+            const t = document.getElementById('qr-text').value;
+            const fg = document.getElementById('qr-fg').value;
+            const bg = document.getElementById('qr-bg').value;
+            document.getElementById('qr-output').innerHTML = '';
+            new QRCode(document.getElementById('qr-output'), {
+                text: t,
+                width: 150,
+                height: 150,
+                colorDark: fg,
+                colorLight: bg
+            });
+        }
+
+        // --- IMAGE RESIZER (Fixed Bug) ---
+        let resizerImg = new Image();
+        let currentResizerFile = null;
+        let originalRatio = 0;
+
+        function handleResizerFile(file) {
+            if (!file) return;
+            currentResizerFile = file;
+            const r = new FileReader();
+            r.onload = e => {
+                resizerImg.src = e.target.result;
+                resizerImg.onload = () => {
+                    document.getElementById('resizer-workspace').classList.remove('hidden');
+                    document.getElementById('resizer-preview').src = resizerImg.src;
+                    // FIXED: Added logic to populate the orig-dims span
+                    document.getElementById('orig-dims').innerText =
+                        `${resizerImg.width} x ${resizerImg.height} px`;
+                    document.getElementById('resize-width').value = resizerImg.width;
+                    document.getElementById('resize-height').value = resizerImg.height;
+                    originalRatio = resizerImg.width / resizerImg.height;
+                }
+            };
+            r.readAsDataURL(file);
+        }
+
+        function calcHeight() {
+            if (document.getElementById('aspect-ratio').checked) document.getElementById('resize-height').value = Math
+                .round(document.getElementById('resize-width').value / originalRatio);
+        }
+
+        function calcWidth() {
+            if (document.getElementById('aspect-ratio').checked) document.getElementById('resize-width').value = Math
+                .round(document.getElementById('resize-height').value * originalRatio);
+        }
+
+        function processResizer() {
+            const c = document.createElement('canvas');
+            c.width = document.getElementById('resize-width').value;
+            c.height = document.getElementById('resize-height').value;
+            c.getContext('2d').drawImage(resizerImg, 0, 0, c.width, c.height);
+            downloadURI(c.toDataURL(currentResizerFile.type), 'resized_' + currentResizerFile.name);
+        }
+
+        // --- OTHER TOOLS (Unchanged logic but kept for file integrity) ---
+        // Unit Converter
+        const units = {
+            length: {
+                'm': 1,
+                'km': 1000,
+                'cm': 0.01,
+                'mm': 0.001,
+                'ft': 0.3048,
+                'in': 0.0254,
+                'mi': 1609.34
+            },
+            weight: {
+                'kg': 1,
+                'g': 0.001,
+                'mg': 0.000001,
+                'lb': 0.453592,
+                'oz': 0.0283495
+            },
+            temp: {
+                'c': 'c',
+                'f': 'f',
+                'k': 'k'
+            }
+        };
+        let curUnitCat = 'length';
+
+        function setUnitCat(cat) {
+            curUnitCat = cat;
+            document.querySelectorAll('.unit-cat-btn').forEach(b => {
+                b.classList.remove('bg-white', 'shadow-sm', 'text-indigo-600');
+                b.classList.add('text-gray-600');
+                if (b.innerText.toLowerCase().includes(cat) || (cat === 'temp' && b.innerText.includes(
+                    'Temp'))) {
+                    b.classList.add('bg-white', 'shadow-sm', 'text-indigo-600');
+                    b.classList.remove('text-gray-600');
+                }
+            });
+            const opts = Object.keys(units[cat]);
+            const s1 = document.getElementById('unit-in-type');
+            const s2 = document.getElementById('unit-out-type');
+            s1.innerHTML = '';
+            s2.innerHTML = '';
+            opts.forEach(o => {
+                s1.add(new Option(o.toUpperCase(), o));
+                s2.add(new Option(o.toUpperCase(), o));
+            });
+            s2.selectedIndex = 1;
+            convertUnit();
+        }
+
+        function convertUnit() {
+            const val = parseFloat(document.getElementById('unit-in-val').value);
+            const from = document.getElementById('unit-in-type').value;
+            const to = document.getElementById('unit-out-type').value;
+            let res = 0;
+            if (curUnitCat === 'temp') {
+                let cVal = val;
+                if (from === 'f') cVal = (val - 32) * 5 / 9;
+                if (from === 'k') cVal = val - 273.15;
+                if (to === 'c') res = cVal;
+                if (to === 'f') res = (cVal * 9 / 5) + 32;
+                if (to === 'k') res = cVal + 273.15;
+            } else {
+                const base = val * units[curUnitCat][from];
+                res = base / units[curUnitCat][to];
+            }
+            document.getElementById('unit-out-val').value = parseFloat(res.toFixed(6));
+        }
+        setUnitCat('length');
+
+        // Color Picker
+        let colorCanvas = document.getElementById('color-canvas');
+        let colorCtx = colorCanvas.getContext('2d');
+        let colorImgData = null;
+
+        function initColorPicker(file) {
+            if (!file) return;
+            const img = new Image();
+            img.onload = function () {
+                colorCanvas.width = img.width;
+                colorCanvas.height = img.height;
+                colorCtx.drawImage(img, 0, 0);
+                colorImgData = colorCtx.getImageData(0, 0, img.width, img.height).data;
+                document.getElementById('color-placeholder').classList.add('hidden');
+            };
+            img.src = URL.createObjectURL(file);
+        }
+        colorCanvas.addEventListener('mousemove', function (e) {
+            const mag = document.getElementById('color-magnifier');
+            if (!colorImgData) return;
+            mag.classList.remove('hidden');
+            const rect = colorCanvas.getBoundingClientRect();
+            mag.style.left = (e.pageX + 20) + 'px';
+            mag.style.top = (e.pageY - 40) + 'px';
+            const scaleX = colorCanvas.width / rect.width;
+            const scaleY = colorCanvas.height / rect.height;
+            const x = Math.floor((e.clientX - rect.left) * scaleX);
+            const y = Math.floor((e.clientY - rect.top) * scaleY);
+            mag.style.backgroundImage = `url(${colorCanvas.toDataURL()})`;
+            mag.style.backgroundPosition = `-${x * 2 - 48}px -${y * 2 - 48}px`;
+            mag.style.backgroundSize = `${colorCanvas.width * 2}px ${colorCanvas.height * 2}px`;
+        });
+        colorCanvas.addEventListener('mouseleave', () => document.getElementById('color-magnifier').classList.add(
+            'hidden'));
+        colorCanvas.addEventListener('click', function (e) {
+            const rect = colorCanvas.getBoundingClientRect();
+            const scaleX = colorCanvas.width / rect.width;
+            const scaleY = colorCanvas.height / rect.height;
+            const x = Math.floor((e.clientX - rect.left) * scaleX);
+            const y = Math.floor((e.clientY - rect.top) * scaleY);
+            const i = (y * colorCanvas.width + x) * 4;
+            const r = colorImgData[i];
+            const g = colorImgData[i + 1];
+            const b = colorImgData[i + 2];
+            const hex = "#" + ((1 << 24) + (r << 16) + (g << 8) + (b)).toString(16).slice(1).toUpperCase();
+            const rgb = `rgb(${r}, ${g}, ${b})`;
+            document.getElementById('picked-color-preview').style.backgroundColor = hex;
+            document.getElementById('picked-hex').value = hex;
+            document.getElementById('picked-rgb').value = rgb;
+        });
+
+        // Image Converter (HEIC)
+        let converterFiles = [];
+
+        function handleConverterFiles(files) {
+            converterFiles = Array.from(files);
+            if (converterFiles.length) {
+                document.getElementById('converter-controls').classList.remove('hidden');
+                updateConverterPreview();
+            }
+        }
+
+        function updateConverterPreview() {
+            const list = document.getElementById('converter-preview-list');
+            list.innerHTML = '';
+            converterFiles.forEach((file, index) => {
+                const div = document.createElement('div');
+                div.className =
+                    'flex items-center justify-between bg-gray-50 p-3 rounded-lg border border-gray-100';
+                const isHeic = file.name.toLowerCase().endsWith('.heic');
+                const imgSrc = isHeic ? '' : URL.createObjectURL(file);
+                const imgTag = isHeic ? '<i data-lucide="file-image" class="text-gray-400"></i>' :
+                    `<img src="${imgSrc}" class="w-full h-full object-cover">`;
+                div.innerHTML =
+                    `<div class="flex items-center gap-3 overflow-hidden"><div class="w-10 h-10 bg-gray-200 rounded flex-shrink-0 overflow-hidden flex items-center justify-center">${imgTag}</div><div class="min-w-0"><p class="text-sm font-medium truncate">${file.name}</p></div></div><button onclick="converterFiles.splice(${index}, 1); updateConverterPreview()" class="text-gray-400 hover:text-red-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button>`;
+                list.appendChild(div);
+            });
+            lucide.createIcons();
+        }
+        async function processConverter() {
+            const format = document.getElementById('convert-format').value;
+            const quality = parseFloat(document.getElementById('convert-quality').value);
+            const btn = document.getElementById('conv-btn-text');
+            const loader = document.getElementById('conv-loader');
+            btn.innerText = 'Processing...';
+            loader.classList.remove('hidden');
+            for (const file of converterFiles) {
+                try {
+                    let imageBlob = file;
+                    if (file.name.toLowerCase().endsWith('.heic')) {
+                        btn.innerText = 'Converting HEIC...';
+                        imageBlob = await heic2any({
+                            blob: file,
+                            toType: "image/jpeg"
+                        });
+                    }
+                    await new Promise(resolve => {
+                        const img = new Image();
+                        img.onload = function () {
+                            const canvas = document.createElement('canvas');
+                            let w = img.width,
+                                h = img.height;
+                            if (format === 'ico') {
+                                w = 64;
+                                h = 64;
+                            }
+                            canvas.width = w;
+                            canvas.height = h;
+                            const ctx = canvas.getContext('2d');
+                            if (format === 'image/jpeg') {
+                                ctx.fillStyle = '#FFFFFF';
+                                ctx.fillRect(0, 0, w, h);
+                            }
+                            ctx.drawImage(img, 0, 0, w, h);
+                            let mime = format === 'ico' ? 'image/png' : format;
+                            let ext = format === 'ico' ? 'ico' : format.split('/')[1];
+                            const newName = file.name.replace(/\.[^/.]+$/, "") + '.' + ext;
+                            canvas.toBlob(blob => {
+                                const url = URL.createObjectURL(blob);
+                                downloadURI(url, newName);
+                                resolve();
+                            }, mime, quality);
+                        };
+                        img.src = URL.createObjectURL(imageBlob);
+                    });
+                } catch (err) {
+                    console.error(err);
+                    alert("Error converting " + file.name);
+                }
+            }
+            btn.innerText = 'Convert All';
+            loader.classList.add('hidden');
+        }
+
+        // Stopwatch, Diff, Password, PDF, etc
+        let swInterval, swStartT, swElapsed = 0;
+
+        function swStart() {
+            swStartT = Date.now();
+            swInterval = setInterval(() => {
+                const d = Date.now() - swStartT + swElapsed;
+                const ms = Math.floor((d % 1000) / 10).toString().padStart(2, '0');
+                const s = Math.floor((d / 1000) % 60).toString().padStart(2, '0');
+                const m = Math.floor((d / 60000) % 60).toString().padStart(2, '0');
+                const h = Math.floor(d / 3600000).toString().padStart(2, '0');
+                document.getElementById('sw-display').innerText = `${h}:${m}:${s}.${ms}`;
+            }, 10);
+            document.getElementById('sw-btn-start').classList.add('hidden');
+            document.getElementById('sw-btn-stop').classList.remove('hidden');
+        }
+
+        function swStop() {
+            clearInterval(swInterval);
+            swElapsed += Date.now() - swStartT;
+            document.getElementById('sw-btn-start').classList.remove('hidden');
+            document.getElementById('sw-btn-stop').classList.add('hidden');
+        }
+
+        function swReset() {
+            swStop();
+            swElapsed = 0;
+            document.getElementById('sw-display').innerText = "00:00:00.00";
+            document.getElementById('sw-laps').innerHTML = '';
+        }
+
+        function swLap() {
+            const d = document.createElement('div');
+            d.innerText =
+                `Lap ${document.getElementById('sw-laps').children.length+1}: ${document.getElementById('sw-display').innerText}`;
+            document.getElementById('sw-laps').prepend(d);
+        }
+
+        function runDiff() {
+            const t1 = document.getElementById('diff-orig').value.split('\n');
+            const t2 = document.getElementById('diff-mod').value.split('\n');
+            const o1 = document.getElementById('diff-out-orig');
+            const o2 = document.getElementById('diff-out-mod');
+            o1.innerHTML = '';
+            o2.innerHTML = '';
+            for (let i = 0; i < Math.max(t1.length, t2.length); i++) {
+                const l1 = t1[i] || '',
+                    l2 = t2[i] || '';
+                const d1 = document.createElement('div');
+                d1.className = 'diff-line';
+                d1.textContent = l1 || ' ';
+                const d2 = document.createElement('div');
+                d2.className = 'diff-line';
+                d2.textContent = l2 || ' ';
+                if (l1 !== l2) {
+                    d1.className += ' diff-removed';
+                    d2.className += ' diff-added';
+                }
+                o1.appendChild(d1);
+                o2.appendChild(d2);
+            }
+        }
+
+        // --- JSON OBFUSCATOR ---
+        // --- JSON OBFUSCATOR ---
+        async function obfuscateJSON() {
+            const input = document.getElementById('json-obf-input').value;
+            const isMinified = document.getElementById('json-obf-minify').checked;
+            const useAes = document.getElementById('json-obf-aes').checked;
+            const password = document.getElementById('json-obf-password').value;
+            const outEl = document.getElementById('json-obf-output');
+            
+            try {
+                outEl.classList.remove('text-red-500');
+                outEl.classList.add('text-gray-700');
+                
+                // Parse the original JSON to validate
+                const parsed = JSON.parse(input);
+                
+                if (useAes) {
+                    if (!password) {
+                        outEl.value = "Error: Password wajib diisi jika Enkripsi AES aktif!";
+                        outEl.classList.add('text-red-500');
+                        return;
+                    }
+                    
+                    outEl.value = "Memproses Enkripsi AES...";
+                    
+                    const enc = new TextEncoder();
+                    const keyMaterial = await window.crypto.subtle.importKey("raw", enc.encode(password), { name: "PBKDF2" }, false, ["deriveKey"]);
+                    const salt = window.crypto.getRandomValues(new Uint8Array(16));
+                    const key = await window.crypto.subtle.deriveKey(
+                        { name: "PBKDF2", salt: salt, iterations: 100000, hash: "SHA-256" },
+                        keyMaterial, { name: "AES-GCM", length: 256 }, true, ["encrypt", "decrypt"]
+                    );
+                    
+                    const iv = window.crypto.getRandomValues(new Uint8Array(12));
+                    // Encrypt stringified JSON
+                    const encrypted = await window.crypto.subtle.encrypt(
+                        { name: "AES-GCM", iv: iv }, key, enc.encode(JSON.stringify(parsed))
+                    );
+                    
+                    const blobToBase64 = (blob) => new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onloadend = () => resolve(reader.result.split(',')[1]);
+                        reader.readAsDataURL(blob);
+                    });
+                    
+                    const saltBase64 = await blobToBase64(new Blob([salt]));
+                    const ivBase64 = await blobToBase64(new Blob([iv]));
+                    const dataBase64 = await blobToBase64(new Blob([encrypted]));
+                    
+                    const resultObj = { s: saltBase64, i: ivBase64, d: dataBase64 };
+                    
+                    outEl.value = isMinified ? JSON.stringify(resultObj) : JSON.stringify(resultObj, null, 4);
+                    
+                } else {
+                    // Recursive function to obfuscate string values and keys
+                    function obfuscateObject(obj) {
+                        if (Array.isArray(obj)) {
+                            return obj.map(item => obfuscateObject(item));
+                        } else if (obj !== null && typeof obj === 'object') {
+                            const newObj = {};
+                            for (let k in obj) {
+                                if (Object.prototype.hasOwnProperty.call(obj, k)) {
+                                    newObj[k] = obfuscateObject(obj[k]);
+                                }
+                            }
+                            return newObj;
+                        } else if (typeof obj === 'string') {
+                            // Advanced Obfuscation: Hex Escaping for strings
+                            return obj.split('').map(char => {
+                                if(char.trim() === '') return char;
+                                const hex = char.charCodeAt(0).toString(16);
+                                return '\\u' + ('0000' + hex).slice(-4);
+                            }).join('');
+                        }
+                        return obj;
+                    }
+                    
+                    // Deep clone and obfuscate
+                    const obfuscated = obfuscateObject(JSON.parse(JSON.stringify(parsed)));
+                    
+                    let result = isMinified ? JSON.stringify(obfuscated) : JSON.stringify(obfuscated, null, 4);
+                    // Un-escape the double backslashes
+                    result = result.replace(/\\\\u/g, '\\u');
+
+                    outEl.value = result;
+                }
+            } catch (error) {
+                outEl.value = "Error: Invalid JSON Input.\n" + error.message;
+                outEl.classList.add('text-red-500');
+                outEl.classList.remove('text-gray-700');
+            }
+        }
+
+
+        function generatePassword() {
+            const l = document.getElementById('pass-len').value;
+            let c = "";
+            if (document.getElementById('pass-upper').checked) c += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            if (document.getElementById('pass-lower').checked) c += "abcdefghijklmnopqrstuvwxyz";
+            if (document.getElementById('pass-num').checked) c += "0123456789";
+            if (document.getElementById('pass-sym').checked) c += "!@#$%^&*()_+";
+            let p = "";
+            for (let i = 0; i < l; i++) p += c.charAt(Math.floor(Math.random() * c.length));
+            document.getElementById('pass-output').value = p;
+        }
+        let pdfImages = [];
+
+        function handlePdfFiles(files) {
+            Array.from(files).forEach(f => {
+                const r = new FileReader();
+                r.onload = e => {
+                    pdfImages.push({
+                        src: e.target.result
+                    });
+                    renderPdfQueue();
+                };
+                r.readAsDataURL(f);
+            });
+        }
+
+        function renderPdfQueue() {
+            const q = document.getElementById('pdf-queue');
+            q.innerHTML = '';
+            pdfImages.forEach((img, i) => {
+                q.innerHTML +=
+                    `<div class="relative aspect-[3/4] bg-gray-100 border rounded overflow-hidden"><img src="${img.src}" class="object-contain w-full h-full"><button onclick="pdfImages.splice(${i},1);renderPdfQueue()" class="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full w-6 h-6 flex items-center justify-center text-xs">x</button></div>`;
+            });
+        }
+
+        function generatePDF() {
+            if (!pdfImages.length) return;
+            const {
+                jsPDF
+            } = window.jspdf;
+            const doc = new jsPDF();
+            const pw = doc.internal.pageSize.getWidth(),
+                ph = doc.internal.pageSize.getHeight();
+            pdfImages.forEach((d, i) => {
+                if (i > 0) doc.addPage();
+                const img = new Image();
+                img.src = d.src;
+                const r = Math.min(pw / img.width, ph / img.height);
+                doc.addImage(d.src, 'JPEG', (pw - img.width * r) / 2, (ph - img.height * r) / 2, img.width * r,
+                    img.height * r);
+            });
+            doc.save('images.pdf');
+        }
+
+        // Init
+        generatePassword();
+    </script>
+
+    <script src="assets/script.js"></script>
+</body>
+
+</html>
+
+
+
+
+

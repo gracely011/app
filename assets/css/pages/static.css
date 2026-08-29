@@ -1,0 +1,62 @@
+/*
+  ____                     _       
+ / ___|_ __ __ _  ___ ___| |_   _ 
+| |  _| '__/ _` |/ __/ _ \ | | | |
+| |_| | | | (_| | (_|  __/ | |_| |
+ \____|_|  \__,_|\___\___|_|\__, |
+                            |___/ 
+   Unlock Premium Together
+*/
+/* ---- Legal documents (privacy / terms) ---- */
+.gp-legal .gp-card-light { padding: 36px 40px; }
+.gp-legal-grid { display: grid; grid-template-columns: 1fr; gap: 28px; }
+.gp-legal-toc { border: 1px solid #ececec; border-radius: 12px; background: #fafafa; padding: 16px 18px; align-self: start; }
+.gp-legal-toc-title { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #888; margin: 0 0 10px; }
+.gp-legal-toc ol { list-style: none; counter-reset: toc; margin: 0; padding: 0; }
+.gp-legal-toc li { counter-increment: toc; margin: 0; }
+.gp-legal-toc a { display: flex; gap: 10px; align-items: baseline; padding: 6px 8px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #333; text-decoration: none; line-height: 1.4; transition: background 0.2s ease, color 0.2s ease; }
+.gp-legal-toc a::before { content: counter(toc, decimal-leading-zero); font-size: 11px; font-weight: 700; color: #999; min-width: 20px; }
+.gp-legal-toc a:hover, .gp-legal-toc a:focus-visible { background: #000; color: #fff; outline: none; }
+.gp-legal-toc a:hover::before, .gp-legal-toc a:focus-visible::before { color: rgba(255,255,255,0.6); }
+.gp-legal-body { min-width: 0; }
+.gp-legal-meta { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #777; margin: 0 0 24px; }
+.gp-legal-meta i { color: #000; }
+.gp-legal-section { scroll-margin-top: 110px; padding-bottom: 22px; margin-bottom: 22px; border-bottom: 1px solid #f0f0f0; }
+.gp-legal-section:last-of-type { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
+.gp-legal-section h2 { font-size: 20px; font-weight: 800; color: #000; margin: 0 0 10px; line-height: 1.3; }
+.gp-legal-section p { font-size: 15px; line-height: 1.75; color: #444; margin: 0; }
+.gp-legal-section p + p { margin-top: 12px; }
+.gp-legal-foot { margin-top: 28px; padding-top: 18px; border-top: 1px solid #ececec; font-size: 13px; color: #666; display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; }
+.gp-legal-foot a { color: #000; font-weight: 700; text-decoration: none; }
+.gp-legal-foot a:hover { text-decoration: underline; }
+.gp-legal-foot .gp-legal-foot-sep { color: #ccc; }
+
+@media (min-width: 992px) {
+  .gp-legal .gp-card-light.gp-card-wide { max-width: 1000px; }
+  .gp-legal-grid { grid-template-columns: 220px minmax(0, 1fr); gap: 40px; }
+  .gp-legal-toc { position: sticky; top: 110px; }
+}
+@media (max-width: 767px) {
+  .gp-legal .gp-card-light { padding: 22px 16px; }
+  .gp-legal-section h2 { font-size: 18px; }
+  .gp-legal-section p { font-size: 14px; }
+}
+
+/* ---- Status pages (desktoponly / blocked / limited) ---- */
+.gp-status-page { background: #fff; }
+.gp-status-box { background: #fff; border: 1px solid #ececec; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 40px 32px; }
+.gp-status-box .gp-status-icon { width: 84px; height: 84px; border-radius: 50%; background: #000; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 34px; margin-bottom: 20px; }
+.gp-status-box .gp-status-kicker { display: block; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #888; margin-bottom: 8px; }
+.gp-status-box h2 { font-size: 26px; }
+.gp-status-box p { margin: 0 auto 24px; max-width: 440px; }
+.gp-status-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.gp-status-actions .ud-main-btn { padding: 12px 22px; font-size: 14px; font-weight: 600; }
+.gp-status-actions .ud-main-btn i { margin-right: 6px; }
+.gp-status-actions .gp-status-btn-ghost { background: #fff; color: #000; border: 1px solid #000; }
+.gp-status-actions .gp-status-btn-ghost:hover { background: #f2f2f2; color: #000; }
+.gp-status-actions .gp-status-btn-link { background: transparent; color: #000; border: 1px solid transparent; }
+.gp-status-actions .gp-status-btn-link:hover { background: #f2f2f2; color: #000; }
+@media (max-width: 767px) {
+  .gp-status-box { padding: 28px 18px; }
+  .gp-status-box h2 { font-size: 22px; }
+}

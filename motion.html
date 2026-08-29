@@ -1,0 +1,250 @@
+<!--
+  ____                     _       
+ / ___|_ __ __ _  ___ ___| |_   _ 
+| |  _| '__/ _` |/ __/ _ \ | | | |
+| |_| | | | (_| | (_|  __/ | |_| |
+ \____|_|  \__,_|\___\___|_|\__, |
+                            |___/ 
+   Unlock Premium Together
+-->
+<!DOCTYPE html>
+<html lang="en" class="">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alight Motion Accounts | Gracely</title>
+    <meta name="description"
+        content="Unlock premium experiences together with our one-click access extension. Join us and start enjoying premium content without the premium price tag. All-in-One premium access.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://draft.gracely.my.id/">
+    <meta property="og:title" content="Unlock Premium Together | Gracely">
+    <meta property="og:description"
+        content="Unlock premium experiences together with our one-click access extension. Join us and start enjoying premium content without the premium price tag.">
+    <meta property="og:image" content="assets/images/favicon.png">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://draft.gracely.my.id/">
+    <meta property="twitter:title" content="Unlock Premium Together | Gracely">
+    <meta property="twitter:description"
+        content="Unlock premium experiences together with our one-click access extension. Join us and start enjoying premium content without the premium price tag.">
+    <meta property="twitter:image" content="assets/images/favicon.png">
+
+    <link rel="shortcut icon" href="assets/images/favicon.png" type="image/png" />
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js"></script>
+    <script>(async () => { await requireAuth(); })();</script>
+    <!-- Google Fonts (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-gray-200 dark:bg-gray-900 text-gray-900 dark:text-white flex items-center justify-center min-h-screen p-4 transition-colors duration-300">
+
+    <div
+        class="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-2xl w-full max-w-lg transform md:hover:scale-105 transition-transform duration-300">
+
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <div class="flex items-center justify-center gap-4">
+                <h1 class="text-4xl font-bold text-cyan-500 dark:text-cyan-400">Alight Motion</h1>
+                <!-- Light/Dark Mode Toggle Button -->
+                <button id="theme-toggle"
+                    class="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-cyan-500">
+                    <svg id="theme-toggle-sun" class="h-6 w-6 hidden" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
+                        </path>
+                    </svg>
+                    <svg id="theme-toggle-moon" class="h-6 w-6 hidden" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+            <p class="text-gray-500 dark:text-gray-400 mt-2">Premium Accounts List</p>
+        </header>
+
+        <!-- Accounts List -->
+        <div class="space-y-3">
+            <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg flex items-center justify-between">
+                <p class="text-gray-700 dark:text-gray-300 text-sm sm:text-base"><strong
+                        class="font-semibold text-gray-900 dark:text-white">Account 1:</strong> <span
+                        class="font-mono">xjdatotd@alightmotion.id</span></p>
+                <button
+                    class="copy-btn bg-cyan-500 hover:bg-cyan-600 text-white text-sm font-bold py-1 px-3 rounded-md transition-all duration-200"
+                    data-email="xjdatotd@alightmotion.id">Copy</button>
+            </div>
+            <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg flex items-center justify-between">
+                <p class="text-gray-700 dark:text-gray-300 text-sm sm:text-base"><strong
+                        class="font-semibold text-gray-900 dark:text-white">Account 2:</strong> <span
+                        class="font-mono">xfxanzuz@alightmotion.id</span></p>
+                <button
+                    class="copy-btn bg-cyan-500 hover:bg-cyan-600 text-white text-sm font-bold py-1 px-3 rounded-md transition-all duration-200"
+                    data-email="xfxanzuz@alightmotion.id">Copy</button>
+            </div>
+            <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg flex items-center justify-between">
+                <p class="text-gray-700 dark:text-gray-300 text-sm sm:text-base"><strong
+                        class="font-semibold text-gray-900 dark:text-white">Account 3:</strong> <span
+                        class="font-mono">fiiwlhgi@alightmotion.id</span></p>
+                <button
+                    class="copy-btn bg-cyan-500 hover:bg-cyan-600 text-white text-sm font-bold py-1 px-3 rounded-md transition-all duration-200"
+                    data-email="fiiwlhgi@alightmotion.id">Copy</button>
+            </div>
+            <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg flex items-center justify-between">
+                <p class="text-gray-700 dark:text-gray-300 text-sm sm:text-base"><strong
+                        class="font-semibold text-gray-900 dark:text-white">Account 4:</strong> <span
+                        class="font-mono">vgqqompu@alightmotion.id</span></p>
+                <button
+                    class="copy-btn bg-cyan-500 hover:bg-cyan-600 text-white text-sm font-bold py-1 px-3 rounded-md transition-all duration-200"
+                    data-email="vgqqompu@alightmotion.id">Copy</button>
+            </div>
+            <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg flex items-center justify-between">
+                <p class="text-gray-700 dark:text-gray-300 text-sm sm:text-base"><strong
+                        class="font-semibold text-gray-900 dark:text-white">Account 5:</strong> <span
+                        class="font-mono">zkymfpgn@alightmotion.id</span></p>
+                <button
+                    class="copy-btn bg-cyan-500 hover:bg-cyan-600 text-white text-sm font-bold py-1 px-3 rounded-md transition-all duration-200"
+                    data-email="zkymfpgn@alightmotion.id">Copy</button>
+            </div>
+            <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg flex items-center justify-between">
+                <p class="text-gray-700 dark:text-gray-300 text-sm sm:text-base"><strong
+                        class="font-semibold text-gray-900 dark:text-white">Account 6:</strong> <span
+                        class="font-mono">mgbypniqii@alightmotion.id</span></p>
+                <button
+                    class="copy-btn bg-cyan-500 hover:bg-cyan-600 text-white text-sm font-bold py-1 px-3 rounded-md transition-all duration-200"
+                    data-email="mgbypniqii@alightmotion.id">Copy</button>
+            </div>
+            <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg flex items-center justify-between">
+                <p class="text-gray-700 dark:text-gray-300 text-sm sm:text-base"><strong
+                        class="font-semibold text-gray-900 dark:text-white">Account 7:</strong> <span
+                        class="font-mono">mrdofgkoqy@alightmotion.id</span></p>
+                <button
+                    class="copy-btn bg-cyan-500 hover:bg-cyan-600 text-white text-sm font-bold py-1 px-3 rounded-md transition-all duration-200"
+                    data-email="mrdofgkoqy@alightmotion.id">Copy</button>
+            </div>
+            <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg flex items-center justify-between">
+                <p class="text-gray-700 dark:text-gray-300 text-sm sm:text-base"><strong
+                        class="font-semibold text-gray-900 dark:text-white">Account 8:</strong> <span
+                        class="font-mono">odozjjqhcg@alightmotion.id</span></p>
+                <button
+                    class="copy-btn bg-cyan-500 hover:bg-cyan-600 text-white text-sm font-bold py-1 px-3 rounded-md transition-all duration-200"
+                    data-email="odozjjqhcg@alightmotion.id">Copy</button>
+            </div>
+            <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg flex items-center justify-between">
+                <p class="text-gray-700 dark:text-gray-300 text-sm sm:text-base"><strong
+                        class="font-semibold text-gray-900 dark:text-white">Account 9:</strong> <span
+                        class="font-mono">vpmcvhqzuh@alightmotion.id</span></p>
+                <button
+                    class="copy-btn bg-cyan-500 hover:bg-cyan-600 text-white text-sm font-bold py-1 px-3 rounded-md transition-all duration-200"
+                    data-email="vpmcvhqzuh@alightmotion.id">Copy</button>
+            </div>
+            <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg flex items-center justify-between">
+                <p class="text-gray-700 dark:text-gray-300 text-sm sm:text-base"><strong
+                        class="font-semibold text-gray-900 dark:text-white">Account 10:</strong> <span
+                        class="font-mono">aozvvunzec@alightmotion.id</span></p>
+                <button
+                    class="copy-btn bg-cyan-500 hover:bg-cyan-600 text-white text-sm font-bold py-1 px-3 rounded-md transition-all duration-200"
+                    data-email="aozvvunzec@alightmotion.id">Copy</button>
+            </div>
+        </div>
+
+        <!-- Access Button & Footer -->
+        <footer class="text-center mt-8">
+            <p class="mb-4 text-gray-500 dark:text-gray-400">Access code via:</p>
+            <a href="http://generator.email/@alightmotion.id" target="_blank" rel="noopener noreferrer"
+                class="inline-block bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-300 shadow-lg">Open
+                Email Generator</a>
+            <p class="text-xs text-gray-500 mt-6">Last Updated: June 28, 2025</p>
+        </footer>
+    </div>
+
+    <script>
+        // Light/Dark Mode Toggle
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeToggleSunIcon = document.getElementById('theme-toggle-sun');
+        const themeToggleMoonIcon = document.getElementById('theme-toggle-moon');
+
+        const applyTheme = (theme) => {
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+                themeToggleMoonIcon.classList.remove('hidden');
+                themeToggleSunIcon.classList.add('hidden');
+            } else {
+                document.documentElement.classList.remove('dark');
+                themeToggleSunIcon.classList.remove('hidden');
+                themeToggleMoonIcon.classList.add('hidden');
+            }
+        };
+
+        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        applyTheme(savedTheme);
+
+        themeToggleBtn.addEventListener('click', () => {
+            const newTheme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
+
+        // Copy Function
+        const copyButtons = document.querySelectorAll('.copy-btn');
+
+        const copyToClipboard = (text, button) => {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.top = '-9999px';
+            textArea.style.left = '-9999px';
+
+            document.body.appendChild(textArea);
+            textArea.select();
+
+            try {
+                document.execCommand('copy');
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                button.classList.add('bg-green-500', 'hover:bg-green-600');
+                button.classList.remove('bg-cyan-500', 'hover:bg-cyan-600');
+
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('bg-green-500', 'hover:bg-green-600');
+                    button.classList.add('bg-cyan-500', 'hover:bg-cyan-600');
+                }, 2000);
+
+            } catch (err) {
+                console.error('Failed to copy to clipboard:', err);
+            } finally {
+                document.body.removeChild(textArea);
+            }
+        };
+
+        copyButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const emailToCopy = button.getAttribute('data-email');
+                copyToClipboard(emailToCopy, button);
+            });
+        });
+    </script>
+
+    <script src="assets/script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,92 @@
+/*
+  ____                     _       
+ / ___|_ __ __ _  ___ ___| |_   _ 
+| |  _| '__/ _` |/ __/ _ \ | | | |
+| |_| | | | (_| | (_|  __/ | |_| |
+ \____|_|  \__,_|\___\___|_|\__, |
+                            |___/ 
+   Unlock Premium Together
+*/
+.gp-auth .gp-card-light { padding: 32px; }
+.gp-auth .gp-card-title { text-align: center; }
+.gp-auth .gp-card-lead { text-align: center; }
+.gp-auth .gp-alert { margin-bottom: 20px; }
+.gp-auth .gp-alert-text b { font-weight: 700; }
+.gp-auth form { margin: 0; }
+.gp-auth .gracely-form-group:last-of-type { margin-bottom: 20px; }
+.gp-auth .ud-main-btn.w-100 { margin-top: 4px; }
+.gp-auth .cf-turnstile { min-height: 65px; }
+
+/* Email "did you mean" suggestion under the email input */
+.au-email-suggestion { font-size: 12px; margin-top: 5px; color: #555; min-height: 0; }
+.au-email-suggestion:empty { display: none; }
+.au-email-suggestion a { text-decoration: underline; font-weight: 700; color: #000; }
+
+/* Small note inside the form (signup terms) */
+.au-form-note { font-size: 12px; color: #666; line-height: 1.6; margin: -6px 0 18px; text-align: center; }
+.au-form-note a { color: #000; font-weight: 700; }
+.au-form-note a:hover { text-decoration: underline; }
+
+/* Show / hide password toggle (absolutely positioned inside the floating-label group) */
+.au-has-toggle input { padding-right: 46px; }
+.au-pw-toggle {
+  position: absolute; top: 50%; right: 8px; transform: translateY(-50%);
+  width: 34px; height: 34px; border: 0; border-radius: 8px; background: transparent;
+  color: #757575; font-size: 15px; line-height: 1; cursor: pointer; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: color 0.2s, background 0.2s;
+}
+.au-pw-toggle:hover { color: #000; background: #f2f2f2; }
+.au-pw-toggle:focus-visible { outline: 2px solid #000; outline-offset: 1px; }
+.au-pw-toggle[aria-pressed="true"] { color: #000; }
+
+/* ---------- split card (login / signup): dark brand panel + form column ---------- */
+.gp-auth .gp-card-light.au-split { max-width: 920px; margin: 0 auto; padding: 0; display: grid; grid-template-columns: 5fr 6fr; overflow: hidden; }
+.au-panel {
+  position: relative; color: #fff; padding: 36px 32px; display: flex; flex-direction: column; gap: 18px;
+  background: radial-gradient(130% 130% at 0% 0%, #222 0%, #000 60%);
+}
+.au-panel::before {
+  content: ""; position: absolute; right: 0; top: 0; width: 120px; height: 76px; opacity: .45; pointer-events: none;
+  background-image: radial-gradient(rgba(255,255,255,0.5) 1px, transparent 1.6px); background-size: 13px 13px;
+}
+/* decorative shape in the bottom-right corner (same as the footer) */
+.au-panel::after {
+  content: ""; position: absolute; right: 0; bottom: 0; width: 220px; height: 156px; z-index: 0; pointer-events: none;
+  background: url("../../images/footer/rightshape.png") no-repeat right bottom / contain;
+}
+.au-panel > * { position: relative; z-index: 1; }
+.au-panel-title { font-size: 24px; font-weight: 800; line-height: 1.25; max-width: 240px; }
+.au-panel-list { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.au-panel-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.85); }
+.au-panel-list i { color: #4ade80; margin-top: 3px; font-size: 14px; }
+.au-form-col { padding: 32px 36px; min-width: 0; }
+
+/* numbered steps + account identity (reset / password / profile panels) */
+.au-panel-steps { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.au-panel-steps li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.85); }
+.au-step-num { width: 22px; height: 22px; border-radius: 50%; background: #fff; color: #000; font-weight: 800; font-size: 11px; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 22px; }
+.au-panel-steps li > span:not(.au-step-num) { padding-top: 1px; }
+.au-ident { display: flex; flex-direction: column; gap: 2px; margin-top: 4px; }
+.au-ident-avatar { width: 52px; height: 52px; border-radius: 50%; background: #fff; color: #000; font-weight: 800; font-size: 18px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 10px; }
+.au-ident-name { font-weight: 700; font-size: 16px; overflow-wrap: anywhere; min-width: 0; }
+.au-ident-email { font-size: 13px; color: rgba(255,255,255,0.65); word-break: break-all; }
+
+/* ---------- shared polish ---------- */
+.gp-auth .gracely-form-group input { border-width: 1px; border-color: #ddd; border-radius: 12px; padding: 12px 14px; }
+.gp-auth .gracely-form-group input:focus { border-color: #000; box-shadow: 0 0 0 4px rgba(0,0,0,0.07); }
+.gp-auth .au-has-toggle input { padding-right: 46px; }
+.gp-auth .ud-main-btn.w-100 { border-radius: 999px; padding: 13px 20px; font-weight: 500; }
+
+/* Mobile: full-width card, 16px gutters; split card stacks */
+@media (max-width: 991px) {
+  .gp-auth .gp-card-light.au-split { grid-template-columns: 1fr; max-width: 560px; }
+  .au-panel { padding: 26px 24px; gap: 12px; }
+  .au-panel-title { font-size: 20px; }
+}
+@media (max-width: 767px) {
+  .gp-auth .gp-card-light { padding: 24px 16px; }
+  .gp-auth .gp-card-light.gp-card-narrow { max-width: 100%; }
+  .gp-auth .gp-card-light.au-split { padding: 0; }
+  .au-form-col { padding: 24px 16px; }
+}

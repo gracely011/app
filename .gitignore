@@ -1,0 +1,25 @@
+*.sql
+extract.js
+svgs.html
+vector.html
+rewrite.sh
+rewrite2.sh
+.git-rewrite/
+aturhonma - Copy.js
+*.md
+.agents/
+vector/
+tabel sql/
+.tmp/
+.codegraph/
+%TEMP%/
+assets/pack_temp/
+logs/
+backup/
+auto/
+patch/
+*.bak
+/*.zip
+local_build.js
+assets/halo/*.js
+assets/halo/*.json

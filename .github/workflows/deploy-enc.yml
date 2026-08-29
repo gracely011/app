@@ -1,0 +1,79 @@
+name: Deploy Encrypted to Main
+
+on:
+  push:
+    branches: ["dev-clean"]
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout dev-clean
+        uses: actions/checkout@v4
+        with:
+          ref: dev-clean
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Obfuscator
+        run: npm install -g javascript-obfuscator
+
+      - name: Obfuscate JavaScript (Keep Console Branding)
+        run: |
+          # --domain-lock restricts running to specific domains
+          # --domain-lock-redirect-url redirects if domain doesn't match
+          
+          OPTIONS="--compact true --self-defending true --disable-console-output false --debug-protection true --debug-protection-interval 4000 --domain-lock gracely011.github.io,draft.gracely.my.id --domain-lock-redirect-url https://draft.gracely.my.id/"
+          
+          javascript-obfuscator ./assets/script.js --output ./assets/script.js $OPTIONS
+          javascript-obfuscator ./auth.js --output ./auth.js $OPTIONS
+          javascript-obfuscator ./assets/snow.js --output ./assets/snow.js $OPTIONS
+          javascript-obfuscator ./assets/youtube-noads-2.0-final.js --output ./assets/youtube-noads-2.0-final.js $OPTIONS
+          javascript-obfuscator ./assets/js/main.js --output ./assets/js/main.js $OPTIONS
+          javascript-obfuscator ./assets/js/admin.js --output ./assets/js/admin.js $OPTIONS
+          
+          # Extension Assets
+          javascript-obfuscator ./assets/images/extension/gg.js --output ./assets/images/extension/gg.js $OPTIONS
+          
+          # aturhonma.js MUST be excluded because MV3 cannot execute remote obfuscated code.
+          # It must remain parsable text/data.
+
+      - name: Encrypt Assets (aturhonma.js & whitelist.json)
+        run: |
+          node scripts/encrypt_assets.js
+          # Remove scripts folder so the encryption key is not pushed to main
+          rm -rf scripts/
+
+      - name: Setup Git Config
+        run: |
+          git config --global user.name "gracely011"
+          git config --global user.email "gracely011@users.noreply.github.com"
+          git config --global author.name "gracely011"
+          git config --global author.email "gracely011@users.noreply.github.com"
+          git config --global committer.name "gracely011"
+          git config --global committer.email "gracely011@users.noreply.github.com"
+
+      - name: Force Push to Main
+        env:
+          GIT_AUTHOR_NAME: "gracely011"
+          GIT_AUTHOR_EMAIL: "gracely011@users.noreply.github.com"
+          GIT_COMMITTER_NAME: "gracely011"
+          GIT_COMMITTER_EMAIL: "gracely011@users.noreply.github.com"
+        run: |
+          # Environment is now encrypted. Push to main.
+          git --work-tree=. add .
+          git commit -m "Deploy: Encrypted build from dev-clean" --author="gracely011 <gracely011@users.noreply.github.com>"
+          git push origin HEAD:main --force
+
+      - name: Trigger Pages Deployment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh workflow run static.yml --ref main || true

@@ -1,0 +1,151 @@
+<!--
+  ____                     _       
+ / ___|_ __ __ _  ___ ___| |_   _ 
+| |  _| '__/ _` |/ __/ _ \ | | | |
+| |_| | | | (_| | (_|  __/ | |_| |
+ \____|_|  \__,_|\___\___|_|\__, |
+                            |___/ 
+   Unlock Premium Together
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Action Blocked | Gracely</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <link rel="shortcut icon" href="assets/images/favicon.png" type="image/png">
+
+    <style>
+        :root {
+            --text-color: #ffffff;
+            --background-color: #000000;
+            --accent-color: #888888;
+            /* A slightly lighter grey for the border */
+            --illustration-color: #ffffff;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            perspective: 1000px;
+        }
+
+        .illustration {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 6rem;
+            font-weight: 900;
+            margin: 0;
+            line-height: 1;
+            color: var(--text-color);
+            text-shadow: 0 5px 25px rgba(255, 255, 255, 0.1);
+            transition: transform 0.1s ease-out;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 10px 0 20px 0;
+            color: var(--accent-color);
+        }
+
+        p {
+            font-size: 1.125rem;
+            line-height: 1.6;
+            margin: 0 0 30px 0;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        p>strong {
+            color: var(--illustration-color);
+            font-weight: 700;
+        }
+
+        a {
+            color: var(--text-color);
+            font-weight: bold;
+            text-decoration: none;
+            padding: 12px 25px;
+            border: 2px solid var(--accent-color);
+            border-radius: 50px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: var(--text-color);
+            color: var(--background-color);
+        }
+    </style>
+
+    <!-- Gracely Backend Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js"></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+  </head>
+
+<body>
+
+    <div class="illustration">
+        <svg viewBox="0 0 100 100" fill="none" stroke="var(--illustration-color)" stroke-width="8"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M50 15 L85 30 V 60 C 85 80, 50 95, 50 95 C 50 95, 15 80, 15 60 V 30 Z" />
+        </svg>
+    </div>
+
+    <main class="container">
+        <h1 id="text-3d">HANYUKKK</h1>
+        <h2>Action Not Allowed</h2>
+        <p>You cannot do this directly. Please use the "<strong>Safely log out</strong>" feature if you want to log out.
+        </p>
+        <a href="https://draft.gracely.my.id/">Return to Homepage</a>
+    </main>
+
+
+
+    <script src="layout.js"></script>
+
+
+
+  <script src="assets/script.js"></script>
+</body>
+
+</html>
+
+
+
+
+

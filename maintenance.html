@@ -1,0 +1,140 @@
+<!--
+  ____                     _       
+ / ___|_ __ __ _  ___ ___| |_   _ 
+| |  _| '__/ _` |/ __/ _ \ | | | |
+| |_| | | | (_| | (_|  __/ | |_| |
+ \____|_|  \__,_|\___\___|_|\__, |
+                            |___/ 
+   Unlock Premium Together
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Under Maintenance | Gracely</title>
+    <meta name="title" content="Under Maintenance | Gracely">
+    <meta name="description" content="Gracely is currently under maintenance. We'll be back shortly.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://draft.gracely.my.id/">
+    <meta property="og:title" content="Under Maintenance | Gracely">
+    <meta property="og:description" content="Gracely is currently under maintenance. We'll be back shortly.">
+    <meta property="og:image" content="assets/images/favicon.png">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://draft.gracely.my.id/">
+    <meta property="twitter:title" content="Under Maintenance | Gracely">
+    <meta property="twitter:description" content="Gracely is currently under maintenance. We'll be back shortly.">
+    <meta property="twitter:image" content="assets/images/favicon.png">
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="assets/images/favicon.png" type="image/png">
+    <style>
+        :root {
+            --text-color: #ffffff;
+            --background-color: #000000;
+            --accent-color: #888888;
+            /* A slightly lighter grey for the border */
+            --illustration-color: #ffffff;
+        }
+
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            perspective: 1000px;
+        }
+
+        .illustration {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 10rem;
+            font-weight: 900;
+            margin: 0;
+            line-height: 1;
+            color: var(--text-color);
+            text-shadow: 0 5px 25px rgba(255, 255, 255, 0.1);
+            transition: transform 0.1s ease-out;
+            text-transform: uppercase;
+            /* Ensures "Soon" is capitalized */
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin: 10px 0 20px 0;
+            color: var(--accent-color);
+        }
+
+        p {
+            font-size: 1.125rem;
+            line-height: 1.6;
+            margin: 0 0 30px 0;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+
+    <!-- Gracely Backend Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js"></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+  </head>
+
+<body>
+
+    <div class="illustration">
+        <svg viewBox="0 0 100 100" fill="none" stroke="var(--illustration-color)" stroke-width="8"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M25 75 L75 25 M70 30 L80 20 M20 80 L30 70" />
+            <path d="M25 25 L75 75 M25 35 L35 25 M65 75 L75 65" />
+        </svg>
+    </div>
+
+    <main class="container">
+        <h1 id="text-3d">Soon</h1>
+        <h2>Under Maintenance</h2>
+        <p>This service is momentarily offline for some quick updates. We'll be back up and running shortly. Thanks for
+            your patience!</p>
+    </main>
+
+    <script src="layout.js"></script>
+
+
+
+  <script src="assets/script.js"></script>
+</body>
+
+</html>
+
+
+
+
+

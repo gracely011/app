@@ -1,0 +1,567 @@
+<!--
+  ____                     _       
+ / ___|_ __ __ _  ___ ___| |_   _ 
+| |  _| '__/ _` |/ __/ _ \ | | | |
+| |_| | | | (_| | (_|  __/ | |_| |
+ \____|_|  \__,_|\___\___|_|\__, |
+                            |___/ 
+   Unlock Premium Together
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="manual-meta-title">Manual Login | Gracely</title>
+  <meta name="title" content="Manual Login | Gracely" />
+  <meta name="description" content="Sign in manually with premium shared credentials on Gracely." />
+  <link rel="shortcut icon" href="assets/images/favicon.png" type="image/png" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+  <link rel="stylesheet" href="assets/css/animate.css" />
+  <link rel="stylesheet" href="assets/css/ud-styles.css" />
+  <link rel="stylesheet" href="assets/styles.css" />
+  <link rel="stylesheet" href="assets/css/pages/tools.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icon-css@1.1.0/css/flag-icon.min.css" />
+
+  <!-- Gracely Auth Protection -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="auth.js"></script>
+  <script>
+    (async () => {
+      await requireAuth();
+    })();
+  </script>
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="ud-header gp-header">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <nav class="navbar navbar-expand-lg gp-nav">
+            <a class="navbar-brand" href="./" aria-label="Gracely">
+              <img src="assets/images/logo/gracely_mobile_white.png" alt="Gracely" id="logo" class="gp-logo gp-logo-mark" />
+              <img src="assets/images/logo/gracely_white.png" alt="Gracely" class="gp-logo gp-logo-full" />
+            </a>
+            <button class="navbar-toggler" type="button" aria-label="Menu" aria-controls="gpNavCollapse" aria-expanded="false">
+              <span class="toggler-icon"> </span>
+              <span class="toggler-icon"> </span>
+              <span class="toggler-icon"> </span>
+            </button>
+
+            <div class="navbar-collapse gp-collapse" id="gpNavCollapse">
+              <div class="gp-drawer-head d-lg-none">
+                <img src="assets/images/logo/gracely_mobile_black.png" alt="Gracely" style="height: 30px; width: auto;">
+                <button type="button" class="gp-drawer-close" id="gpDrawerClose" aria-label="Close menu"><i class="fa-solid fa-xmark"></i></button>
+              </div>
+
+              <!-- HYBRID: PROFILE IN DRAWER (LOGGED IN ONLY) -->
+              <div class="gp-drawer-account d-lg-none" id="mobile-user-profile" style="display:none;">
+                <span class="gp-avatar sync-avatar">M</span>
+                <div class="gp-drawer-account-text">
+                  <div class="gp-drawer-name sync-fullname">Member</div>
+                  <div class="gp-plan-badge-container"></div>
+                </div>
+              </div>
+
+              <ul id="nav" class="navbar-nav mx-auto">
+                <li class="nav-item"><a href="./">Home</a></li>
+                <li class="nav-item"><a href="./#features">Features</a></li>
+                <li class="nav-item"><a href="./#about">About</a></li>
+                <li class="nav-item"><a href="./#pricing">Pricing</a></li>
+                <li class="nav-item"><a href="./#services">Services</a></li>
+              </ul>
+
+              <div class="gp-drawer-extra d-lg-none">
+                <div class="gp-drawer-title" id="mobile-account-title" style="display:none;">Account</div>
+                <ul class="gp-drawer-links" id="mobile-account-links" style="display:none;">
+                  <li><a href="./dashboard.html"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                  <li><a href="./profile.html"><i class="fa-solid fa-user-pen"></i> Edit profile</a></li>
+                  <li><a href="./history.html"><i class="fa-solid fa-receipt"></i> Order history</a></li>
+                  <li><a href="./logs.html"><i class="fa-solid fa-clock-rotate-left"></i> Activity logs</a></li>
+                  <li><a href="./extension.html"><i class="fa-brands fa-discord"></i> Manage extension</a></li>
+                </ul>
+
+                <div class="gp-drawer-title">Language</div>
+                <ul class="gp-drawer-langs">
+                  <li><a href="?lang=en" data-lang="en"><span class="flag-icon flag-icon-us"></span> English</a></li>
+                  <li><a href="?lang=id" data-lang="id"><span class="flag-icon flag-icon-id"></span> Indonesia</a></li>
+                  <li><a href="?lang=my" data-lang="my"><span class="flag-icon flag-icon-my"></span> Melayu</a></li>
+                  <li><a href="?lang=ph" data-lang="ph"><span class="flag-icon flag-icon-ph"></span> Filipino</a></li>
+                  <li><a href="?lang=vn" data-lang="vn"><span class="flag-icon flag-icon-vn"></span> Tiếng Việt</a></li>
+                  <li><a href="?lang=th" data-lang="th"><span class="flag-icon flag-icon-th"></span> ไทย</a></li>
+                  <li><a href="?lang=cn" data-lang="cn"><span class="flag-icon flag-icon-cn"></span> 中文</a></li>
+                  <li><a href="?lang=jp" data-lang="jp"><span class="flag-icon flag-icon-jp"></span> 日本語</a></li>
+                  <li><a href="?lang=kr" data-lang="kr"><span class="flag-icon flag-icon-kr"></span> 한국어</a></li>
+                </ul>
+
+                <div class="gp-drawer-auth" id="mobile-auth-logged-out">
+                  <a href="./login.html" class="ud-main-btn gp-btn-pad w-100 gp-btn-glass is-light"><i class="fa-solid fa-arrow-right-to-bracket"></i> Log In</a>
+                  <a href="./signup.html" class="ud-main-btn gp-btn-pad w-100 gp-btn-solid"><i class="fa-solid fa-user-plus"></i> Sign Up</a>
+                </div>
+
+                <div class="gp-drawer-auth" id="mobile-auth-logged-in" style="display:none;">
+                  <a href="./premium.html" class="ud-main-btn gp-btn-pad w-100 gp-btn-glass is-light"><i class="fa-solid fa-crown"></i> Extend premium</a>
+                  <a href="#" id="drawer-logout-btn" class="ud-main-btn gp-btn-pad w-100 gp-btn-glass is-light" onclick="if(typeof logout === 'function') logout();"><i class="fa fa-sign-out"></i> Log out</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="navbar-btn gp-actions">
+              <div class="nav-item dropdown d-none d-lg-inline-block me-2">
+                <a class="ud-main-btn ud-login-btn text-center dropdown-toggle gp-lang-toggle" href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                  <span class="flag-icon flag-icon-us"></span>
+                  <i class="fa-solid fa-chevron-down gp-lang-caret"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end gp-dropdown">
+                  <li class="gp-lang-head">Select language</li>
+                  <li><a class="dropdown-item" href="?lang=en" data-lang="en"><span class="flag-icon flag-icon-us me-2"></span>English</a></li>
+                  <li><a class="dropdown-item" href="?lang=id" data-lang="id"><span class="flag-icon flag-icon-id me-2"></span>Indonesia</a></li>
+                  <li><a class="dropdown-item" href="?lang=my" data-lang="my"><span class="flag-icon flag-icon-my me-2"></span>Melayu</a></li>
+                  <li><a class="dropdown-item" href="?lang=ph" data-lang="ph"><span class="flag-icon flag-icon-ph me-2"></span>Filipino</a></li>
+                  <li><a class="dropdown-item" href="?lang=vn" data-lang="vn"><span class="flag-icon flag-icon-vn me-2"></span>Tiếng Việt</a></li>
+                  <li><a class="dropdown-item" href="?lang=th" data-lang="th"><span class="flag-icon flag-icon-th me-2"></span>ไทย</a></li>
+                  <li><a class="dropdown-item" href="?lang=cn" data-lang="cn"><span class="flag-icon flag-icon-cn me-2"></span>中文</a></li>
+                  <li><a class="dropdown-item" href="?lang=jp" data-lang="jp"><span class="flag-icon flag-icon-jp me-2"></span>日本語</a></li>
+                  <li><a class="dropdown-item" href="?lang=kr" data-lang="kr"><span class="flag-icon flag-icon-kr me-2"></span>한국어</a></li>
+                </ul>
+              </div>
+
+              <!-- Desktop Auth Buttons -->
+              <a href="./login.html" class="ud-main-btn gp-glassbtn d-none d-md-inline-block" id="desktop-login-btn">Log In</a>
+              <a href="./signup.html" class="gp-rimbtn d-none d-md-inline-flex gp-cta" id="desktop-signup-btn">
+                <span class="gp-rimbtn-rim" aria-hidden="true"></span>
+                <span class="gp-rimbtn-core" aria-hidden="true"></span>
+                <span class="gp-rimbtn-text">Sign Up</span>
+              </a>
+              <a href="./login.html" class="ud-main-btn ud-login-btn gp-glassbtn d-md-none" id="mobile-nav-login-btn">Log In</a>
+
+              <!-- Desktop Logged-in Dropdown -->
+              <div class="nav-item dropdown d-none gp-user" id="desktop-user-dropdown">
+                <a class="gp-user-toggle dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" aria-label="Account">
+                  <span class="gp-avatar sync-avatar">M</span>
+                  <span class="gp-user-name d-none d-lg-inline sync-firstname">Member</span>
+                  <i class="fa-solid fa-chevron-down gp-user-caret d-none d-lg-inline"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end gp-dropdown gp-user-menu">
+                  <div class="gp-user-head">
+                    <div class="gp-user-head-label">Signed in as</div>
+                    <div class="gp-user-head-name sync-fullname">Member</div>
+                    <div class="gp-plan-badge-container"></div>
+                  </div>
+                  <a class="dropdown-item" href="./dashboard.html"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+                  <a class="dropdown-item" href="./profile.html"><i class="fa-solid fa-user-pen"></i> Edit profile</a>
+                  <a class="dropdown-item" href="./history.html"><i class="fa-solid fa-receipt"></i> Order history</a>
+                  <a class="dropdown-item" href="./logs.html"><i class="fa-solid fa-clock-rotate-left"></i> Activity logs</a>
+                  <a class="dropdown-item" href="./extension.html"><i class="fa-brands fa-discord"></i> Manage extension</a>
+                  <a class="dropdown-item" href="./premium.html"><i class="fa-solid fa-crown"></i> Extend premium</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item gp-item-danger" href="#" id="logout-button" onclick="if(typeof logout === 'function') logout();"><i class="fa fa-sign-out"></i> Log out</a>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Banner -->
+  <section class="ud-page-banner">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="ud-banner-content">
+            <h1 id="manual-page-title">Manual Login</h1>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bento Grid Manual Credentials -->
+  <section class="gp-dash gp-tools gp-tl-manual">
+    <div class="container">
+      <div class="gp-bento gp-tl-grid">
+
+        <!-- Main Bento Card -->
+        <div class="menu-section gp-dash-card gp-tl-card gp-area-tl-main">
+          <div class="menu-section-header"><i class="fa-solid fa-key"></i> Login details</div>
+
+          <div class="gp-tl-service">
+            <img class="gp-tl-service-logo" id="manual-service-logo" src="assets/images/favicon.png" alt="Service Logo" width="56" height="56" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='assets/images/favicon.png';">
+            <div>
+              <div class="gp-tl-service-name" id="manual-service-name">Service Name</div>
+              <div class="gp-tl-service-sub">Sign in manually with the details below. Do not change the password, email or profile settings.</div>
+            </div>
+          </div>
+
+          <!-- Bilingual Desktop-Only Security Alert for Google, Gemini & NotebookLM -->
+          <div id="google-security-alert" class="gp-alert gp-alert-warning gp-tl-alert-inline" role="alert" style="display: none; align-items: flex-start; gap: 12px;">
+            <i class="fa-solid fa-desktop" aria-hidden="true" style="font-size: 18px; margin-top: 2px;"></i>
+            <div class="gp-alert-text">
+              <div style="font-weight: 700; margin-bottom: 4px; line-height: 1.45;">
+                Please DO NOT attempt to log in using a mobile phone or tablet. For security reasons, this account is only accessible via desktop or laptop web browsers.
+              </div>
+              <div style="font-size: 12px; opacity: 0.9; line-height: 1.45;">
+                Mohon JANGAN login menggunakan HP atau tablet. Demi alasan keamanan, akun ini hanya boleh diakses melalui browser web di komputer atau laptop.
+              </div>
+            </div>
+          </div>
+
+          <ul class="gp-tl-creds">
+            <!-- Email / Username -->
+            <li class="gp-tl-cred" id="manual-login-cred">
+              <span class="gp-tl-cred-icon" aria-hidden="true"><i class="fa-solid fa-envelope"></i></span>
+              <div class="gp-tl-cred-body">
+                <label class="gp-tl-cred-label" for="manual-login-input">Email / Username</label>
+                <input class="gp-tl-cred-value" type="text" id="manual-login-input" value="" readonly>
+              </div>
+              <button type="button" class="gp-tl-copy" data-copy="manual-login-input" aria-label="Copy Email"><i class="fa-regular fa-copy"></i><span>Copy</span></button>
+            </li>
+
+            <!-- Password / Inbox Link -->
+            <li class="gp-tl-cred" id="manual-pass-cred">
+              <span class="gp-tl-cred-icon" id="manual-pass-icon" aria-hidden="true"><i class="fa-solid fa-lock"></i></span>
+              <div class="gp-tl-cred-body">
+                <label class="gp-tl-cred-label" id="manual-pass-label" for="manual-pass-input">Password</label>
+                <input class="gp-tl-cred-value" type="text" id="manual-pass-input" value="" readonly>
+              </div>
+              <div style="display: flex; gap: 6px; flex-shrink: 0; align-items: center;">
+                <button type="button" class="gp-tl-copy" data-copy="manual-pass-input" aria-label="Copy Password"><i class="fa-regular fa-copy"></i><span>Copy</span></button>
+                <a href="#" id="manual-inbox-btn" target="_blank" rel="noopener noreferrer" class="gp-tl-copy" style="display: none; text-decoration: none;"><i class="fa-solid fa-arrow-up-right-from-square"></i><span>Open Inbox</span></a>
+              </div>
+            </li>
+
+            <!-- Activation Code / Extra Info (Optional) -->
+            <li class="gp-tl-cred" id="manual-extra-cred" style="display: none;">
+              <span class="gp-tl-cred-icon" aria-hidden="true"><i class="fa-solid fa-shield-halved"></i></span>
+              <div class="gp-tl-cred-body">
+                <label class="gp-tl-cred-label" for="manual-extra-input">Activation Code / Extra Info</label>
+                <input class="gp-tl-cred-value" type="text" id="manual-extra-input" value="" readonly>
+              </div>
+              <button type="button" class="gp-tl-copy" data-copy="manual-extra-input" aria-label="Copy Extra"><i class="fa-regular fa-copy"></i><span>Copy</span></button>
+            </li>
+          </ul>
+
+          <div class="gp-dash-actions">
+            <a class="ud-main-btn gp-dash-btn gp-btn-rim" id="manual-target-url-btn" href="#" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-arrow-up-right-from-square"></i> Login here</a>
+            <a class="ud-main-btn gp-dash-btn gp-btn-glass" href="./dashboard.html">Back to the dashboard</a>
+          </div>
+        </div>
+
+        <!-- Side Bento Card -->
+        <div class="menu-section gp-dash-card gp-tl-card gp-area-tl-side">
+          <div class="menu-section-header"><i class="fa-solid fa-circle-question"></i> How to use</div>
+          <ol class="gp-tl-steps">
+            <li><span class="gp-tl-step-num">1</span><span>Open the service with the button and go to the login page.</span></li>
+            <li><span class="gp-tl-step-num">2</span><span>Copy and paste the login details from this page.</span></li>
+            <li><span class="gp-tl-step-num">3</span><span>Never log out or edit the account. Other members share it.</span></li>
+          </ol>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="ud-footer gp-footer" data-wow-delay=".15s">
+    <div class="shape shape-1">
+      <img src="assets/images/footer/leftshape.png" alt="shape" />
+    </div>
+    <div class="shape shape-2">
+      <img src="assets/images/footer/dotted-shape.svg" alt="shape" />
+    </div>
+    <div class="shape shape-3">
+      <img src="assets/images/footer/rightshape.png" alt="shape" />
+    </div>
+    <div class="ud-footer-widgets">
+      <div class="container">
+        <div class="row">
+          <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="ud-widget">
+              <a href="./" class="ud-footer-logo">
+                <img src="assets/images/logo/gracely_white.png" alt="logo" />
+              </a>
+              <p class="ud-widget-desc">Unlock Premium Together</p>
+              <ul class="ud-widget-socials">
+                <li><a href="./gracelydiscord" target="_blank" rel="noopener" aria-label="Discord" class="gp-btn-glass"><i class="fa-brands fa-discord"></i></a></li>
+                <li><a href="./gracelytelegram" target="_blank" rel="noopener" aria-label="Telegram" class="gp-btn-glass"><i class="fa-brands fa-telegram"></i></a></li>
+                <li><a href="mailto:contact@gracely.my.id" aria-label="Email" class="gp-btn-glass"><i class="fa-solid fa-envelope"></i></a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+            <div class="ud-widget">
+              <h5 class="ud-widget-title">About</h5>
+              <ul class="ud-widget-links">
+                <li><a href="./#features">Features</a></li>
+                <li><a href="./#about">About</a></li>
+                <li><a href="./#pricing">Pricing</a></li>
+                <li><a href="./#services">Services</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+            <div class="ud-widget">
+              <h5 class="ud-widget-title">Dashboard</h5>
+              <ul class="ud-widget-links">
+                <li><a href="./dashboard.html">View dashboard <i class="fa-solid fa-arrow-up-right-from-square"></i></a></li>
+                <li><a href="./premium.html">Purchase premium <i class="fa-solid fa-arrow-up-right-from-square"></i></a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+            <div class="ud-widget">
+              <h5 class="ud-widget-title">Extension</h5>
+              <ul class="ud-widget-links">
+                <li><a href="./dashboard.html">Download extension <i class="fa-solid fa-arrow-up-right-from-square"></i></a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-xl-2 col-lg-2 col-md-6 col-sm-10">
+            <div class="ud-widget">
+              <h5 class="ud-widget-title">Partners</h5>
+              <ul class="ud-widget-brands">
+                <li>
+                  <a href="https://cloudflare.com/" rel="nofollow noopener" target="_blank">
+                    <img src="https://companieslogo.com/img/orig/NET_BIG.D-52893f5e.png" alt="Cloudflare">
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ud-footer-bottom">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8">
+            <ul class="ud-footer-bottom-left">
+              <li><a href="./privacy.html">Privacy Policy</a></li>
+              <li><a href="./terms.html">Terms of Service</a></li>
+              <li><a href="./index.html#contact">Contact Us</a></li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <p class="ud-footer-bottom-right">Gracely &copy; 2023-2026</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <a href="javascript:void(0)" class="back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+  </a>
+
+  <!-- Scripts -->
+  <script src="assets/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/wow.min.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/script.js"></script>
+
+  <!-- Dynamic Manual Credentials & Supabase Icon Resolver -->
+  <script>
+    (async function initManualLogin() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const name = (urlParams.get('name') || 'Premium Service').trim();
+      const login = (urlParams.get('login') || '').trim();
+      const password = (urlParams.get('password') || '').trim();
+      const targetUrl = (urlParams.get('url') || '').trim();
+      const extra = (urlParams.get('extra') || '').trim();
+
+      // 1. Set Title & Headers
+      document.title = `${name} | Gracely`;
+      const metaTitle = document.getElementById('manual-meta-title');
+      if (metaTitle) metaTitle.textContent = `${name} | Gracely`;
+
+      const pageTitle = document.getElementById('manual-page-title');
+      if (pageTitle) pageTitle.textContent = name;
+
+      const serviceNameEl = document.getElementById('manual-service-name');
+      if (serviceNameEl) serviceNameEl.textContent = name;
+
+      // 2. Set Email / Username
+      const loginInput = document.getElementById('manual-login-input');
+      if (loginInput) loginInput.value = login || '—';
+
+      // 3. Set Password or Inbox Link
+      const passInput = document.getElementById('manual-pass-input');
+      const passLabel = document.getElementById('manual-pass-label');
+      const passIcon = document.getElementById('manual-pass-icon');
+      const inboxBtn = document.getElementById('manual-inbox-btn');
+
+      if (passInput) passInput.value = password || '—';
+
+      const isUrlPassword = password.startsWith('http://') || password.startsWith('https://');
+      if (isUrlPassword) {
+        if (passLabel) passLabel.textContent = 'Inbox / OTP Link';
+        if (passIcon) passIcon.innerHTML = '<i class="fa-solid fa-inbox"></i>';
+        if (inboxBtn) {
+          inboxBtn.href = password;
+          inboxBtn.style.display = 'inline-flex';
+        }
+      }
+
+      // 4. Set Activation Code / Extra
+      if (extra) {
+        const extraCred = document.getElementById('manual-extra-cred');
+        const extraInput = document.getElementById('manual-extra-input');
+        if (extraCred) extraCred.style.display = 'flex';
+        if (extraInput) extraInput.value = extra;
+      }
+
+      // 5. Set Target URL Button
+      const targetUrlBtn = document.getElementById('manual-target-url-btn');
+      if (targetUrlBtn) {
+        if (targetUrl) {
+          targetUrlBtn.href = targetUrl;
+        } else if (isUrlPassword) {
+          targetUrlBtn.href = password;
+          targetUrlBtn.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i> Open Inbox';
+        } else {
+          targetUrlBtn.style.display = 'none';
+        }
+      }
+
+      // 6. Check for Google / Gemini / NotebookLM Ecosystem (Show Desktop-Only Security Alert)
+      const nameLower = name.toLowerCase();
+      const targetLower = targetUrl.toLowerCase();
+      const loginLower = login.toLowerCase();
+      const passLower = password.toLowerCase();
+
+      const isGoogleService = 
+        nameLower.includes('notebooklm') ||
+        nameLower.includes('notebook lm') ||
+        nameLower.includes('gemini') ||
+        nameLower.includes('google') ||
+        nameLower.includes('colab') ||
+        targetLower.includes('google.com') ||
+        targetLower.includes('notebooklm') ||
+        loginLower.includes('@nasimerah.com') ||
+        loginLower.includes('@withgpy.com') ||
+        loginLower.includes('@gmail.com') ||
+        loginLower.includes('@google') ||
+        passLower.includes('smartphone') ||
+        passLower.includes('wipedata') ||
+        passLower.includes('notebooklm') ||
+        urlParams.get('google') === 'true' ||
+        urlParams.get('desktop_only') === 'true';
+
+      const googleAlert = document.getElementById('google-security-alert');
+      if (googleAlert && isGoogleService) {
+        googleAlert.style.display = 'flex';
+      }
+
+      // 7. Dynamic Icon Resolution (Supabase -> Local -> Favicon)
+      const serviceLogoImg = document.getElementById('manual-service-logo');
+      if (serviceLogoImg) {
+        let resolvedIcon = null;
+
+        // Step A: Query Supabase gracely_services
+        try {
+          if (typeof supabaseClient !== 'undefined' && name && name !== 'Premium Service') {
+            const cleanName = name.replace(/^(Pro:\s*|The\s+Phantom:\s*|Bypass\s*\|\s*)/i, '').trim();
+            const { data, error } = await supabaseClient
+              .from('gracely_services')
+              .select('icon_url')
+              .or(`service_name.ilike.%${name}%,service_name.ilike.%${cleanName}%`)
+              .limit(1);
+
+            if (data && data.length > 0 && data[0].icon_url) {
+              resolvedIcon = data[0].icon_url;
+            }
+          }
+        } catch (e) {
+          console.warn('Icon lookup in Supabase error:', e);
+        }
+
+        // Step B: Local Asset Fallback
+        if (!resolvedIcon) {
+          const cleanLower = nameLower.replace(/^(pro:\s*|the\s+phantom:\s*|bypass\s*\|\s*)/i, '').trim();
+          if (cleanLower.includes('notebook')) resolvedIcon = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRJ_-m9Y994yfZimh_h8Yzn0sMx2IsfVoDIQ&s';
+          else if (cleanLower.includes('gemini')) resolvedIcon = 'https://static.vecteezy.com/system/resources/previews/055/687/055/non_2x/rectangle-gemini-google-icon-symbol-logo-free-png.png';
+          else if (cleanLower.includes('hbo')) resolvedIcon = 'assets/images/services/hbomax.png';
+          else if (cleanLower.includes('ground')) resolvedIcon = 'assets/images/services/groundnews.png';
+          else if (cleanLower.includes('wall street') || cleanLower.includes('wsj')) resolvedIcon = 'assets/images/services/WSJ.png';
+          else if (cleanLower.includes('academia')) resolvedIcon = 'assets/images/services/Academia.png';
+          else if (cleanLower.includes('netflix')) resolvedIcon = 'assets/images/services/netflix.png';
+          else if (cleanLower.includes('udemy')) resolvedIcon = 'assets/images/services/Udemy.png';
+          else if (cleanLower.includes('capcut')) resolvedIcon = 'assets/images/services/CapCut.png';
+          else if (cleanLower.includes('chatgpt')) resolvedIcon = 'assets/images/services/chatgptpro.png';
+          else if (cleanLower.includes('claude')) resolvedIcon = 'assets/images/services/claude.png';
+          else if (cleanLower.includes('perplexity')) resolvedIcon = 'assets/images/services/perplexity.png';
+          else if (cleanLower.includes('datacamp')) resolvedIcon = 'assets/images/services/datacamp.png';
+        }
+
+        // Step C: Google Favicon from target URL
+        if (!resolvedIcon && targetUrl) {
+          try {
+            const domain = new URL(targetUrl).hostname;
+            if (domain) resolvedIcon = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+          } catch (e) {}
+        }
+
+        // Step D: Apply Icon
+        if (resolvedIcon) {
+          serviceLogoImg.src = resolvedIcon;
+        }
+      }
+
+      // 7. Clipboard Copy Handlers
+      function fallbackCopy(input) {
+        input.removeAttribute('readonly');
+        input.select();
+        input.setSelectionRange(0, 99999);
+        try { document.execCommand('copy'); } catch (e) {}
+        input.setAttribute('readonly', '');
+        if (window.getSelection) window.getSelection().removeAllRanges();
+      }
+
+      document.querySelectorAll('.gp-tl-copy[data-copy]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const inputId = btn.getAttribute('data-copy');
+          const input = document.getElementById(inputId);
+          if (!input || !input.value) return;
+
+          const done = function () {
+            const label = btn.querySelector('span');
+            const oldText = label ? label.textContent : 'Copy';
+            btn.classList.add('is-copied');
+            if (label) label.textContent = 'Copied';
+            setTimeout(function () {
+              btn.classList.remove('is-copied');
+              if (label) label.textContent = oldText;
+            }, 1500);
+          };
+
+          if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(input.value).then(done, function () {
+              fallbackCopy(input);
+              done();
+            });
+          } else {
+            fallbackCopy(input);
+            done();
+          }
+        });
+      });
+
+    })();
+  </script>
+</body>
+
+</html>

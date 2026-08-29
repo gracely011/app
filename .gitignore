@@ -23,3 +23,4 @@ patch/
 local_build.js
 assets/halo/*.js
 assets/halo/*.json
+scripts/

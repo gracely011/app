@@ -25,30 +25,72 @@ jobs:
       - name: Install Obfuscator
         run: npm install -g javascript-obfuscator
 
-      - name: Obfuscate JavaScript (Keep Console Branding)
+      - name: Obfuscate ALL JavaScript Files
         run: |
-          # --domain-lock restricts running to specific domains
-          # --domain-lock-redirect-url redirects if domain doesn't match
-          
           OPTIONS="--compact true --self-defending true --disable-console-output false --debug-protection true --debug-protection-interval 4000 --domain-lock gracely011.github.io,draft.gracely.my.id --domain-lock-redirect-url https://draft.gracely.my.id/"
           
-          javascript-obfuscator ./assets/script.js --output ./assets/script.js $OPTIONS
-          javascript-obfuscator ./auth.js --output ./auth.js $OPTIONS
-          javascript-obfuscator ./assets/snow.js --output ./assets/snow.js $OPTIONS
-          javascript-obfuscator ./assets/youtube-noads-2.0-final.js --output ./assets/youtube-noads-2.0-final.js $OPTIONS
-          javascript-obfuscator ./assets/js/main.js --output ./assets/js/main.js $OPTIONS
-          javascript-obfuscator ./assets/js/admin.js --output ./assets/js/admin.js $OPTIONS
-          
-          # Extension Assets
-          javascript-obfuscator ./assets/images/extension/gg.js --output ./assets/images/extension/gg.js $OPTIONS
-          
-          # aturhonma.js MUST be excluded because MV3 cannot execute remote obfuscated code.
-          # It must remain parsable text/data.
+          # Obfuscate every .js file across the repository (excluding aturhonma.js, vendor libs)
+          find . -type f -name "*.js" ! -name "aturhonma.js" ! -name "bootstrap.bundle.min.js" ! -name "wow.min.js" ! -path "*/.git/*" ! -path "*/node_modules/*" ! -path "*/scripts/*" -exec javascript-obfuscator {} --output {} $OPTIONS \;
 
-      - name: Encrypt Assets (aturhonma.js & whitelist.json)
+      - name: Encrypt Assets Inline (aturhonma.js & whitelist.json)
         run: |
-          node scripts/encrypt_assets.js
-          # Remove scripts folder so the encryption key is not pushed to main
+          node -e '
+          const fs = require("fs");
+          const crypto = require("crypto");
+          const vm = require("vm");
+
+          const PASSWORD = "kuberserah_selalu_in_GOD";
+          const ITERATIONS = 100000;
+
+          async function getKey(password, salt) {
+              const enc = new TextEncoder();
+              const keyMaterial = await crypto.webcrypto.subtle.importKey("raw", enc.encode(password), { name: "PBKDF2" }, false, ["deriveKey"]);
+              return await crypto.webcrypto.subtle.deriveKey({ name: "PBKDF2", salt: salt, iterations: ITERATIONS, hash: "SHA-256" }, keyMaterial, { name: "AES-GCM", length: 256 }, false, ["encrypt", "decrypt"]);
+          }
+
+          async function encryptData(plainDataObj, password) {
+              const jsonString = JSON.stringify(plainDataObj);
+              const enc = new TextEncoder();
+              const salt = crypto.getRandomValues(new Uint8Array(16));
+              const iv = crypto.getRandomValues(new Uint8Array(12));
+              const key = await getKey(password, salt);
+              const encrypted = await crypto.webcrypto.subtle.encrypt({ name: "AES-GCM", iv: iv }, key, enc.encode(jsonString));
+              return JSON.stringify({
+                  s: Buffer.from(salt).toString("base64"),
+                  i: Buffer.from(iv).toString("base64"),
+                  d: Buffer.from(encrypted).toString("base64")
+              });
+          }
+
+          (async () => {
+              try {
+                  if (fs.existsSync("./aturhonma.js")) {
+                      let fileContent = fs.readFileSync("./aturhonma.js", "utf8");
+                      fileContent = fileContent.replace(/(?:const|let|var)\s+gracelyConfig\s*=/g, "gracelyConfig =");
+                      const sandbox = {};
+                      vm.createContext(sandbox);
+                      vm.runInContext(fileContent, sandbox);
+                      if (sandbox.gracelyConfig) {
+                          const encrypted = await encryptData(sandbox.gracelyConfig, PASSWORD);
+                          fs.writeFileSync("./aturhonma.js", encrypted, "utf8");
+                          console.log("✅ Encrypted aturhonma.js successfully");
+                      }
+                  }
+                  if (fs.existsSync("./whitelist.json")) {
+                      const jsonContent = JSON.parse(fs.readFileSync("./whitelist.json", "utf8"));
+                      if (!jsonContent.s) {
+                          const encrypted = await encryptData(jsonContent, PASSWORD);
+                          fs.writeFileSync("./whitelist.json", encrypted, "utf8");
+                          console.log("✅ Encrypted whitelist.json successfully");
+                      }
+                  }
+              } catch (err) {
+                  console.error("Encryption failed:", err);
+                  process.exit(1);
+              }
+          })();
+          '
+          # Remove scripts folder if any so it never exists on main
           rm -rf scripts/
 
       - name: Setup Git Config

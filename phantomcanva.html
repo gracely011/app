@@ -23,6 +23,7 @@
   <link rel="stylesheet" href="assets/css/animate.css" />
   <link rel="stylesheet" href="assets/css/ud-styles.css" />
   <link rel="stylesheet" href="assets/styles.css" />
+  <link rel="stylesheet" href="assets/css/pages/tools.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icon-css@1.1.0/css/flag-icon.min.css"/>
 
@@ -176,18 +177,38 @@
         </div>
       </div>
     </header>
-<header class="ud-header gp-header">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <nav class="navbar navbar-expand-lg gp-nav">
-              <a class="navbar-brand" href="./" aria-label="Gracely">
-                
-                <img src="assets/images/logo/gracely_mobile_white.png" alt="Gracely" id="logo" class="gp-logo gp-logo-mark" />
-                <img src="assets/images/logo/gracely_white.png" alt="Gracely" class="gp-logo gp-logo-full" />
-              </a>
-              <button class="navbar-toggler" type="button" aria-label="Menu" aria-controls="gpNavCollapse" aria-expanded="false">
-                <span class="toggler-icon"> </span>
+  <div class="gp-drawer-backdrop" id="gpDrawerBackdrop"></div>
+  <script>
+  (function () {
+    var toggler  = document.querySelector('.navbar-toggler');
+    var collapse = document.getElementById('gpNavCollapse');
+    var backdrop = document.getElementById('gpDrawerBackdrop');
+    var closeBtn = document.getElementById('gpDrawerClose');
+    if (!toggler || !collapse) return;
+    function sync() {
+      var open = collapse.classList.contains('show');
+      backdrop.classList.toggle('show', open);
+      document.body.classList.toggle('gp-drawer-open', open);
+      toggler.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    function close() {
+      collapse.classList.remove('show');
+      toggler.classList.remove('active');
+      sync();
+    }
+    toggler.addEventListener('click', function () { setTimeout(sync, 0); });
+    backdrop.addEventListener('click', close);
+    if (closeBtn) closeBtn.addEventListener('click', close);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    window.addEventListener('resize', function () { if (window.innerWidth >= 992) close(); });
+    collapse.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href]');
+      if (a && !a.classList.contains('dropdown-toggle')) close();
+    });
+  })();
+  </script>
+
+  <section class="ud-page-banner">
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
@@ -204,11 +225,21 @@
       <div class="gp-bento gp-tl-grid">
         <div class="menu-section gp-dash-card gp-tl-card gp-area-tl-main">
           <div class="menu-section-header"><i class="fa-solid fa-ghost"></i> The Phantom: Canva Access</div>
-          <p class="gp-tl-lead">Click below to access Canva with The Phantom exclusive access.</p>
+          <p class="gp-tl-lead">Not a member yet? Join the team with the invite link below.</p>
           
-          <div class="gp-dash-actions gp-tl-back-actions mt-4">
+          <div class="gp-tl-form gp-tl-join-row" id="phantom-join-container">
+            <div class="d-flex align-items-center gap-2 py-3 text-muted">
+              <div class="spinner-border spinner-border-sm text-primary" role="status" style="width: 1.25rem; height: 1.25rem; border-width: 0.15em;"></div>
+              <span style="font-size: 0.95rem;">Loading team access...</span>
+            </div>
+          </div>
+
+          <p class="gp-tl-note"><i class="fa-solid fa-circle-info"></i> No need to join multiple times. Join once if your Canva account is not Pro yet.</p>
+          <p class="gp-tl-note"><i class="fa-solid fa-floppy-disk"></i> Don't forget to back up your projects.</p>
+
+          <div class="gp-dash-actions gp-tl-back-actions">
             <a class="ud-main-btn gp-dash-btn gp-btn-rim" href="https://canva.com/" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Access Canva</a>
-            <a class="ud-main-btn gp-dash-btn gp-btn-glass" href="dashboard.html">Back to the dashboard</a>
+            <a class="ud-main-btn gp-dash-btn gp-btn-glass" href="./dashboard.html">Back to the dashboard</a>
           </div>
         </div>
 
@@ -223,6 +254,63 @@
       </div>
     </div>
   </section>
+
+  <script>
+    async function loadDynamicPhantomCanvaLinks() {
+      const container = document.getElementById('phantom-join-container');
+      if (!container) return;
+
+      try {
+        const client = window.supabaseClient || (typeof supabaseClient !== 'undefined' ? supabaseClient : null);
+        if (!client) {
+          container.innerHTML = '<p class="gp-tl-note text-danger"><i class="fa-solid fa-circle-exclamation"></i> Service client unavailable. Please refresh.</p>';
+          return;
+        }
+
+        const { data, error } = await client
+          .from('links_update')
+          .select('html_content, is_enabled')
+          .eq('page_name', 'phantomcanva')
+          .maybeSingle();
+
+        if (error || !data) {
+          console.error('[PhantomCanva] Fetch error:', error);
+          container.innerHTML = '<p class="gp-tl-note text-danger"><i class="fa-solid fa-circle-exclamation"></i> Unable to load Phantom Canva team links. Please try again later.</p>';
+          return;
+        }
+
+        if (data.is_enabled === false) {
+          container.innerHTML = '<p class="gp-tl-note text-warning"><i class="fa-solid fa-triangle-exclamation"></i> Team invitation is currently paused. Please check back later.</p>';
+          return;
+        }
+
+        if (data.html_content && data.html_content.trim()) {
+          container.innerHTML = data.html_content;
+
+          const joinLink = document.getElementById('join-team-link');
+          const urlSelect = document.getElementById('url-select');
+
+          if (joinLink && urlSelect) {
+            if (urlSelect.value) {
+              joinLink.href = urlSelect.value;
+            }
+            urlSelect.addEventListener('change', function() {
+              joinLink.href = this.value;
+            });
+          }
+        } else {
+          container.innerHTML = '<p class="gp-tl-note text-warning"><i class="fa-solid fa-circle-info"></i> No team invites available at this moment.</p>';
+        }
+      } catch (err) {
+        console.error('[PhantomCanva] Unexpected error:', err);
+        container.innerHTML = '<p class="gp-tl-note text-danger"><i class="fa-solid fa-circle-exclamation"></i> An error occurred while loading team access.</p>';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      loadDynamicPhantomCanvaLinks();
+    });
+  </script>
 
   <footer class="ud-footer gp-footer" data-wow-delay=".15s">
       <div class="shape shape-1">
@@ -347,7 +435,7 @@
   <script src="assets/js/bootstrap.bundle.min.js"></script>
   <script src="assets/js/wow.min.js"></script>
   <script src="assets/js/main.js"></script>
-  <script src="layout.js"></script>
+  
     <script src="assets/script.js"></script>
 </body>
 </html>

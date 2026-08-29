@@ -252,33 +252,11 @@
             <div class="menu-section-header"><i class="fa-solid fa-palette"></i> Canva</div>
 
                         <p class="gp-tl-lead">Not a member yet? Join the team with the invite link below.</p>
-                        <div class="gp-tl-form gp-tl-join-row">
-              <div class="gracely-form-group">
-                <select name="team" id="url-select" aria-label="Team">
-                                    <option value="https://www.canva.com/brand/join?token=uPu74cpoLqi8BK0M0Wq4mg&amp;referrer=team-invite">Canva Team 1</option>
-                                    <option value="https://www.canva.com/brand/join?token=HWdw0b2twBoOrhttxH6F1Q&amp;referrer=team-invite">Canva Team 2</option>
-                                    <option value="https://www.canva.com/brand/join?token=mGuij8qURE0wJxIdTcveTw&amp;referrer=team-invite">Canva Team 3</option>
-                                    <option value="https://www.canva.com/brand/join?token=GDd821ULeMdvRT5GGeSldQ&amp;referrer=team-invite">Canva Team 4</option>
-                                    <option value="https://www.canva.com/brand/join?token=r8W4Y8XG0_RiebTuOeueFg&amp;referrer=team-invite">Canva Team 5</option>
-                                    <option value="https://www.canva.com/brand/join?token=s6XtDIgbaANpx0lf_m9YXg&amp;invitationDestinationType=group">Canva Team 6</option>
-                                    <option value="https://www.canva.com/brand/join?token=kyRjPWSdEbWz_TjgT7oAwQ&amp;invitationDestinationType=group">Canva Team 7</option>
-                                    <option value="https://www.canva.com/brand/join?token=5zi70HFqdsBh6GxUkPGMkw&amp;invitationDestinationType=group">Canva Team 8</option>
-                                    <option value="https://www.canva.com/brand/join?token=O30zFzPc2dD99q2jZh__iA&amp;invitationDestinationType=group">Canva Team 9</option>
-                                    <option value="https://www.canva.com/brand/join?token=A3mM1TDrdhK-g0SYB44sXA&amp;invitationDestinationType=group">Canva Team 10</option>
-                                    <option value="https://www.canva.com/brand/join?token=8c-3Lev3OCMddoRfhu0zqw&amp;invitationDestinationType=group">Canva Team 11</option>
-                                    <option value="https://www.canva.com/brand/join?token=NuVgKyiB4VVqeq6GGHrqsg&amp;invitationDestinationType=group">Canva Team 12</option>
-                                    <option value="https://www.canva.com/brand/join?token=nKCYy_QMGRVs3_-jaI7Prw&amp;invitationDestinationType=group">Canva Team 13</option>
-                                    <option value="https://www.canva.com/brand/join?token=5pgtqXLBz_zBV4h16sABxA&amp;invitationDestinationType=group">Canva Team 14</option>
-                                    <option value="https://www.canva.com/brand/join?token=IUhC9cT7VO0e1tYOo6ZGJA&amp;invitationDestinationType=group">Canva Team 15</option>
-                                    <option value="https://www.canva.com/brand/join?token=zqPse_utcJJlaRg09lWw9w&amp;invitationDestinationType=group">Canva Team 16</option>
-                                    <option value="https://www.canva.com/brand/join?token=3wsOsXimMUy16Gb5NFOa5Q&amp;invitationDestinationType=group">Canva Team 17</option>
-                                    <option value="https://www.canva.com/brand/join?token=aAwkJyOkTpOKI4HN0cX4Dw&amp;invitationDestinationType=group">Canva Team 18</option>
-                                    <option value="https://www.canva.com/brand/join?token=hK-g8X7tBoU3kIrJqokcMw&amp;invitationDestinationType=group">Canva Team 19</option>
-                                    <option value="https://www.canva.com/brand/join?token=sYBd2nEPglthStbN-GJPsw&amp;invitationDestinationType=group">Canva Team 20</option>
-                                  </select>
-                <label for="url-select">Team</label>
+                        <div class="gp-tl-form gp-tl-join-row" id="canva-join-container">
+              <div class="d-flex align-items-center gap-2 py-3 text-muted">
+                <div class="spinner-border spinner-border-sm text-primary" role="status" style="width: 1.25rem; height: 1.25rem; border-width: 0.15em;"></div>
+                <span style="font-size: 0.95rem;">Loading team access...</span>
               </div>
-              <a id="join-team-link" href="https://www.canva.com/brand/join?token=uPu74cpoLqi8BK0M0Wq4mg&amp;referrer=team-invite" target="_blank" rel="noopener" class="ud-main-btn gp-dash-btn gp-btn-rim"><i class="fa-solid fa-user-plus"></i> Join Canva Team</a>
             </div>
                         <p class="gp-tl-note"><i class="fa-solid fa-circle-info"></i> No need to join multiple times. Join once if your Canva account is not Pro yet.</p>
                         <p class="gp-tl-note"><i class="fa-solid fa-floppy-disk"></i> Don't forget to back up your projects.</p>
@@ -303,17 +281,60 @@
     </section>
 
 <script>
-  // Find the link and select element for joining a team
-  const joinLink = document.getElementById('join-team-link');
-  const urlSelect = document.getElementById('url-select');
+  async function loadDynamicCanvaLinks() {
+    const container = document.getElementById('canva-join-container');
+    if (!container) return;
 
-  // Check if both the link and the select dropdown exist
-  if (joinLink && urlSelect) {
-      // When the user changes the selection, update the link's href attribute
-      urlSelect.addEventListener('change', function() {
-          joinLink.href = this.value;
-      });
+    try {
+      const client = window.supabaseClient || (typeof supabaseClient !== 'undefined' ? supabaseClient : null);
+      if (!client) {
+        container.innerHTML = '<p class="gp-tl-note text-danger"><i class="fa-solid fa-circle-exclamation"></i> Service client unavailable. Please refresh.</p>';
+        return;
+      }
+
+      const { data, error } = await client
+        .from('links_update')
+        .select('html_content, is_enabled')
+        .eq('page_name', 'canva')
+        .maybeSingle();
+
+      if (error || !data) {
+        console.error('[Canva] Fetch error:', error);
+        container.innerHTML = '<p class="gp-tl-note text-danger"><i class="fa-solid fa-circle-exclamation"></i> Unable to load Canva team links. Please try again later.</p>';
+        return;
+      }
+
+      if (data.is_enabled === false) {
+        container.innerHTML = '<p class="gp-tl-note text-warning"><i class="fa-solid fa-triangle-exclamation"></i> Team invitation is currently paused. Please check back later.</p>';
+        return;
+      }
+
+      if (data.html_content && data.html_content.trim()) {
+        container.innerHTML = data.html_content;
+
+        const joinLink = document.getElementById('join-team-link');
+        const urlSelect = document.getElementById('url-select');
+
+        if (joinLink && urlSelect) {
+          if (urlSelect.value) {
+            joinLink.href = urlSelect.value;
+          }
+          urlSelect.addEventListener('change', function() {
+            joinLink.href = this.value;
+          });
+        }
+      } else {
+        container.innerHTML = '<p class="gp-tl-note text-warning"><i class="fa-solid fa-circle-info"></i> No team invites available at this moment.</p>';
+      }
+    } catch (err) {
+      console.error('[Canva] Unexpected error:', err);
+      container.innerHTML = '<p class="gp-tl-note text-danger"><i class="fa-solid fa-circle-exclamation"></i> An error occurred while loading team access.</p>';
+    }
   }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    loadDynamicCanvaLinks();
+  });
 </script>
 
     

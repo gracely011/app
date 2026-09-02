@@ -13,47 +13,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404 Not Found | Gracely</title>
-
-    <script>
-    // Direct Access Fallback Router for Clean URLs (HTTP/HTTPS Only)
-    (function handle404Routing() {
-        if (!window.location.protocol.startsWith('http')) return;
-        try {
-            var pathname = window.location.pathname;
-            var segments = pathname.split('/').filter(Boolean);
-            var lastSegment = (segments[segments.length - 1] || '').toLowerCase();
-            
-            // Redirect /home or /home.html directly to root index with query & hash
-            if (lastSegment === 'home') {
-                window.location.replace('/' + window.location.search + window.location.hash);
-                return;
-            }
-            
-            var validPages = [
-                'admin', 'blocked', 'canva', 'dashboard', 'extension', 'guardrequired',
-                'history', 'index', 'kalender-konten', 'login', 'logs', 'maintenance',
-                'manual', 'motion', 'password', 'phantomcanva', 'premium', 'privacy',
-                'profile', 'reset', 'signup', 'supertools', 'terms', 'tutorial',
-                'update', 'youtube-noads'
-            ];
-            
-            if (lastSegment && validPages.indexOf(lastSegment) !== -1) {
-                var cleanPath = pathname.replace(/\/+$/, '');
-                var targetUrl = (cleanPath.charAt(0) === '/' ? '' : '/') + cleanPath + '.html' + window.location.search + window.location.hash;
-                window.location.replace(targetUrl);
-            }
-        } catch(e) {}
-    })();
-    </script>
+    <meta name="title" content="404 Not Found | Gracely">
+    <meta name="description" content="Oops! The page you're looking for doesn't exist.">
 
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="assets/images/favicon.png" type="image/png">
+
+    <!-- Direct Clean URL Router -->
+    <script src="assets/js/router.js"></script>
 
     <style>
         :root {
             --text-color: #ffffff;
             --background-color: #000000;
-            --accent-color: #888888; /* A slightly lighter grey for the border */
+            --accent-color: #888888;
             --illustration-color: #ffffff;
         }
 
@@ -124,6 +97,7 @@
             border: 2px solid var(--accent-color);
             border-radius: 50px;
             transition: background-color 0.3s ease, color 0.3s ease;
+            display: inline-block;
         }
 
         a:hover {
@@ -131,12 +105,6 @@
             color: var(--background-color);
         }
     </style>
-
-    <!-- Gracely Backend Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="auth.js"></script>
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-
 </head>
 <body>
 
@@ -147,13 +115,36 @@
     </div>
 
     <main class="container">
-        <h1 id="text-3d">4 0 4 </h1>
-        <h2>OPAT KOSONG OPAT Page Not Found</h2>
+        <h1 id="text-3d">404</h1>
+        <h2>Page Not Found</h2>
         <p>Oops! The page you're looking for doesn't exist. It might have been moved or deleted.</p>
         <a href="./">Return to Homepage</a>
     </main>
 
-    <script src="layout.js"></script>
-    <script src="assets/script.js"></script>
+    <script>
+        const textElement = document.getElementById('text-3d');
+        const maxRotation = 90;
+
+        document.addEventListener('mousemove', (e) => {
+            const { clientX, clientY } = e;
+            const { innerWidth, innerHeight } = window;
+
+            const x = (clientX / innerWidth) - 0.5;
+            const y = (clientY / innerHeight) - 0.5;
+
+            const rotateY = x * (maxRotation * 2);
+            const rotateX = -y * (maxRotation * 2);
+
+            if (textElement) {
+                textElement.style.transform = `rotateY(${rotateY}deg) rotateX(${rotateX}deg)`;
+            }
+        });
+
+        document.addEventListener('mouseleave', () => {
+            if (textElement) {
+                textElement.style.transform = 'rotateY(0deg) rotateX(0deg)';
+            }
+        });
+    </script>
 </body>
 </html>

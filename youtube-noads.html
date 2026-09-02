@@ -28,10 +28,11 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="auth.js"></script>
     <script>
-        (async () => {
-            await requireAuth();
-        })();
+      (async () => {
+        await requireAuth();
+      })();
     </script>
+    
 </head>
 
 <body>
@@ -41,7 +42,7 @@
             <div class="header-title">
                 <h1>YouTube NoAds</h1>
                 <p>version 2.0 &mdash; Gracely &copy; 2024-<span id="year"></span></p>
-                <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+                
             </div>
             <div class="header-controls">
                 <div style="display: flex; gap: 10px; align-items: center; width: 100%;">
@@ -74,6 +75,7 @@
     </div>
 
     <script src="assets/youtube-noads-2.0-final.js"></script>
-</body>
+    <script src="assets/script.js"></script>
+  </body>
 
 </html>

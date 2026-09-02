@@ -193,36 +193,7 @@
       </div>
     </header>
     <div class="gp-drawer-backdrop" id="gpDrawerBackdrop"></div>
-    <script>
-    (function () {
-      var toggler  = document.querySelector('.navbar-toggler');
-      var collapse = document.getElementById('gpNavCollapse');
-      var backdrop = document.getElementById('gpDrawerBackdrop');
-      var closeBtn = document.getElementById('gpDrawerClose');
-      if (!toggler || !collapse) return;
-      function sync() {
-        var open = collapse.classList.contains('show');
-        backdrop.classList.toggle('show', open);
-        document.body.classList.toggle('gp-drawer-open', open);
-        toggler.setAttribute('aria-expanded', open ? 'true' : 'false');
-      }
-      function close() {
-        collapse.classList.remove('show');
-        toggler.classList.remove('active');
-        sync();
-      }
-      toggler.addEventListener('click', function () { setTimeout(sync, 0); }); // main.js toggles .show
-      backdrop.addEventListener('click', close);
-      if (closeBtn) closeBtn.addEventListener('click', close);
-      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
-      window.addEventListener('resize', function () { if (window.innerWidth >= 992) close(); });
-      // Close the drawer when a link inside it is clicked (e.g. #features on the same page)
-      collapse.addEventListener('click', function (e) {
-        var a = e.target.closest('a[href]');
-        if (a && !a.classList.contains('dropdown-toggle')) close();
-      });
-    })();
-    </script>
+    
     
     
     <section class="ud-hero" id="home">
@@ -474,25 +445,7 @@
                   </div>
       </div>
     </section>
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      var PLANS = {"premium":{"30":{"id":"30","price":49999,"save":0},"90":{"id":"90","price":147999,"save":1998},"180":{"id":"1801","price":284999,"save":14995},"365":{"id":"3651","price":549999,"save":58322}},"pro":{"30":{"id":"301","price":99999,"save":0},"90":{"id":"901","price":295999,"save":3998},"180":{"id":"1802","price":569999,"save":29995},"365":{"id":"3652","price":1099999,"save":116656}},"phantom":{"30":{"id":"302","price":399999,"save":0},"90":{"id":"903","price":1189999,"save":9998},"180":{"id":"1803","price":2279999,"save":119995},"365":{"id":"365","price":4379999,"save":486656}}};
-      var L = {"days":"DAYS","save":"Save"};
-      var rp = function (n) { return 'Rp ' + Number(n).toLocaleString('id-ID'); };
-      var btns = document.querySelectorAll('.lp-duration-btn'), cards = document.querySelectorAll('.lp-card');
-      function apply(days) {
-        btns.forEach(function (b) { var on = b.dataset.days == days; b.classList.toggle('is-active', on); b.setAttribute('aria-selected', on ? 'true' : 'false'); });
-        cards.forEach(function (c) {
-          var info = PLANS[c.dataset.tier] && PLANS[c.dataset.tier][days]; if (!info) return;
-          c.querySelector('[data-price]').textContent = rp(info.price);
-          c.querySelector('[data-per]').textContent = '/ ' + days + ' ' + L.days;
-          var sv = c.querySelector('[data-save]'); sv.hidden = !(info.save > 0); sv.textContent = L.save + ' ' + rp(info.save);
-          c.querySelector('[data-buy]').href = './premium?plan=' + info.id;
-        });
-      }
-      btns.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.days); }); });
-    });
-    </script>
+    
     
 
 
@@ -1118,35 +1071,7 @@
     </div>
   </div>
 </section>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  var items = [].slice.call(document.querySelectorAll('#lpSvcGrid .lp-svc'));
-  var empty = document.getElementById('lpSvcEmpty');
-  var tier = 'premium';
-  function render() {
-    var matched = 0;
-    items.forEach(function (el) {
-      var ok = el.dataset.tier === tier;
-      if (ok) matched++;
-      el.hidden = !ok;
-    });
-    empty.hidden = matched > 0;
-  }
-  document.querySelectorAll('.lp-svc-tiers .lp-chip').forEach(function (b) { b.addEventListener('click', function () {
-    tier = b.dataset.tier; document.querySelectorAll('.lp-svc-tiers .lp-chip').forEach(function (x) { var on = x === b; x.classList.toggle('is-active', on); x.setAttribute('aria-selected', on ? 'true' : 'false'); }); render(); }); });
-  render();
-  // Warm the logo cache once the page is idle so scrolling / switching tiers
-  // doesn't show grey placeholders (logos are remote and lazy-loaded).
-  window.addEventListener('load', function () {
-    var warm = function () {
-      document.querySelectorAll('#lpSvcGrid img[loading="lazy"]').forEach(function (im, i) {
-        setTimeout(function () { im.loading = 'eager'; }, i * 30);
-      });
-    };
-    if ('requestIdleCallback' in window) requestIdleCallback(warm, { timeout: 4000 }); else setTimeout(warm, 2500);
-  });
-});
-</script>
+
 
 
     
@@ -1387,19 +1312,7 @@ document.addEventListener('DOMContentLoaded', function () {
       </div>
       <p class="lp-tm-hint"><i class="fa-solid fa-arrows-left-right"></i> Drag to explore</p>
     </section>
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-    document.addEventListener('DOMContentLoaded', function () {
-      var track = document.getElementById('lpTmTrack'); if (!track) return;
-      var isDown = false, startX = 0, startScroll = 0, moved = false;
-      track.addEventListener('pointerdown', function (e) { isDown = true; moved = false; startX = e.clientX; startScroll = track.scrollLeft; track.classList.add('is-dragging'); track.setPointerCapture(e.pointerId); });
-      track.addEventListener('pointermove', function (e) { if (!isDown) return; var dx = e.clientX - startX; if (Math.abs(dx) > 4) moved = true; track.scrollLeft = startScroll - dx; });
-      ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (ev) { track.addEventListener(ev, function () { isDown = false; track.classList.remove('is-dragging'); }); });
-      track.addEventListener('click', function (e) { if (moved) { e.preventDefault(); e.stopPropagation(); } }, true);
-      function step() { var card = track.querySelector('.lp-tm-card'); return card ? card.getBoundingClientRect().width + 24 : 340; }
-      document.getElementById('lpTmPrev').addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
-      document.getElementById('lpTmNext').addEventListener('click', function () { track.scrollBy({ left: step(), behavior: 'smooth' }); });
-    });
-    </script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
     
 
     
@@ -1638,81 +1551,12 @@ document.addEventListener('DOMContentLoaded', function () {
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/wow.min.js"></script>
     <script src="assets/js/main.js"></script>
+    <script src="assets/js/i18n.js"></script>
     <script src="assets/script.js"></script>
     <script src="assets/checkSubmit_v2.js"></script>
     
-<script>
-      // ==== for menu scroll
-      const pageLink = document.querySelectorAll(".ud-menu-scroll");
 
-      pageLink.forEach((elem) => {
-        elem.addEventListener("click", (e) => {
-          e.preventDefault();
-          document.querySelector(elem.getAttribute("href")).scrollIntoView({
-            behavior: "smooth",
-            offsetTop: 1 - 60,
-          });
-        });
-      });
-
-      // section menu active
-      function onScroll(event) {
-        const sections = document.querySelectorAll(".ud-menu-scroll");
-        const scrollPos =
-          window.pageYOffset ||
-          document.documentElement.scrollTop ||
-          document.body.scrollTop;
-
-        for (let i = 0; i < sections.length; i++) {
-          const currLink = sections[i];
-          const val = currLink.getAttribute("href");
-          const refElement = document.querySelector(val);
-          const scrollTopMinus = scrollPos + 73;
-          if (
-            refElement.offsetTop <= scrollTopMinus &&
-            refElement.offsetTop + refElement.offsetHeight > scrollTopMinus
-          ) {
-            document
-              .querySelector(".ud-menu-scroll")
-              .classList.remove("active");
-            currLink.classList.add("active");
-          } else {
-            currLink.classList.remove("active");
-          }
-        }
-      }
-
-      window.document.addEventListener("scroll", onScroll);
-    </script>
   
-<script>
-// Pause continuously-animated elements (liquid rims, badge shines) while off-screen.
-(function gpAnimObserver() {
-  if (!('IntersectionObserver' in window)) return;
-  var sel = '.gp-btn-rim, .gp-rimbtn-rim, .lp-svc-tiers .lp-chip, .lp-duration-btn, ' +
-            '.gp-hl-filters .lp-chip, .gp-hl-pagination .page-link, .gp-plan-badge, .gp-dash-badge, .lp-shine';
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (en) { en.target.classList.toggle('gp-anim-off', !en.isIntersecting); });
-  }, { rootMargin: '100px' });
-  document.querySelectorAll(sel).forEach(function (el) { io.observe(el); });
-})();
-// Scrollable segmented tablists: keep the active chip centered in view.
-(function () {
-  function center(c, smooth) {
-    if (c.scrollWidth <= c.clientWidth + 4) return;
-    var a = c.querySelector('.is-active');
-    if (!a) return;
-    var cr = c.getBoundingClientRect(), ar = a.getBoundingClientRect();
-    var left = c.scrollLeft + (ar.left + ar.width / 2) - (cr.left + cr.width / 2);
-    if (smooth && c.scrollTo) c.scrollTo({ left: left, behavior: 'smooth' }); else c.scrollLeft = left;
-  }
-  var lists = document.querySelectorAll('.gp-hl-filters, .lp-svc-tiers, .lp-duration-toggle');
-  lists.forEach(function (c) {
-    center(c, false);
-    c.addEventListener('click', function () { setTimeout(function () { center(c, true); }, 0); });
-  });
-  window.addEventListener('resize', function () { lists.forEach(function (c) { center(c, false); }); });
-})();
-</script>
+
 </body>
 </html>

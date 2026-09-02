@@ -13,47 +13,37 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Order history | Gracely</title>
+    <title>Invoice | Gracely</title>
 
-    <meta name="title" content="Order history | Gracely">
-    <meta name="description" content="Unlock premium experiences together with our one-click access extension. Join us and start enjoying premium content without the premium price tag. All-in-One premium access.">
-    <meta name="keywords" content="platform premium, extension chrome premium, extension apk premium, all-in-one Chrome extension, unlock premium services, access premium tools, free access premium websites">
-
+    <meta name="title" content="Invoice | Gracely">
+    <meta name="description" content="Official Electronic Invoice - Gracely Unlock Premium Together.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://draft.gracely.my.id">
-    <meta property="og:title" content="Order history | Gracely">
-    <meta property="og:description" content="Unlock premium experiences together with our one-click access extension. Join us and start enjoying premium content without the premium price tag.">
-    <meta property="og:image" content="https://draft.gracely.my.id/assets/images/favicon.png">
-
+    <meta property="og:url" content="https://draft.gracely.my.id/">
+    <meta property="og:title" content="Invoice | Gracely">
+    <meta property="og:description" content="Official Electronic Invoice - Gracely Unlock Premium Together.">
+    <meta property="og:image" content="assets/images/favicon.png">
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://draft.gracely.my.id">
-    <meta property="twitter:title" content="Order history | Gracely">
-    <meta property="twitter:description" content="Unlock premium experiences together with our one-click access extension. Join us and start enjoying premium content without the premium price tag.">
-    <meta property="twitter:image" content="https://draft.gracely.my.id/assets/images/favicon.png">
+    <meta property="twitter:url" content="https://draft.gracely.my.id/">
+    <meta property="twitter:title" content="Invoice | Gracely">
+    <meta property="twitter:description" content="Official Electronic Invoice - Gracely Unlock Premium Together.">
+    <meta property="twitter:image" content="assets/images/favicon.png">
 
     <link rel="shortcut icon" href="assets/images/favicon.png" type="image/png" />
 
+    <!-- CSS Assets -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="assets/css/animate.css" />
     <link rel="stylesheet" href="assets/css/ud-styles.css" />
     <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="stylesheet" href="assets/css/pages/invoice.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icon-css@1.1.0/css/flag-icon.min.css"/>
 
-    <!-- Gracely Backend Scripts -->
+    <!-- Gracely Backend Auth -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="auth.js"></script>
-    <!-- Midtrans Snap JS SDK (Sandbox) -->
-    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="Mid-client-9zkuCA6I6sTUTitR"></script>
-    <script>
-      (async () => {
-        await requireAuth();
-        if (typeof window.loadOrderHistory === 'function') {
-          window.loadOrderHistory(0);
-        }
-      })();
-    </script>
-    
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   </head>
   <body>
     <!-- Announcement Bar -->
@@ -158,6 +148,10 @@
                   </ul>
                 </div>
 
+                <!-- HYBRID: BEFORE LOGIN (DESKTOP) -->
+                <a href="./login.html" class="ud-main-btn gp-glassbtn d-none d-md-inline-block" id="desktop-login-btn">Log In</a>
+                <a href="./signup.html" class="gp-rimbtn d-none d-md-inline-flex gp-cta" id="desktop-signup-btn">Sign Up</a>
+
                 <!-- HYBRID: AFTER LOGIN (DESKTOP) -->
                 <div class="nav-item dropdown d-none gp-user" id="desktop-user-dropdown">
                   <a class="gp-user-toggle dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" aria-label="Account">
@@ -189,149 +183,102 @@
     </header>
     <div class="gp-drawer-backdrop" id="gpDrawerBackdrop"></div>
 
-    
-
-    <!-- Page Banner with optimal top padding to avoid header overlap -->
+    <!-- Page Banner -->
     <section class="ud-page-banner" style="padding-top: 155px; padding-bottom: 60px;">
       <div class="container">
         <div class="row">
           <div class="col-lg-12">
             <div class="ud-banner-content">
-              <h1>Order history</h1>
+              <h1>Invoice</h1>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Main History Section -->
-    <section class="groupy-logs gp-hl">
+    <!-- Invoice Sheet Section -->
+    <section class="gp-page gp-inv">
       <div class="container">
 
-        <!-- Top Stats Cards -->
-        <div class="gp-hl-stats">
-          <div class="gp-hl-stat">
-            <span class="gp-hl-stat-label">Total orders</span>
-            <span class="gp-hl-stat-value" id="statTotalOrders">0</span>
+        <!-- Loading Placeholder -->
+        <div id="invLoading" class="text-center py-5">
+          <div class="spinner-border text-primary mb-3" role="status">
+            <span class="visually-hidden">Loading invoice...</span>
           </div>
-          <div class="gp-hl-stat">
-            <span class="gp-hl-stat-label">Paid orders</span>
-            <span class="gp-hl-stat-value" id="statPaidOrders">0</span>
-          </div>
-          <div class="gp-hl-stat">
-            <span class="gp-hl-stat-label">First paid order</span>
-            <span class="gp-hl-stat-value gp-hl-stat-sm" id="statFirstPaidOrder">Never</span>
-          </div>
-          <div class="gp-hl-stat">
-            <span class="gp-hl-stat-label">Last paid order</span>
-            <span class="gp-hl-stat-value gp-hl-stat-sm" id="statLastPaidOrder">Never</span>
-          </div>
+          <p class="text-muted">Loading invoice details...</p>
         </div>
 
-        <!-- Table Card Wrapper -->
-        <div class="logs-wrapper gp-hl-card">
-          
-          <!-- Toolbar (Filters & Search) -->
-          <form class="gp-hl-toolbar" onsubmit="return false;">
-            <div class="gp-hl-filters" role="tablist" id="filterTablist">
-              <button type="button" class="lp-chip is-active" data-status="ALL">All</button>
-              <button type="button" class="lp-chip" data-status="PAID">PAID</button>
-              <button type="button" class="lp-chip" data-status="UNPAID">UNPAID</button>
-              <button type="button" class="lp-chip" data-status="EXPIRED">EXPIRED</button>
+        <!-- Official Receipt Card -->
+        <div class="gp-card-light gp-inv-sheet d-none" id="gpInvSheet">
+          <div class="gp-inv-top">
+            <div class="gp-inv-brand">
+              <img src="assets/images/favicon.png" alt="Gracely" />
+              <div class="gp-inv-brand-name">Gracely</div>
+              <small><a href="mailto:support@gracely.my.id">support@gracely.my.id</a></small>
             </div>
-            <div class="gp-hl-search">
-              <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-              <input type="search" id="orderSearchInput" placeholder="Search invoice…" aria-label="Search invoice…">
+            <div class="gp-inv-title">
+              <h2>INVOICE</h2>
+              <div class="gp-inv-no" id="invNo">#GCY-000000000000</div>
+              <span id="invStatusBadge" class="gp-inv-paid"><i class="fa-solid fa-circle-check"></i> PAID</span>
             </div>
-          </form>
-
-          <!-- Subtitle: only shown when user has orders -->
-          <h5 class="logs-subtitle gp-hl-count" id="ordersCountSubtitle" style="display:none;">Showing orders 1 - 6 of 6</h5>
-
-          <!-- Orders Table Container -->
-          <div class="table-responsive" id="ordersTableContainer" style="display:none;">
-            <table class="table gp-hl-table" id="ordersTable">
-              <thead>
-                <tr>
-                  <th scope="col">Date & Time</th>
-                  <th scope="col">Invoice ID</th>
-                  <th scope="col">Plan</th>
-                  <th scope="col" class="gp-hl-right">Total</th>
-                  <th scope="col">Status</th>
-                </tr>
-              </thead>
-              <tbody id="ordersTableBody">
-                <!-- Dynamically populated rows -->
-              </tbody>
-            </table>
           </div>
 
-          <!-- Empty State Container -->
-          <div id="ordersEmptyState" class="gp-hl-empty">
-            <i class="fa-solid fa-receipt"></i>
-            <p id="emptyStateText">No orders yet.</p>
-            <a href="./premium.html" class="ud-main-btn gp-btn-glass is-light" id="emptyStateBtn">Purchase premium</a>
+          <div class="gp-inv-meta">
+            <div>
+              <div class="gp-inv-meta-label">Billed to</div>
+              <div class="gp-inv-meta-value" id="invBilledName">Member<small id="invBilledEmail">member@gracely.my.id</small></div>
+            </div>
+            <div>
+              <div class="gp-inv-meta-label">Date & Time</div>
+              <div class="gp-inv-meta-value" id="invDate">Jan 01, 2026<small id="invTime">00:00 WIB</small></div>
+            </div>
+            <div>
+              <div class="gp-inv-meta-label">Ref</div>
+              <div class="gp-inv-meta-value gp-inv-mono" id="invRefContainer">
+                <span id="invRefText">REF-DIRECT</span>
+              </div>
+            </div>
           </div>
 
-          <ul class="back-to-the-dashboard">
-            <li><a href="./dashboard.html" class="ud-main-btn gp-btn-glass is-light gp-backbtn">Back to the dashboard</a></li>
-          </ul>
+          <table class="gp-inv-table">
+            <thead>
+              <tr><th>Plan</th><th>Total</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span id="invPlanName">Plan Pro</span><small class="gp-inv-mono" id="invPlanNumber">#GCY-000000000000</small></td>
+                <td class="gp-inv-mono" id="invPlanPrice">Rp 0</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr><td>Total</td><td class="gp-inv-mono" id="invTotalPrice">Rp 0</td></tr>
+            </tfoot>
+          </table>
+
+          <div class="gp-inv-note">Gracely &mdash; Unlock Premium Together. This invoice was generated electronically and is valid without a signature.</div>
         </div>
+
+        <!-- Action Buttons -->
+        <div class="gp-inv-actions d-none" id="invActions">
+          <button type="button" class="ud-main-btn gp-btn-glass is-light" onclick="window.print()"><i class="fa-solid fa-print"></i>Print invoice</button>
+          <button type="button" class="ud-main-btn gp-btn-glass is-light" id="gpInvDownload"><i class="fa-solid fa-download"></i>Download invoice</button>
+          <a class="ud-main-btn gp-btn-glass is-light" href="./history.html"><i class="fa-solid fa-receipt"></i>Order history</a>
+        </div>
+
       </div>
     </section>
-
-    <!-- Payment / Resume Modal -->
-    <div class="modal fade" id="historyPayModal" tabindex="-1" aria-hidden="true" style="z-index: 1055;">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 20px; color: #0f172a; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);">
-          <div class="modal-header" style="border-bottom: 1px solid #f1f5f9; padding: 18px 24px;">
-            <h5 class="modal-title fs-6 fw-bold text-dark"><i class="fa-solid fa-receipt me-2 text-primary"></i> Order Details</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body text-center" style="padding: 28px 24px;">
-            <div class="mb-1 text-muted text-uppercase fw-semibold" style="font-size: 11px; letter-spacing: 0.05em;">Invoice Number</div>
-            <h4 class="gp-hl-mono text-dark fw-bolder mb-4" id="hpModalInvoice">GCY-XXXXXXXX</h4>
-
-            <div class="p-3 mb-4 rounded text-start" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;">
-              <div class="d-flex justify-content-between mb-2" style="font-size: 13px;">
-                <span class="text-muted">Plan:</span>
-                <b class="text-dark" id="hpModalPlan">-</b>
-              </div>
-              <div class="d-flex justify-content-between mb-2" style="font-size: 13px;">
-                <span class="text-muted">Payment Method:</span>
-                <b class="text-dark" id="hpModalMethod">-</b>
-              </div>
-              <div class="d-flex justify-content-between border-top border-slate-200 pt-2 mt-2" style="font-size: 15px;">
-                <span class="fw-semibold text-dark">Total Amount:</span>
-                <b class="text-dark fw-bold fs-5" id="hpModalTotal">Rp 0</b>
-              </div>
-            </div>
-
-            <div id="hpModalVaBox" style="display:none;" class="p-3 rounded text-start mb-4" style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 12px;">
-              <div class="text-muted mb-1" style="font-size: 11px; text-transform: uppercase; font-weight: 600;">Virtual Account Number:</div>
-              <div class="d-flex align-items-center justify-content-between">
-                <span class="gp-hl-mono fs-5 fw-bold text-primary" id="hpModalVaNum">12808000000000</span>
-                <button type="button" class="btn btn-sm btn-outline-primary" onclick="navigator.clipboard.writeText(document.getElementById('hpModalVaNum').textContent); alert('VA Number copied!');">
-                  <i class="fa-regular fa-copy me-1"></i> Copy
-                </button>
-              </div>
-            </div>
-
-            <div class="d-grid gap-2 mt-2">
-              <button type="button" class="ud-main-btn gp-btn-glass is-light w-100" id="btnHpConfirmPay" style="border: 2px solid #000; font-weight: 700;">
-                <i class="fa-solid fa-circle-check me-2 text-success"></i> Confirm & Complete Payment
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- Footer -->
     <footer class="ud-footer gp-footer" data-wow-delay=".15s">
-      <div class="shape shape-1"><img src="assets/images/footer/leftshape.png" alt="shape" /></div>
-      <div class="shape shape-2"><img src="assets/images/footer/dotted-shape.svg" alt="shape" /></div>
-      <div class="shape shape-3"><img src="assets/images/footer/rightshape.png" alt="shape" /></div>
+      <div class="shape shape-1">
+        <img src="assets/images/footer/leftshape.png" alt="shape" />
+      </div>
+      <div class="shape shape-2">
+        <img src="assets/images/footer/dotted-shape.svg" alt="shape" />
+      </div>
+      <div class="shape shape-3">
+        <img src="assets/images/footer/rightshape.png" alt="shape" />
+      </div>
       <div class="ud-footer-widgets">
         <div class="container">
           <div class="row">
@@ -344,7 +291,7 @@
                 <ul class="ud-widget-socials">
                   <li><a href="./gracelydiscord" target="_blank" rel="noopener" aria-label="Discord" class="gp-btn-glass"><i class="fa-brands fa-discord"></i></a></li>
                   <li><a href="./gracelytelegram" target="_blank" rel="noopener" aria-label="Telegram" class="gp-btn-glass"><i class="fa-brands fa-telegram"></i></a></li>
-                  <li><a href="mailto:contact@gracely.my.id" aria-label="Email" class="gp-btn-glass"><i class="fa-solid fa-envelope"></i></a></li>
+                  <li><a href="mailto:support@gracely.my.id" aria-label="Email" class="gp-btn-glass"><i class="fa-solid fa-envelope"></i></a></li>
                 </ul>
               </div>
             </div>
@@ -385,8 +332,8 @@
                 <h5 class="ud-widget-title">Partners</h5>
                 <ul class="ud-widget-brands">
                   <li>
-                    <a href="https://cloudflare.com/" rel="nofollow noopener" target="_blank">
-                      <img src="https://companieslogo.com/img/orig/NET_BIG.D-52893f5e.png" alt="Cloudflare">
+                    <a href="https://midtrans.com/" rel="nofollow noopener" target="_blank">
+                      <img src="https://assets.tokopedia.net/assets-tokopedia-lite/v2/zeus/k плата/02685718.png" alt="Midtrans" style="max-height: 24px; filter: brightness(0) invert(1); opacity: 0.8;">
                     </a>
                   </li>
                 </ul>
@@ -403,7 +350,7 @@
               <ul class="ud-footer-bottom-left">
                 <li><a href="./privacy.html">Privacy Policy</a></li>
                 <li><a href="./terms.html">Terms of Service</a></li>
-                <li><a href="./index.html#contact">Contact Us</a></li>
+                <li><a href="./#contact">Contact Us</a></li>
               </ul>
             </div>
             <div class="col-md-4">
@@ -416,9 +363,157 @@
 
     <a href="javascript:void(0)" class="back-to-top"><i class="fa-solid fa-arrow-up"></i></a>
 
+    <!-- Scripts -->
     <script src="assets/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/main.js"></script>
     <script src="assets/script.js"></script>
-    <script src="assets/js/account.js"></script>
+
+    <!-- Dynamic Invoice Data Loader & PDF Exporter -->
+    <script>
+      let currentInvoiceNumber = '';
+
+      async function loadInvoiceData() {
+        const params = new URLSearchParams(window.location.search);
+        const invoiceId = params.get('id') || params.get('inv');
+
+        const loadingEl = document.getElementById('invLoading');
+        const sheetEl = document.getElementById('gpInvSheet');
+        const actionsEl = document.getElementById('invActions');
+
+        const sb = window.supabaseClient || (typeof supabase !== 'undefined' ? supabase : null);
+        if (!sb) {
+          setTimeout(loadInvoiceData, 300);
+          return;
+        }
+
+        try {
+          const { data: { session } } = await sb.auth.getSession();
+          const user = session?.user;
+          const userMeta = user?.user_metadata || {};
+          const fullName = userMeta.full_name || userMeta.name || user?.email?.split('@')[0] || 'Valued Member';
+          const userEmail = user?.email || 'member@gracely.my.id';
+
+          let orderData = null;
+
+          if (invoiceId) {
+            const { data, error } = await sb
+              .from('gracely_orders')
+              .select('*')
+              .eq('invoice_id', invoiceId)
+              .maybeSingle();
+
+            if (!error && data) {
+              orderData = data;
+            }
+          }
+
+          // Fallback: If no ID or not found, get latest user order
+          if (!orderData && user) {
+            const { data, error } = await sb
+              .from('gracely_orders')
+              .select('*')
+              .eq('user_id', user.id)
+              .order('created_at', { ascending: false })
+              .limit(1)
+              .maybeSingle();
+
+            if (!error && data) {
+              orderData = data;
+            }
+          }
+
+          if (orderData) {
+            currentInvoiceNumber = orderData.invoice_id;
+            document.title = 'Invoice ' + orderData.invoice_id + ' | Gracely';
+            document.getElementById('invNo').innerText = '#' + orderData.invoice_id;
+            document.getElementById('invPlanNumber').innerText = '#' + orderData.invoice_id;
+
+            // Status Badge
+            const status = (orderData.status || 'PAID').toUpperCase();
+            const badgeEl = document.getElementById('invStatusBadge');
+            if (status === 'PAID') {
+              badgeEl.className = 'gp-inv-paid';
+              badgeEl.innerHTML = '<i class="fa-solid fa-circle-check"></i> PAID';
+            } else if (status === 'EXPIRED' || status === 'FAILED') {
+              badgeEl.className = 'gp-inv-expired';
+              badgeEl.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> ' + status;
+            } else {
+              badgeEl.className = 'gp-inv-unpaid';
+              badgeEl.innerHTML = '<i class="fa-solid fa-clock"></i> UNPAID';
+            }
+
+            // User info
+            document.getElementById('invBilledName').childNodes[0].nodeValue = fullName;
+            document.getElementById('invBilledEmail').innerText = userEmail;
+
+            // Date & Time
+            const dateObj = new Date(orderData.created_at || Date.now());
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const dateStr = months[dateObj.getMonth()] + ' ' + String(dateObj.getDate()).padStart(2, '0') + ', ' + dateObj.getFullYear();
+            const timeStr = String(dateObj.getHours()).padStart(2, '0') + ':' + String(dateObj.getMinutes()).padStart(2, '0') + ' WIB';
+
+            document.getElementById('invDate').childNodes[0].nodeValue = dateStr;
+            document.getElementById('invTime').innerText = timeStr;
+
+            // Ref
+            const refEl = document.getElementById('invRefContainer');
+            const refVal = orderData.payment_reference || orderData.midtrans_order_id || orderData.invoice_id;
+            refEl.innerHTML = '<span class="gp-inv-ref">' + refVal + '</span>';
+
+            // Plan details
+            const planDisplay = orderData.plan_name || (orderData.duration_days ? orderData.duration_days + ' Days Premium + Pro' : 'Plan Pro');
+            document.getElementById('invPlanName').innerText = planDisplay;
+
+            const amountFormatted = 'Rp ' + Number(orderData.gross_amount || orderData.amount || 0).toLocaleString('id-ID');
+            document.getElementById('invPlanPrice').innerText = amountFormatted;
+            document.getElementById('invTotalPrice').innerText = amountFormatted;
+          } else {
+            // Default view if no order exists
+            currentInvoiceNumber = invoiceId || 'SAMPLE';
+            document.getElementById('invNo').innerText = '#' + (invoiceId || 'GCY-PREMIUM');
+            document.getElementById('invBilledName').childNodes[0].nodeValue = fullName;
+            document.getElementById('invBilledEmail').innerText = userEmail;
+          }
+
+          if (loadingEl) loadingEl.classList.add('d-none');
+          if (sheetEl) sheetEl.classList.remove('d-none');
+          if (actionsEl) actionsEl.classList.remove('d-none');
+
+        } catch (err) {
+          console.error("Failed to load invoice:", err);
+          if (loadingEl) loadingEl.classList.add('d-none');
+          if (sheetEl) sheetEl.classList.remove('d-none');
+          if (actionsEl) actionsEl.classList.remove('d-none');
+        }
+      }
+
+      // Download PDF using html2pdf
+      document.addEventListener('DOMContentLoaded', () => {
+        loadInvoiceData();
+
+        const dlBtn = document.getElementById('gpInvDownload');
+        if (dlBtn) {
+          dlBtn.addEventListener('click', function () {
+            const btn = this;
+            const sheet = document.getElementById('gpInvSheet');
+            btn.disabled = true;
+            sheet.classList.add('gp-inv-capture');
+
+            const fileName = 'Gracely-Invoice-' + (currentInvoiceNumber || 'Receipt') + '.pdf';
+
+            html2pdf().set({
+              margin: 10,
+              filename: fileName,
+              image: { type: 'jpeg', quality: 0.98 },
+              html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+              jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            }).from(sheet).save().finally(() => {
+              btn.disabled = false;
+              sheet.classList.remove('gp-inv-capture');
+            });
+          });
+        }
+      });
+    </script>
   </body>
 </html>

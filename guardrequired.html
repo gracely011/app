@@ -194,36 +194,7 @@
       </div>
     </header>
     <div class="gp-drawer-backdrop" id="gpDrawerBackdrop"></div>
-    <script>
-    (function () {
-      var toggler  = document.querySelector('.navbar-toggler');
-      var collapse = document.getElementById('gpNavCollapse');
-      var backdrop = document.getElementById('gpDrawerBackdrop');
-      var closeBtn = document.getElementById('gpDrawerClose');
-      if (!toggler || !collapse) return;
-      function sync() {
-        var open = collapse.classList.contains('show');
-        backdrop.classList.toggle('show', open);
-        document.body.classList.toggle('gp-drawer-open', open);
-        toggler.setAttribute('aria-expanded', open ? 'true' : 'false');
-      }
-      function close() {
-        collapse.classList.remove('show');
-        toggler.classList.remove('active');
-        sync();
-      }
-      toggler.addEventListener('click', function () { setTimeout(sync, 0); }); // main.js toggles .show
-      backdrop.addEventListener('click', close);
-      if (closeBtn) closeBtn.addEventListener('click', close);
-      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
-      window.addEventListener('resize', function () { if (window.innerWidth >= 992) close(); });
-      // Close the drawer when a link inside it is clicked (e.g. #features on the same page)
-      collapse.addEventListener('click', function (e) {
-        var a = e.target.closest('a[href]');
-        if (a && !a.classList.contains('dropdown-toggle')) close();
-      });
-    })();
-    </script>
+    
     
     
     <section class="ud-page-banner">
@@ -248,7 +219,7 @@
           <img src="./assets/images/extension/guard.png" alt="Gracely Guard" class="gp-ex-guard-img" width="412" height="221" loading="lazy">
           <p>Please install and enable Gracely Guard <span class="gp-ex-guard-ver">v1.0.3</span> in your browser extensions to use Gracely Extension.</p>
           <div class="gp-ex-guard-actions">
-            <a class="ud-main-btn gp-btn-glass is-light" href="assets/update/gracely-guard-1.0.3.zip" download><i class="fa-solid fa-download" aria-hidden="true"></i> Download Gracely Guard</a>
+            <a class="ud-main-btn gp-btn-glass is-light" href="javascript:void(0)" data-download-ext="guard"><i class="fa-solid fa-download" aria-hidden="true"></i> Download Gracely Guard</a>
             <a class="ud-main-btn gp-btn-glass is-light" href="./dashboard.html">Back to the dashboard</a>
           </div>
         </div>
@@ -388,78 +359,8 @@
     <script src="assets/script.js"></script>
     <script src="assets/checkSubmit_v2.js"></script>
     
-<script>
-      // ==== for menu scroll
-      const pageLink = document.querySelectorAll(".ud-menu-scroll");
 
-      pageLink.forEach((elem) => {
-        elem.addEventListener("click", (e) => {
-          e.preventDefault();
-          document.querySelector(elem.getAttribute("href")).scrollIntoView({
-            behavior: "smooth",
-            offsetTop: 1 - 60,
-          });
-        });
-      });
-
-      // section menu active
-      function onScroll(event) {
-        const sections = document.querySelectorAll(".ud-menu-scroll");
-        const scrollPos =
-          window.pageYOffset ||
-          document.documentElement.scrollTop ||
-          document.body.scrollTop;
-
-        for (let i = 0; i < sections.length; i++) {
-          const currLink = sections[i];
-          const val = currLink.getAttribute("href");
-          const refElement = document.querySelector(val);
-          const scrollTopMinus = scrollPos + 73;
-          if (
-            refElement.offsetTop <= scrollTopMinus &&
-            refElement.offsetTop + refElement.offsetHeight > scrollTopMinus
-          ) {
-            document
-              .querySelector(".ud-menu-scroll")
-              .classList.remove("active");
-            currLink.classList.add("active");
-          } else {
-            currLink.classList.remove("active");
-          }
-        }
-      }
-
-      window.document.addEventListener("scroll", onScroll);
-    </script>
   
-<script>
-// Pause continuously-animated elements (liquid rims, badge shines) while off-screen.
-(function gpAnimObserver() {
-  if (!('IntersectionObserver' in window)) return;
-  var sel = '.gp-btn-rim, .gp-rimbtn-rim, .lp-svc-tiers .lp-chip, .lp-duration-btn, ' +
-            '.gp-hl-filters .lp-chip, .gp-hl-pagination .page-link, .gp-plan-badge, .gp-dash-badge, .lp-shine';
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (en) { en.target.classList.toggle('gp-anim-off', !en.isIntersecting); });
-  }, { rootMargin: '100px' });
-  document.querySelectorAll(sel).forEach(function (el) { io.observe(el); });
-})();
-// Scrollable segmented tablists: keep the active chip centered in view.
-(function () {
-  function center(c, smooth) {
-    if (c.scrollWidth <= c.clientWidth + 4) return;
-    var a = c.querySelector('.is-active');
-    if (!a) return;
-    var cr = c.getBoundingClientRect(), ar = a.getBoundingClientRect();
-    var left = c.scrollLeft + (ar.left + ar.width / 2) - (cr.left + cr.width / 2);
-    if (smooth && c.scrollTo) c.scrollTo({ left: left, behavior: 'smooth' }); else c.scrollLeft = left;
-  }
-  var lists = document.querySelectorAll('.gp-hl-filters, .lp-svc-tiers, .lp-duration-toggle');
-  lists.forEach(function (c) {
-    center(c, false);
-    c.addEventListener('click', function () { setTimeout(function () { center(c, true); }, 0); });
-  });
-  window.addEventListener('resize', function () { lists.forEach(function (c) { center(c, false); }); });
-})();
-</script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a31358735d36c539',t:'MTc4Nzc1MjY0NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+
+</body>
 </html>

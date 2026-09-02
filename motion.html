@@ -40,7 +40,12 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="auth.js"></script>
-    <script>(async () => { await requireAuth(); })();</script>
+    <script>
+      (async () => {
+        await requireAuth();
+      })();
+    </script>
+    
     <!-- Google Fonts (Inter) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -176,75 +181,10 @@
         </footer>
     </div>
 
-    <script>
-        // Light/Dark Mode Toggle
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const themeToggleSunIcon = document.getElementById('theme-toggle-sun');
-        const themeToggleMoonIcon = document.getElementById('theme-toggle-moon');
-
-        const applyTheme = (theme) => {
-            if (theme === 'dark') {
-                document.documentElement.classList.add('dark');
-                themeToggleMoonIcon.classList.remove('hidden');
-                themeToggleSunIcon.classList.add('hidden');
-            } else {
-                document.documentElement.classList.remove('dark');
-                themeToggleSunIcon.classList.remove('hidden');
-                themeToggleMoonIcon.classList.add('hidden');
-            }
-        };
-
-        const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        applyTheme(savedTheme);
-
-        themeToggleBtn.addEventListener('click', () => {
-            const newTheme = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
-            localStorage.setItem('theme', newTheme);
-            applyTheme(newTheme);
-        });
-
-        // Copy Function
-        const copyButtons = document.querySelectorAll('.copy-btn');
-
-        const copyToClipboard = (text, button) => {
-            const textArea = document.createElement('textarea');
-            textArea.value = text;
-            textArea.style.position = 'fixed';
-            textArea.style.top = '-9999px';
-            textArea.style.left = '-9999px';
-
-            document.body.appendChild(textArea);
-            textArea.select();
-
-            try {
-                document.execCommand('copy');
-                const originalText = button.textContent;
-                button.textContent = 'Copied!';
-                button.classList.add('bg-green-500', 'hover:bg-green-600');
-                button.classList.remove('bg-cyan-500', 'hover:bg-cyan-600');
-
-                setTimeout(() => {
-                    button.textContent = originalText;
-                    button.classList.remove('bg-green-500', 'hover:bg-green-600');
-                    button.classList.add('bg-cyan-500', 'hover:bg-cyan-600');
-                }, 2000);
-
-            } catch (err) {
-                console.error('Failed to copy to clipboard:', err);
-            } finally {
-                document.body.removeChild(textArea);
-            }
-        };
-
-        copyButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const emailToCopy = button.getAttribute('data-email');
-                copyToClipboard(emailToCopy, button);
-            });
-        });
-    </script>
+    
 
     <script src="assets/script.js"></script>
+    <script src="assets/js/tools-suite.js"></script>
 </body>
 
 </html>

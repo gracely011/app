@@ -1,0 +1,293 @@
+/* ==========================================================================
+   INVOICE PAGE STYLES (Gracely Official Receipt)
+   ========================================================================== */
+
+.gp-inv {
+  padding: 60px 0 100px;
+}
+
+.gp-inv-sheet {
+  background: #ffffff;
+  color: #1e293b;
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 780px;
+  margin: 0 auto;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.12), 0 0 1px 1px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+  font-family: inherit;
+}
+
+.gp-inv-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 24px;
+  margin-bottom: 30px;
+}
+
+.gp-inv-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gp-inv-brand img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  margin-bottom: 4px;
+}
+
+.gp-inv-brand-name {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.5px;
+}
+
+.gp-inv-brand small a,
+.gp-inv-brand small {
+  color: #64748b;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.gp-inv-title {
+  text-align: right;
+}
+
+.gp-inv-title h2 {
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #0f172a;
+  margin: 0 0 4px;
+}
+
+.gp-inv-no {
+  font-family: 'JetBrains Mono', monospace, Consolas, Courier, monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.gp-inv-paid {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #dcfce7;
+  color: #15803d;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  letter-spacing: 0.5px;
+}
+
+.gp-inv-unpaid {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fef3c7;
+  color: #b45309;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  letter-spacing: 0.5px;
+}
+
+.gp-inv-expired {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fee2e2;
+  color: #b91c1c;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  letter-spacing: 0.5px;
+}
+
+.gp-inv-meta {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 14px;
+  margin-bottom: 30px;
+  border: 1px solid #edf2f7;
+}
+
+.gp-inv-meta-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #94a3b8;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.gp-inv-meta-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+  word-break: break-word;
+}
+
+.gp-inv-meta-value small {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.gp-inv-meta-value a {
+  color: #4f46e5;
+  text-decoration: none;
+}
+
+.gp-inv-meta-value a:hover {
+  text-decoration: underline;
+}
+
+.gp-inv-mono {
+  font-family: 'JetBrains Mono', monospace, Consolas, Courier, monospace;
+}
+
+.gp-inv-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+}
+
+.gp-inv-table th {
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #64748b;
+  padding: 12px 16px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.gp-inv-table th:last-child {
+  text-align: right;
+}
+
+.gp-inv-table td {
+  padding: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.gp-inv-table td small {
+  display: block;
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+.gp-inv-table td:last-child {
+  text-align: right;
+  font-weight: 700;
+}
+
+.gp-inv-table tfoot td {
+  font-size: 18px;
+  font-weight: 800;
+  color: #0f172a;
+  border-top: 2px solid #0f172a;
+  border-bottom: none;
+  padding-top: 18px;
+}
+
+.gp-inv-note {
+  font-size: 12px;
+  color: #94a3b8;
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px dashed #e2e8f0;
+  line-height: 1.5;
+}
+
+.gp-inv-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.gp-inv-actions button,
+.gp-inv-actions a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Capturing mode for html2pdf */
+.gp-inv-capture {
+  box-shadow: none !important;
+  border: 1px solid #cbd5e1 !important;
+  margin: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .announcement-bar,
+  .ud-header,
+  .ud-page-banner,
+  .gp-inv-actions,
+  .ud-footer,
+  .back-to-top {
+    display: none !important;
+  }
+  #gpInvSheet,
+  #gpInvSheet * {
+    visibility: visible;
+  }
+  #gpInvSheet {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 20px;
+    box-shadow: none;
+    border: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .gp-inv-sheet {
+    padding: 24px 16px;
+  }
+  .gp-inv-top {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .gp-inv-title {
+    text-align: left;
+  }
+  .gp-inv-meta {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}

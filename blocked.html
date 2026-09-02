@@ -131,21 +131,38 @@
         <h2>Action Not Allowed</h2>
         <p>You cannot do this directly. Please use the "<strong>Safely log out</strong>" feature if you want to log out.
         </p>
-        <a href="https://draft.gracely.my.id/">Return to Homepage</a>
+        <a href="./">Return to Homepage</a>
     </main>
 
+    <script>
+        (function () {
+            const textElement = document.getElementById('text-3d');
+            if (!textElement) return;
 
+            const maxRotation = 45; // Smooth 3D tilt degree
 
-    <script src="layout.js"></script>
+            document.addEventListener('mousemove', function (e) {
+                const clientX = e.clientX;
+                const clientY = e.clientY;
+                const innerWidth = window.innerWidth || document.documentElement.clientWidth;
+                const innerHeight = window.innerHeight || document.documentElement.clientHeight;
 
+                const x = (clientX / innerWidth) - 0.5;
+                const y = (clientY / innerHeight) - 0.5;
 
+                const rotateY = x * (maxRotation * 2);
+                const rotateX = -y * (maxRotation * 2);
+
+                textElement.style.transform = 'rotateY(' + rotateY.toFixed(2) + 'deg) rotateX(' + rotateX.toFixed(2) + 'deg)';
+            });
+
+            document.addEventListener('mouseleave', function () {
+                textElement.style.transform = 'rotateY(0deg) rotateX(0deg)';
+            });
+        })();
+    </script>
 
   <script src="assets/script.js"></script>
 </body>
 
 </html>
-
-
-
-
-

@@ -31,11 +31,12 @@
   <!-- Gracely Auth Protection -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="auth.js"></script>
-  <script>
-    (async () => {
-      await requireAuth();
-    })();
-  </script>
+    <script>
+      (async () => {
+        await requireAuth();
+      })();
+    </script>
+  
 </head>
 
 <body>
@@ -372,194 +373,42 @@
   <script src="assets/js/wow.min.js"></script>
   <script src="assets/js/main.js"></script>
   <script src="assets/script.js"></script>
+  <script src="assets/js/tools-suite.js"></script>
 
-  <!-- Dynamic Manual Credentials & Supabase Icon Resolver -->
+  <!-- Instant Inline Parameter Resolution -->
   <script>
-    (async function initManualLogin() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const name = (urlParams.get('name') || 'Premium Service').trim();
-      const login = (urlParams.get('login') || '').trim();
-      const password = (urlParams.get('password') || '').trim();
-      const targetUrl = (urlParams.get('url') || '').trim();
-      const extra = (urlParams.get('extra') || '').trim();
+    (function () {
+      try {
+        const p = new URLSearchParams(window.location.search);
+        const name = (p.get('name') || p.get('service') || p.get('title') || '').trim();
+        const login = (p.get('login') || p.get('user') || p.get('email') || p.get('username') || '').trim();
+        const pass = (p.get('password') || p.get('pass') || p.get('pwd') || '').trim();
+        const url = (p.get('url') || p.get('target') || p.get('link') || p.get('target_url') || '').trim();
 
-      // 1. Set Title & Headers
-      document.title = `${name} | Gracely`;
-      const metaTitle = document.getElementById('manual-meta-title');
-      if (metaTitle) metaTitle.textContent = `${name} | Gracely`;
-
-      const pageTitle = document.getElementById('manual-page-title');
-      if (pageTitle) pageTitle.textContent = name;
-
-      const serviceNameEl = document.getElementById('manual-service-name');
-      if (serviceNameEl) serviceNameEl.textContent = name;
-
-      // 2. Set Email / Username
-      const loginInput = document.getElementById('manual-login-input');
-      if (loginInput) loginInput.value = login || '—';
-
-      // 3. Set Password or Inbox Link
-      const passInput = document.getElementById('manual-pass-input');
-      const passLabel = document.getElementById('manual-pass-label');
-      const passIcon = document.getElementById('manual-pass-icon');
-      const inboxBtn = document.getElementById('manual-inbox-btn');
-
-      if (passInput) passInput.value = password || '—';
-
-      const isUrlPassword = password.startsWith('http://') || password.startsWith('https://');
-      if (isUrlPassword) {
-        if (passLabel) passLabel.textContent = 'Inbox / OTP Link';
-        if (passIcon) passIcon.innerHTML = '<i class="fa-solid fa-inbox"></i>';
-        if (inboxBtn) {
-          inboxBtn.href = password;
-          inboxBtn.style.display = 'inline-flex';
+        if (name) {
+          document.title = name + ' | Gracely';
+          const t = document.getElementById('manual-page-title');
+          if (t) t.textContent = name;
+          const s = document.getElementById('manual-service-name');
+          if (s) s.textContent = name;
         }
-      }
-
-      // 4. Set Activation Code / Extra
-      if (extra) {
-        const extraCred = document.getElementById('manual-extra-cred');
-        const extraInput = document.getElementById('manual-extra-input');
-        if (extraCred) extraCred.style.display = 'flex';
-        if (extraInput) extraInput.value = extra;
-      }
-
-      // 5. Set Target URL Button
-      const targetUrlBtn = document.getElementById('manual-target-url-btn');
-      if (targetUrlBtn) {
-        if (targetUrl) {
-          targetUrlBtn.href = targetUrl;
-        } else if (isUrlPassword) {
-          targetUrlBtn.href = password;
-          targetUrlBtn.innerHTML = '<i class="fa-solid fa-arrow-up-right-from-square"></i> Open Inbox';
-        } else {
-          targetUrlBtn.style.display = 'none';
+        if (login) {
+          const l = document.getElementById('manual-login-input');
+          if (l) l.value = login;
         }
-      }
-
-      // 6. Check for Google / Gemini / NotebookLM Ecosystem (Show Desktop-Only Security Alert)
-      const nameLower = name.toLowerCase();
-      const targetLower = targetUrl.toLowerCase();
-      const loginLower = login.toLowerCase();
-      const passLower = password.toLowerCase();
-
-      const isGoogleService = 
-        nameLower.includes('notebooklm') ||
-        nameLower.includes('notebook lm') ||
-        nameLower.includes('gemini') ||
-        nameLower.includes('google') ||
-        nameLower.includes('colab') ||
-        targetLower.includes('google.com') ||
-        targetLower.includes('notebooklm') ||
-        loginLower.includes('@nasimerah.com') ||
-        loginLower.includes('@withgpy.com') ||
-        loginLower.includes('@gmail.com') ||
-        loginLower.includes('@google') ||
-        passLower.includes('smartphone') ||
-        passLower.includes('wipedata') ||
-        passLower.includes('notebooklm') ||
-        urlParams.get('google') === 'true' ||
-        urlParams.get('desktop_only') === 'true';
-
-      const googleAlert = document.getElementById('google-security-alert');
-      if (googleAlert && isGoogleService) {
-        googleAlert.style.display = 'flex';
-      }
-
-      // 7. Dynamic Icon Resolution (Supabase -> Local -> Favicon)
-      const serviceLogoImg = document.getElementById('manual-service-logo');
-      if (serviceLogoImg) {
-        let resolvedIcon = null;
-
-        // Step A: Query Supabase gracely_services
-        try {
-          if (typeof supabaseClient !== 'undefined' && name && name !== 'Premium Service') {
-            const cleanName = name.replace(/^(Pro:\s*|The\s+Phantom:\s*|Bypass\s*\|\s*)/i, '').trim();
-            const { data, error } = await supabaseClient
-              .from('gracely_services')
-              .select('icon_url')
-              .or(`service_name.ilike.%${name}%,service_name.ilike.%${cleanName}%`)
-              .limit(1);
-
-            if (data && data.length > 0 && data[0].icon_url) {
-              resolvedIcon = data[0].icon_url;
-            }
+        if (pass) {
+          const pwd = document.getElementById('manual-pass-input');
+          if (pwd) pwd.value = pass;
+        }
+        if (url) {
+          const btn = document.getElementById('manual-target-url-btn');
+          if (btn) {
+            btn.href = url;
+            btn.setAttribute('target', '_blank');
+            btn.setAttribute('rel', 'noopener noreferrer');
           }
-        } catch (e) {
-          console.warn('Icon lookup in Supabase error:', e);
         }
-
-        // Step B: Local Asset Fallback
-        if (!resolvedIcon) {
-          const cleanLower = nameLower.replace(/^(pro:\s*|the\s+phantom:\s*|bypass\s*\|\s*)/i, '').trim();
-          if (cleanLower.includes('notebook')) resolvedIcon = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRJ_-m9Y994yfZimh_h8Yzn0sMx2IsfVoDIQ&s';
-          else if (cleanLower.includes('gemini')) resolvedIcon = 'https://static.vecteezy.com/system/resources/previews/055/687/055/non_2x/rectangle-gemini-google-icon-symbol-logo-free-png.png';
-          else if (cleanLower.includes('hbo')) resolvedIcon = 'assets/images/services/hbomax.png';
-          else if (cleanLower.includes('ground')) resolvedIcon = 'assets/images/services/groundnews.png';
-          else if (cleanLower.includes('wall street') || cleanLower.includes('wsj')) resolvedIcon = 'assets/images/services/WSJ.png';
-          else if (cleanLower.includes('academia')) resolvedIcon = 'assets/images/services/Academia.png';
-          else if (cleanLower.includes('netflix')) resolvedIcon = 'assets/images/services/netflix.png';
-          else if (cleanLower.includes('udemy')) resolvedIcon = 'assets/images/services/Udemy.png';
-          else if (cleanLower.includes('capcut')) resolvedIcon = 'assets/images/services/CapCut.png';
-          else if (cleanLower.includes('chatgpt')) resolvedIcon = 'assets/images/services/chatgptpro.png';
-          else if (cleanLower.includes('claude')) resolvedIcon = 'assets/images/services/claude.png';
-          else if (cleanLower.includes('perplexity')) resolvedIcon = 'assets/images/services/perplexity.png';
-          else if (cleanLower.includes('datacamp')) resolvedIcon = 'assets/images/services/datacamp.png';
-        }
-
-        // Step C: Google Favicon from target URL
-        if (!resolvedIcon && targetUrl) {
-          try {
-            const domain = new URL(targetUrl).hostname;
-            if (domain) resolvedIcon = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
-          } catch (e) {}
-        }
-
-        // Step D: Apply Icon
-        if (resolvedIcon) {
-          serviceLogoImg.src = resolvedIcon;
-        }
-      }
-
-      // 7. Clipboard Copy Handlers
-      function fallbackCopy(input) {
-        input.removeAttribute('readonly');
-        input.select();
-        input.setSelectionRange(0, 99999);
-        try { document.execCommand('copy'); } catch (e) {}
-        input.setAttribute('readonly', '');
-        if (window.getSelection) window.getSelection().removeAllRanges();
-      }
-
-      document.querySelectorAll('.gp-tl-copy[data-copy]').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          const inputId = btn.getAttribute('data-copy');
-          const input = document.getElementById(inputId);
-          if (!input || !input.value) return;
-
-          const done = function () {
-            const label = btn.querySelector('span');
-            const oldText = label ? label.textContent : 'Copy';
-            btn.classList.add('is-copied');
-            if (label) label.textContent = 'Copied';
-            setTimeout(function () {
-              btn.classList.remove('is-copied');
-              if (label) label.textContent = oldText;
-            }, 1500);
-          };
-
-          if (navigator.clipboard && window.isSecureContext) {
-            navigator.clipboard.writeText(input.value).then(done, function () {
-              fallbackCopy(input);
-              done();
-            });
-          } else {
-            fallbackCopy(input);
-            done();
-          }
-        });
-      });
-
+      } catch (e) {}
     })();
   </script>
 </body>

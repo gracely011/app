@@ -222,29 +222,7 @@
       </div>
     </header>
     <div class="gp-drawer-backdrop" id="gpDrawerBackdrop"></div>
-    <script>
-    (function () {
-      var toggler  = document.querySelector('.navbar-toggler');
-      var collapse = document.getElementById('gpNavCollapse');
-      var backdrop = document.getElementById('gpDrawerBackdrop');
-      var closeBtn = document.getElementById('gpDrawerClose');
-      if (!toggler || !collapse) return;
-      function sync() {
-        var open = collapse.classList.contains('show');
-        backdrop.classList.toggle('show', open);
-        document.body.classList.toggle('gp-drawer-open', open);
-        toggler.setAttribute('aria-expanded', open ? 'true' : 'false');
-      }
-      function close() {
-        collapse.classList.remove('show');
-        toggler.classList.remove('active');
-        sync();
-      }
-      toggler.addEventListener('click', function () { setTimeout(sync, 0); });
-      if (closeBtn) closeBtn.addEventListener('click', close);
-      if (backdrop) backdrop.addEventListener('click', close);
-    })();
-    </script>
+    
   <!-- Header End -->
 
   <!-- Hero Section -->

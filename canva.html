@@ -58,6 +58,7 @@
         await requireAuth();
       })();
     </script>
+    
 
   </head>
   <body>
@@ -199,36 +200,7 @@
       </div>
     </header>
     <div class="gp-drawer-backdrop" id="gpDrawerBackdrop"></div>
-    <script>
-    (function () {
-      var toggler  = document.querySelector('.navbar-toggler');
-      var collapse = document.getElementById('gpNavCollapse');
-      var backdrop = document.getElementById('gpDrawerBackdrop');
-      var closeBtn = document.getElementById('gpDrawerClose');
-      if (!toggler || !collapse) return;
-      function sync() {
-        var open = collapse.classList.contains('show');
-        backdrop.classList.toggle('show', open);
-        document.body.classList.toggle('gp-drawer-open', open);
-        toggler.setAttribute('aria-expanded', open ? 'true' : 'false');
-      }
-      function close() {
-        collapse.classList.remove('show');
-        toggler.classList.remove('active');
-        sync();
-      }
-      toggler.addEventListener('click', function () { setTimeout(sync, 0); }); // main.js toggles .show
-      backdrop.addEventListener('click', close);
-      if (closeBtn) closeBtn.addEventListener('click', close);
-      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
-      window.addEventListener('resize', function () { if (window.innerWidth >= 992) close(); });
-      // Close the drawer when a link inside it is clicked (e.g. #features on the same page)
-      collapse.addEventListener('click', function (e) {
-        var a = e.target.closest('a[href]');
-        if (a && !a.classList.contains('dropdown-toggle')) close();
-      });
-    })();
-    </script>
+    
     
     
     <section class="ud-page-banner">
@@ -252,33 +224,11 @@
             <div class="menu-section-header"><i class="fa-solid fa-palette"></i> Canva</div>
 
                         <p class="gp-tl-lead">Not a member yet? Join the team with the invite link below.</p>
-                        <div class="gp-tl-form gp-tl-join-row">
-              <div class="gracely-form-group">
-                <select name="team" id="url-select" aria-label="Team">
-                                    <option value="https://www.canva.com/brand/join?token=uPu74cpoLqi8BK0M0Wq4mg&amp;referrer=team-invite">Canva Team 1</option>
-                                    <option value="https://www.canva.com/brand/join?token=HWdw0b2twBoOrhttxH6F1Q&amp;referrer=team-invite">Canva Team 2</option>
-                                    <option value="https://www.canva.com/brand/join?token=mGuij8qURE0wJxIdTcveTw&amp;referrer=team-invite">Canva Team 3</option>
-                                    <option value="https://www.canva.com/brand/join?token=GDd821ULeMdvRT5GGeSldQ&amp;referrer=team-invite">Canva Team 4</option>
-                                    <option value="https://www.canva.com/brand/join?token=r8W4Y8XG0_RiebTuOeueFg&amp;referrer=team-invite">Canva Team 5</option>
-                                    <option value="https://www.canva.com/brand/join?token=s6XtDIgbaANpx0lf_m9YXg&amp;invitationDestinationType=group">Canva Team 6</option>
-                                    <option value="https://www.canva.com/brand/join?token=kyRjPWSdEbWz_TjgT7oAwQ&amp;invitationDestinationType=group">Canva Team 7</option>
-                                    <option value="https://www.canva.com/brand/join?token=5zi70HFqdsBh6GxUkPGMkw&amp;invitationDestinationType=group">Canva Team 8</option>
-                                    <option value="https://www.canva.com/brand/join?token=O30zFzPc2dD99q2jZh__iA&amp;invitationDestinationType=group">Canva Team 9</option>
-                                    <option value="https://www.canva.com/brand/join?token=A3mM1TDrdhK-g0SYB44sXA&amp;invitationDestinationType=group">Canva Team 10</option>
-                                    <option value="https://www.canva.com/brand/join?token=8c-3Lev3OCMddoRfhu0zqw&amp;invitationDestinationType=group">Canva Team 11</option>
-                                    <option value="https://www.canva.com/brand/join?token=NuVgKyiB4VVqeq6GGHrqsg&amp;invitationDestinationType=group">Canva Team 12</option>
-                                    <option value="https://www.canva.com/brand/join?token=nKCYy_QMGRVs3_-jaI7Prw&amp;invitationDestinationType=group">Canva Team 13</option>
-                                    <option value="https://www.canva.com/brand/join?token=5pgtqXLBz_zBV4h16sABxA&amp;invitationDestinationType=group">Canva Team 14</option>
-                                    <option value="https://www.canva.com/brand/join?token=IUhC9cT7VO0e1tYOo6ZGJA&amp;invitationDestinationType=group">Canva Team 15</option>
-                                    <option value="https://www.canva.com/brand/join?token=zqPse_utcJJlaRg09lWw9w&amp;invitationDestinationType=group">Canva Team 16</option>
-                                    <option value="https://www.canva.com/brand/join?token=3wsOsXimMUy16Gb5NFOa5Q&amp;invitationDestinationType=group">Canva Team 17</option>
-                                    <option value="https://www.canva.com/brand/join?token=aAwkJyOkTpOKI4HN0cX4Dw&amp;invitationDestinationType=group">Canva Team 18</option>
-                                    <option value="https://www.canva.com/brand/join?token=hK-g8X7tBoU3kIrJqokcMw&amp;invitationDestinationType=group">Canva Team 19</option>
-                                    <option value="https://www.canva.com/brand/join?token=sYBd2nEPglthStbN-GJPsw&amp;invitationDestinationType=group">Canva Team 20</option>
-                                  </select>
-                <label for="url-select">Team</label>
+                        <div class="gp-tl-form gp-tl-join-row" id="canva-join-container">
+              <div class="d-flex align-items-center gap-2 py-3 text-muted">
+                <div class="spinner-border spinner-border-sm text-primary" role="status" style="width: 1.25rem; height: 1.25rem; border-width: 0.15em;"></div>
+                <span style="font-size: 0.95rem;">Loading team access...</span>
               </div>
-              <a id="join-team-link" href="https://www.canva.com/brand/join?token=uPu74cpoLqi8BK0M0Wq4mg&amp;referrer=team-invite" target="_blank" rel="noopener" class="ud-main-btn gp-dash-btn gp-btn-rim"><i class="fa-solid fa-user-plus"></i> Join Canva Team</a>
             </div>
                         <p class="gp-tl-note"><i class="fa-solid fa-circle-info"></i> No need to join multiple times. Join once if your Canva account is not Pro yet.</p>
                         <p class="gp-tl-note"><i class="fa-solid fa-floppy-disk"></i> Don't forget to back up your projects.</p>
@@ -302,19 +252,157 @@
       </div>
     </section>
 
-<script>
-  // Find the link and select element for joining a team
-  const joinLink = document.getElementById('join-team-link');
-  const urlSelect = document.getElementById('url-select');
 
-  // Check if both the link and the select dropdown exist
-  if (joinLink && urlSelect) {
-      // When the user changes the selection, update the link's href attribute
-      urlSelect.addEventListener('change', function() {
-          joinLink.href = this.value;
-      });
-  }
-</script>
+
+    
+    <footer class="ud-footer gp-footer" data-wow-delay=".15s">
+      <div class="shape shape-1">
+        <img src="assets/images/footer/leftshape.png" alt="shape" />
+      </div>
+      <div class="shape shape-2">
+        <img src="assets/images/footer/dotted-shape.svg" alt="shape" />
+      </div>
+      <div class="shape shape-3">
+        <img src="assets/images/footer/rightshape.png" alt="shape" />
+      </div>
+      <div class="ud-footer-widgets">
+        <div class="container">
+          <div class="row">
+            <div class="col-xl-3 col-lg-4 col-md-6">
+              <div class="ud-widget">
+                <a href="./" class="ud-footer-logo">
+                  <img src="assets/images/logo/gracely_white.png" alt="logo" />
+                </a>
+                <p class="ud-widget-desc">
+                Unlock Premium Together                </p>
+                <ul class="ud-widget-socials">
+                  <li><a href="./gracelydiscord" target="_blank" rel="noopener" aria-label="Discord" class="gp-btn-glass"><i class="fa-brands fa-discord"></i></a></li>
+                  <li><a href="./gracelytelegram" target="_blank" rel="noopener" aria-label="Telegram" class="gp-btn-glass"><i class="fa-brands fa-telegram"></i></a></li>
+                  <li><a href="mailto:contact@gracely.my.id" aria-label="Email" class="gp-btn-glass"><i class="fa-solid fa-envelope"></i></a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+              <div class="ud-widget">
+                <h5 class="ud-widget-title">About</h5>
+                <ul class="ud-widget-links">
+                  <li>
+                    <a href="./#features">Features</a>
+                  </li>
+                  <li>
+                    <a href="./#about">About</a>
+                  </li>
+                  <li>
+                    <a href="./#pricing">Pricing</a>
+                  </li>
+                  <li>
+                    <a href="./#services">Services</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+              <div class="ud-widget">
+                <h5 class="ud-widget-title">Dashboard</h5>
+                <ul class="ud-widget-links">
+                  <li>
+                    <a href="./dashboard" rel="nofollow noopener" target="_blank">View dashboard <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                  </li>
+                  <li>
+                    <a href="./premium" rel="nofollow noopener" target="_blank">Purchase premium <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6">
+              <div class="ud-widget">
+                <h5 class="ud-widget-title">Extension</h5>
+                <ul class="ud-widget-links">
+                  <li>
+                    <a href="./dashboard" rel="nofollow noopener" target="_blank">Download extension <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-10">
+              <div class="ud-widget">
+                <h5 class="ud-widget-title">Partners</h5>
+                <ul class="ud-widget-brands">
+                  <li>
+                    <a href="https://cloudflare.com/" rel="nofollow noopener" target="_blank">
+                      <img src="https://companieslogo.com/img/orig/NET_BIG.D-52893f5e.png" alt="Cloudflare">
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="ud-footer-bottom">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-8">
+              <ul class="ud-footer-bottom-left">
+                <li>
+                  <a href="./privacy.html">Privacy Policy</a>
+                </li>
+                <li>
+                  <a href="./terms.html">Terms of Service</a>
+                </li>
+                <li>
+                  <a href="./index.html#contact">Contact Us</a>
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-4">
+              <p class="ud-footer-bottom-right">
+              Gracely &copy; 2023-2026              </p>
+              <p class="ud-footer-bottom-right">
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+    
+
+    
+    <a href="javascript:void(0)" class="back-to-top">
+<i class="fa-solid fa-arrow-up"></i>
+    </a>
+    
+
+            </div>
+                        <p class="gp-tl-note"><i class="fa-solid fa-circle-info"></i> No need to join multiple times. Join once if your Canva account is not Pro yet.</p>
+                        <p class="gp-tl-note"><i class="fa-solid fa-floppy-disk"></i> Don't forget to back up your projects.</p>
+
+            <div class="gp-dash-actions gp-tl-back-actions">
+              <a class="ud-main-btn gp-dash-btn gp-btn-rim" href="https://canva.com/" target="_blank" rel="noopener"><i class="fa-solid fa-arrow-up-right-from-square"></i> Access Canva</a>
+              <a class="ud-main-btn gp-dash-btn gp-btn-glass" href="./dashboard">Back to the dashboard</a>
+            </div>
+          </div>
+
+          
+          <div class="menu-section gp-dash-card gp-tl-card gp-area-tl-side">
+            <div class="menu-section-header">How it works</div>
+            <ol class="gp-tl-steps">
+              <li><span class="gp-tl-step-num">1</span><span>Click Join and sign in with your personal Canva account.</span></li>
+              <li><span class="gp-tl-step-num">2</span><span>Accept the team invitation.</span></li>
+              <li><span class="gp-tl-step-num">3</span><span>Open Canva. Pro features stay unlocked while you are in the team.</span></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
 
     
     <footer class="ud-footer gp-footer" data-wow-delay=".15s">
@@ -447,80 +535,11 @@
     <script src="assets/js/wow.min.js"></script>
     <script src="assets/js/main.js"></script>
     <script src="assets/script.js"></script>
+    <script src="assets/js/tools-suite.js"></script>
     <script src="assets/checkSubmit_v2.js"></script>
     
-<script>
-      // ==== for menu scroll
-      const pageLink = document.querySelectorAll(".ud-menu-scroll");
 
-      pageLink.forEach((elem) => {
-        elem.addEventListener("click", (e) => {
-          e.preventDefault();
-          document.querySelector(elem.getAttribute("href")).scrollIntoView({
-            behavior: "smooth",
-            offsetTop: 1 - 60,
-          });
-        });
-      });
-
-      // section menu active
-      function onScroll(event) {
-        const sections = document.querySelectorAll(".ud-menu-scroll");
-        const scrollPos =
-          window.pageYOffset ||
-          document.documentElement.scrollTop ||
-          document.body.scrollTop;
-
-        for (let i = 0; i < sections.length; i++) {
-          const currLink = sections[i];
-          const val = currLink.getAttribute("href");
-          const refElement = document.querySelector(val);
-          const scrollTopMinus = scrollPos + 73;
-          if (
-            refElement.offsetTop <= scrollTopMinus &&
-            refElement.offsetTop + refElement.offsetHeight > scrollTopMinus
-          ) {
-            document
-              .querySelector(".ud-menu-scroll")
-              .classList.remove("active");
-            currLink.classList.add("active");
-          } else {
-            currLink.classList.remove("active");
-          }
-        }
-      }
-
-      window.document.addEventListener("scroll", onScroll);
-    </script>
   
-<script>
-// Pause continuously-animated elements (liquid rims, badge shines) while off-screen.
-(function gpAnimObserver() {
-  if (!('IntersectionObserver' in window)) return;
-  var sel = '.gp-btn-rim, .gp-rimbtn-rim, .lp-svc-tiers .lp-chip, .lp-duration-btn, ' +
-            '.gp-hl-filters .lp-chip, .gp-hl-pagination .page-link, .gp-plan-badge, .gp-dash-badge, .lp-shine';
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (en) { en.target.classList.toggle('gp-anim-off', !en.isIntersecting); });
-  }, { rootMargin: '100px' });
-  document.querySelectorAll(sel).forEach(function (el) { io.observe(el); });
-})();
-// Scrollable segmented tablists: keep the active chip centered in view.
-(function () {
-  function center(c, smooth) {
-    if (c.scrollWidth <= c.clientWidth + 4) return;
-    var a = c.querySelector('.is-active');
-    if (!a) return;
-    var cr = c.getBoundingClientRect(), ar = a.getBoundingClientRect();
-    var left = c.scrollLeft + (ar.left + ar.width / 2) - (cr.left + cr.width / 2);
-    if (smooth && c.scrollTo) c.scrollTo({ left: left, behavior: 'smooth' }); else c.scrollLeft = left;
-  }
-  var lists = document.querySelectorAll('.gp-hl-filters, .lp-svc-tiers, .lp-duration-toggle');
-  lists.forEach(function (c) {
-    center(c, false);
-    c.addEventListener('click', function () { setTimeout(function () { center(c, true); }, 0); });
-  });
-  window.addEventListener('resize', function () { lists.forEach(function (c) { center(c, false); }); });
-})();
-</script>
+
 </body>
 </html>

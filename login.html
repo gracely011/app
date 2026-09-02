@@ -58,6 +58,7 @@
         redirectIfAuthenticated();
       }
     </script>
+    
 
   </head>
   <body>
@@ -199,36 +200,7 @@
       </div>
     </header>
     <div class="gp-drawer-backdrop" id="gpDrawerBackdrop"></div>
-    <script>
-    (function () {
-      var toggler  = document.querySelector('.navbar-toggler');
-      var collapse = document.getElementById('gpNavCollapse');
-      var backdrop = document.getElementById('gpDrawerBackdrop');
-      var closeBtn = document.getElementById('gpDrawerClose');
-      if (!toggler || !collapse) return;
-      function sync() {
-        var open = collapse.classList.contains('show');
-        backdrop.classList.toggle('show', open);
-        document.body.classList.toggle('gp-drawer-open', open);
-        toggler.setAttribute('aria-expanded', open ? 'true' : 'false');
-      }
-      function close() {
-        collapse.classList.remove('show');
-        toggler.classList.remove('active');
-        sync();
-      }
-      toggler.addEventListener('click', function () { setTimeout(sync, 0); }); // main.js toggles .show
-      backdrop.addEventListener('click', close);
-      if (closeBtn) closeBtn.addEventListener('click', close);
-      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
-      window.addEventListener('resize', function () { if (window.innerWidth >= 992) close(); });
-      // Close the drawer when a link inside it is clicked (e.g. #features on the same page)
-      collapse.addEventListener('click', function (e) {
-        var a = e.target.closest('a[href]');
-        if (a && !a.classList.contains('dropdown-toggle')) close();
-      });
-    })();
-    </script>
+    
     
     
     <section class="ud-page-banner">
@@ -296,10 +268,7 @@
     </section>
     
 
-<script>
-document.addEventListener("DOMContentLoaded",function(){let e=["gmail.com","yahoo.com","hotmail.com","outlook.com","aol.com","icloud.com","live.com","msn.com"],t=document.getElementById("email"),n=document.getElementById("email-suggestion");function l(e,t){let n=[];for(let l=0;l<=e.length;l++){let o=l;for(let i=0;i<=t.length;i++)if(0===l)n[i]=i;else if(i>0){let r=n[i-1];e.charAt(l-1)!==t.charAt(i-1)&&(r=Math.min(r,o,n[i])+1),n[i-1]=o,o=r}l>0&&(n[t.length]=o)}return n[t.length]}t.addEventListener("blur",function(){let o=this.value.trim();if(n.innerHTML="",!o.includes("@"))return;let[i,r]=o.split("@");if(r){let c=function t(n){let o=1/0,i=null;for(let r of e){let c=l(n.toLowerCase(),r);c<o&&c<=2&&(o=c,i=r)}return i}(r);if(c&&c!==r){let a=`${i}@${c}`,u=`Did you mean <a href="#">${a}</a>?`;n.innerHTML=u,n.querySelector("a").addEventListener("click",function(e){e.preventDefault(),t.value=a,n.innerHTML=""})}}})});
-document.querySelectorAll(".au-pw-toggle").forEach(function(b){b.addEventListener("click",function(){var i=b.parentNode.querySelector("input"),s=i.type==="password";i.type=s?"text":"password";b.setAttribute("aria-pressed",s?"true":"false");b.setAttribute("aria-label",s?b.dataset.hide:b.dataset.show);b.querySelector("i").className=s?"fa-solid fa-eye-slash":"fa-solid fa-eye";});});
-</script>
+
 
     
     <footer class="ud-footer gp-footer" data-wow-delay=".15s">
@@ -434,78 +403,8 @@ document.querySelectorAll(".au-pw-toggle").forEach(function(b){b.addEventListene
     <script src="assets/script.js"></script>
     <script src="assets/checkSubmit_v2.js"></script>
     
-<script>
-      // ==== for menu scroll
-      const pageLink = document.querySelectorAll(".ud-menu-scroll");
 
-      pageLink.forEach((elem) => {
-        elem.addEventListener("click", (e) => {
-          e.preventDefault();
-          document.querySelector(elem.getAttribute("href")).scrollIntoView({
-            behavior: "smooth",
-            offsetTop: 1 - 60,
-          });
-        });
-      });
-
-      // section menu active
-      function onScroll(event) {
-        const sections = document.querySelectorAll(".ud-menu-scroll");
-        const scrollPos =
-          window.pageYOffset ||
-          document.documentElement.scrollTop ||
-          document.body.scrollTop;
-
-        for (let i = 0; i < sections.length; i++) {
-          const currLink = sections[i];
-          const val = currLink.getAttribute("href");
-          const refElement = document.querySelector(val);
-          const scrollTopMinus = scrollPos + 73;
-          if (
-            refElement.offsetTop <= scrollTopMinus &&
-            refElement.offsetTop + refElement.offsetHeight > scrollTopMinus
-          ) {
-            document
-              .querySelector(".ud-menu-scroll")
-              .classList.remove("active");
-            currLink.classList.add("active");
-          } else {
-            currLink.classList.remove("active");
-          }
-        }
-      }
-
-      window.document.addEventListener("scroll", onScroll);
-    </script>
   
-<script>
-// Pause continuously-animated elements (liquid rims, badge shines) while off-screen.
-(function gpAnimObserver() {
-  if (!('IntersectionObserver' in window)) return;
-  var sel = '.gp-btn-rim, .gp-rimbtn-rim, .lp-svc-tiers .lp-chip, .lp-duration-btn, ' +
-            '.gp-hl-filters .lp-chip, .gp-hl-pagination .page-link, .gp-plan-badge, .gp-dash-badge, .lp-shine';
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (en) { en.target.classList.toggle('gp-anim-off', !en.isIntersecting); });
-  }, { rootMargin: '100px' });
-  document.querySelectorAll(sel).forEach(function (el) { io.observe(el); });
-})();
-// Scrollable segmented tablists: keep the active chip centered in view.
-(function () {
-  function center(c, smooth) {
-    if (c.scrollWidth <= c.clientWidth + 4) return;
-    var a = c.querySelector('.is-active');
-    if (!a) return;
-    var cr = c.getBoundingClientRect(), ar = a.getBoundingClientRect();
-    var left = c.scrollLeft + (ar.left + ar.width / 2) - (cr.left + cr.width / 2);
-    if (smooth && c.scrollTo) c.scrollTo({ left: left, behavior: 'smooth' }); else c.scrollLeft = left;
-  }
-  var lists = document.querySelectorAll('.gp-hl-filters, .lp-svc-tiers, .lp-duration-toggle');
-  lists.forEach(function (c) {
-    center(c, false);
-    c.addEventListener('click', function () { setTimeout(function () { center(c, true); }, 0); });
-  });
-  window.addEventListener('resize', function () { lists.forEach(function (c) { center(c, false); }); });
-})();
-</script>
+
 </body>
 </html>

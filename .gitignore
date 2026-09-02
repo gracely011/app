@@ -24,3 +24,9 @@ local_build.js
 assets/halo/*.js
 assets/halo/*.json
 scripts/
+tool_obfuscator.html
+supabase/
+node_modules/
+package.json
+package-lock.json
+

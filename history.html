@@ -69,8 +69,8 @@
 
     
 
-    <!-- Page Banner with optimal top padding to avoid header overlap -->
-    <section class="ud-page-banner" style="padding-top: 155px; padding-bottom: 60px;">
+    <!-- Page Banner -->
+    <section class="ud-page-banner">
       <div class="container">
         <div class="row">
           <div class="col-lg-12">
@@ -124,25 +124,23 @@
           </form>
 
           <!-- Subtitle: only shown when user has orders -->
-          <h5 class="logs-subtitle gp-hl-count" id="ordersCountSubtitle" style="display:none;">Showing orders 1 - 6 of 6</h5>
+          <h5 class="logs-subtitle gp-hl-count" id="ordersCountSubtitle" style="display: none;">Showing orders 1 - 0 of 0</h5>
 
-          <!-- Orders Table Container -->
-          <div class="table-responsive" id="ordersTableContainer" style="display:none;">
-            <table class="table gp-hl-table" id="ordersTable">
-              <thead>
-                <tr>
-                  <th scope="col">Date & Time</th>
-                  <th scope="col">Invoice ID</th>
-                  <th scope="col">Plan</th>
-                  <th scope="col" class="gp-hl-right">Total</th>
-                  <th scope="col">Status</th>
-                </tr>
-              </thead>
-              <tbody id="ordersTableBody">
-                <!-- Dynamically populated rows -->
-              </tbody>
-            </table>
-          </div>
+          <!-- Orders Table -->
+          <table class="table gp-hl-table" id="ordersTable" style="display: none;">
+            <thead>
+              <tr>
+                <th scope="col">Date & Time</th>
+                <th scope="col">Invoice ID</th>
+                <th scope="col">Plan</th>
+                <th scope="col" class="gp-hl-right">Total</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTableBody">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
 
           <!-- Empty State Container -->
           <div id="ordersEmptyState" class="gp-hl-empty">

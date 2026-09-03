@@ -345,6 +345,12 @@
   background: #f7f4c2;
 }
 
+.status-badge.unpaid{
+  color: #8a5300;
+  border-color: #f7d58b;
+  background: #fef5d8;
+}
+
 .announcement-bar {
   background-color: #ffffff; /* Bright color for visibility */
   color: #000000; /* White text for contrast */

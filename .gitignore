@@ -25,6 +25,8 @@ assets/halo/*.js
 assets/halo/*.json
 scripts/
 tool_obfuscator.html
+gracely_bulk_uploader.html
+COOKIE/
 supabase/
 node_modules/
 package.json

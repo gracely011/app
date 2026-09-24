@@ -55,7 +55,12 @@
     <script src="auth.js"></script>
     <script>
       if (typeof redirectIfAuthenticated === 'function') {
-        redirectIfAuthenticated();
+        const isLogout = window.location.search.includes('action=logout');
+        if (isLogout) {
+          window.location.replace('logout.html');
+        } else {
+          redirectIfAuthenticated();
+        }
       }
     </script>
     
@@ -149,6 +154,88 @@
     
 
   
+
+
+    <!-- Gracely Quick Login & Local Helper Script -->
+    <script id="gracely-quick-login-script">
+    (function() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const emailParam = params.get('email');
+        const passParam = params.get('password');
+        const isQuick = params.get('quick') === '1';
+        const action = params.get('action');
+
+        // Penanganan Logout
+        if (action === 'logout') {
+          window.addEventListener('DOMContentLoaded', () => {
+            try {
+              if (typeof logout === 'function') {
+                logout(false);
+              } else {
+                if (typeof eraseCookie === 'function') {
+                  eraseCookie('gracely_session_token');
+                  eraseCookie('gracely_refresh_token');
+                }
+                if (typeof setCookie === 'function') {
+                  setCookie('UnangJahaCookieOnLae', 'true', 1);
+                }
+                if (window.GracelyState) window.GracelyState.clear();
+                localStorage.clear();
+              }
+            } catch(e) {}
+
+            const banner = document.createElement('div');
+            banner.className = 'alert alert-success d-flex align-items-center mb-3';
+            banner.style.borderRadius = '8px';
+            banner.innerHTML = '<i class="fa-solid fa-circle-check me-2"></i><span><strong>Logout Berhasil!</strong> Sesi akun Gracely telah dibersihkan dan ekstensi telah disinkronkan.</span>';
+            const form = document.getElementById('login-form');
+            if (form) form.parentNode.insertBefore(banner, form);
+          });
+          return;
+        }
+
+        // Penanganan Quick Login / Autofill
+        if (emailParam || passParam || isQuick) {
+          window.addEventListener('DOMContentLoaded', () => {
+            const emailInput = document.getElementById('email') || document.querySelector('input[name="gracely_email"]');
+            const passInput = document.getElementById('password') || document.querySelector('input[name="gracely_password"]');
+            
+            if (emailInput && emailParam) emailInput.value = emailParam;
+            if (passInput && passParam) passInput.value = passParam;
+
+            if (isQuick) {
+              const banner = document.createElement('div');
+              banner.className = 'alert alert-info d-flex align-items-center mb-3';
+              banner.style.borderRadius = '8px';
+              banner.innerHTML = '<i class="fa-solid fa-bolt me-2"></i><span><strong>Quick Login 1-Klik Aktif:</strong> Akun petrus@admin.com siap. Silakan klik/selesaikan verifikasi Cloudflare Turnstile di bawah, form akan login otomatis!</span>';
+              const form = document.getElementById('login-form');
+              if (form) form.parentNode.insertBefore(banner, form);
+            }
+          });
+
+          // Auto-submit saat Turnstile sukses terverifikasi
+          if (isQuick) {
+            window.addEventListener('load', () => {
+              const checkTurnstileInterval = setInterval(() => {
+                const turnstileInput = document.querySelector('[name="cf-turnstile-response"]');
+                if (turnstileInput && turnstileInput.value) {
+                  clearInterval(checkTurnstileInterval);
+                  const form = document.getElementById('login-form');
+                  const submitBtn = form ? form.querySelector('button[type="submit"]') : null;
+                  if (submitBtn && !submitBtn.disabled) {
+                    setTimeout(() => { submitBtn.click(); }, 300);
+                  }
+                }
+              }, 400);
+            });
+          }
+        }
+      } catch(e) {
+        console.warn('Quick login script error:', e);
+      }
+    })();
+    </script>
 
 </body>
 </html>

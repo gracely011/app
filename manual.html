@@ -181,9 +181,21 @@
         if (url) {
           const btn = document.getElementById('manual-target-url-btn');
           if (btn) {
-            btn.href = url;
-            btn.setAttribute('target', '_blank');
-            btn.setAttribute('rel', 'noopener noreferrer');
+            try {
+              const parsed = new URL(url, window.location.origin);
+              // Strict protocol check: hanya izinkan http: dan https: (blokir javascript:, data:, dll)
+              if (parsed.protocol === 'https:' || parsed.protocol === 'http:') {
+                btn.href = parsed.href;
+                btn.setAttribute('target', '_blank');
+                btn.setAttribute('rel', 'noopener noreferrer');
+              } else {
+                btn.removeAttribute('href');
+                btn.classList.add('disabled');
+              }
+            } catch (urlErr) {
+              btn.removeAttribute('href');
+              btn.classList.add('disabled');
+            }
           }
         }
       } catch (e) {}

@@ -195,27 +195,32 @@
           return;
         }
 
-        // Penanganan Quick Login / Autofill
-        if (emailParam || passParam || isQuick) {
+        // Penanganan Quick Login / Autofill (Hanya aktif di lingkungan lokal developer demi keamanan)
+        const isLocalEnv = ['localhost', '127.0.0.1'].includes(window.location.hostname) || window.location.protocol === 'file:';
+        const safeEmail = emailParam;
+        const safePass = isLocalEnv ? passParam : null;
+        const safeIsQuick = isLocalEnv ? isQuick : false;
+
+        if (safeEmail || safePass || safeIsQuick) {
           window.addEventListener('DOMContentLoaded', () => {
             const emailInput = document.getElementById('email') || document.querySelector('input[name="gracely_email"]');
             const passInput = document.getElementById('password') || document.querySelector('input[name="gracely_password"]');
             
-            if (emailInput && emailParam) emailInput.value = emailParam;
-            if (passInput && passParam) passInput.value = passParam;
+            if (emailInput && safeEmail) emailInput.value = safeEmail;
+            if (passInput && safePass) passInput.value = safePass;
 
-            if (isQuick) {
+            if (safeIsQuick) {
               const banner = document.createElement('div');
               banner.className = 'alert alert-info d-flex align-items-center mb-3';
               banner.style.borderRadius = '8px';
-              banner.innerHTML = '<i class="fa-solid fa-bolt me-2"></i><span><strong>Quick Login 1-Klik Aktif:</strong> Akun petrus@admin.com siap. Silakan klik/selesaikan verifikasi Cloudflare Turnstile di bawah, form akan login otomatis!</span>';
+              banner.innerHTML = '<i class="fa-solid fa-bolt me-2"></i><span><strong>Quick Login 1-Klik Aktif (Dev Mode):</strong> Akun siap. Form akan submit otomatis setelah Turnstile terverifikasi.</span>';
               const form = document.getElementById('login-form');
               if (form) form.parentNode.insertBefore(banner, form);
             }
           });
 
-          // Auto-submit saat Turnstile sukses terverifikasi
-          if (isQuick) {
+          // Auto-submit saat Turnstile sukses terverifikasi (KHUSUS LOCAL DEV)
+          if (safeIsQuick) {
             window.addEventListener('load', () => {
               const checkTurnstileInterval = setInterval(() => {
                 const turnstileInput = document.querySelector('[name="cf-turnstile-response"]');

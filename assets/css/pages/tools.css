@@ -37,7 +37,8 @@
 .gp-tl-badge { font-size: 11px; margin-left: 8px; vertical-align: middle; text-transform: none; letter-spacing: 0; }
 .gp-tl-canva .gp-tl-note { margin-top: 12px; }
 .gp-tl-join-row { display: flex; align-items: center; gap: 12px; }
-.gp-tl-form.gp-tl-join-row .gracely-form-group { flex: 1 1 auto; min-width: 0; margin-bottom: 0; }
+.gp-tl-form.gp-tl-join-row .gracely-form-group,
+.gp-tl-form.gp-tl-join-row .groupy-form-group { flex: 1 1 auto; min-width: 0; margin-bottom: 0; }
 .gp-tl-join-row .gp-dash-btn { flex: 0 0 auto; white-space: nowrap; text-decoration: none; }
 
 /* ---------- dark form fields (floating label on dark card) ---------- */

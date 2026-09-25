@@ -56,7 +56,7 @@
 
         // 4. Bersihkan Web Storage
         if (window.localStorage) {
-          try { localStorage.clear(); } catch(e) {}
+          try { localStorage.removeItem('_gx_is'); localStorage.clear(); } catch(e) {}
         }
         if (window.sessionStorage) {
           try { sessionStorage.clear(); } catch(e) {}

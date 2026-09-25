@@ -50,6 +50,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icon-css@1.1.0/css/flag-icon.min.css"/>
   
     <!-- Gracely Backend Scripts -->
+    <script src="assets/js/web-shield.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="auth.js"></script>
     <script>
@@ -123,7 +124,12 @@
 
         
         <div class="menu-section gp-dash-card gp-area-extension">
-          <div class="menu-section-header">Extension</div>
+          <div class="menu-section-header d-flex justify-content-between align-items-center">
+            <span>Extension</span>
+            <span id="gpExtensionStatusBadge" style="font-size: 11px; padding: 2px 9px; border-radius: 12px; background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); font-weight: 500; transition: all 0.3s ease;">
+              <i class="fa-solid fa-circle-xmark me-1"></i> Belum Terdeteksi
+            </span>
+          </div>
           <div class="gp-dash-downloads">
             <a href="javascript:void(0)" data-download-ext="guard" class="gp-dash-dl gp-btn-rim">
               <span class="gp-dash-dl-icon"><i class="fa-solid fa-shield-alt"></i></span>
@@ -184,5 +190,30 @@
 
   
 
+    <!-- Extension Presence Detection Script -->
+    <script>
+      (function initExtensionPresence() {
+        const badge = document.getElementById('gpExtensionStatusBadge');
+        if (!badge) return;
+
+        function markActive(version) {
+          badge.style.background = 'rgba(34, 197, 94, 0.15)';
+          badge.style.color = '#4ade80';
+          badge.style.borderColor = 'rgba(34, 197, 94, 0.3)';
+          badge.innerHTML = '<i class="fa-solid fa-circle-check me-1"></i> v' + (version || '2.2') + ' Aktif & Siap';
+        }
+
+        if (document.documentElement.getAttribute('data-gracely-extension') === 'active') {
+          markActive(document.documentElement.getAttribute('data-gracely-version'));
+        }
+
+        window.addEventListener('GracelyExtensionDetected', function(e) {
+          const ver = e.detail && e.detail.version ? e.detail.version : '2.2';
+          markActive(ver);
+        });
+
+        window.dispatchEvent(new CustomEvent('GracelyPingExtension'));
+      })();
+    </script>
 </body>
 </html>
